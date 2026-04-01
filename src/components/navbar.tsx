@@ -43,31 +43,31 @@ export function Navbar() {
           ) : session ? (
             <Popover>
               <PopoverTrigger asChild>
-                <Avatar className="cursor-pointer hover:ring-2 ring-foreground/20 transition-all">
+                <Avatar className="cursor-pointer transition-opacity hover:opacity-80">
                   <AvatarImage src={session?.user.image ?? ""} alt="profile" />
-                  <AvatarFallback className="font-bold">{session?.user.name.charAt(0)}</AvatarFallback>
+                  <AvatarFallback className="font-semibold">{session?.user.name.charAt(0)}</AvatarFallback>
                 </Avatar>
               </PopoverTrigger>
-              <PopoverContent className="w-80 rounded-2xl p-6 shadow-2xl border-border/50" align="end">
+              <PopoverContent className="w-80 rounded-xl p-6 shadow-xl border-border/50" align="end">
                 <div className="space-y-6">
                   <div className="flex items-center gap-4">
-                    <Avatar className="w-12 h-12">
+                    <Avatar className="w-10 h-10">
                       <AvatarImage src={session?.user.image ?? ""} alt="profile" />
-                      <AvatarFallback className="text-lg font-bold">{session?.user.name.charAt(0)}</AvatarFallback>
+                      <AvatarFallback className="text-base font-semibold">{session?.user.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div>
-                      <h3 className="text-md font-bold leading-none mb-1">{session?.user.name}</h3>
-                      <p className="text-sm text-muted-foreground leading-none">{session?.user.email}</p>
+                      <h3 className="text-sm font-semibold leading-none mb-1">{session?.user.name}</h3>
+                      <p className="text-xs text-muted-foreground leading-none">{session?.user.email}</p>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <Button asChild className="">
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button asChild className="h-9 text-xs">
                       <Link href={"/dashboard"}>Dashboard</Link>
                     </Button>
                     <Button
                       variant={"outline"}
-                      className="text-destructive hover:bg-destructive/5 hover:text-destructive"
-                      // onClick={handleLogout}
+                      className="h-9 text-xs text-destructive hover:bg-destructive/5 hover:text-destructive"
+                      onClick={() => signOut()}
                     >
                       Logout
                     </Button>

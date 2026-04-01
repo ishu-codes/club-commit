@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   BarChart3,
+  User,
   Users,
   Heart,
   Trophy,
@@ -42,23 +43,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
-    if (!isPending && (!session || session.user.role !== "ADMIN")) {
+    if (!isPending && (!session || (session.user as any).role !== "ADMIN")) {
       toast.error("Unauthorized. Recursive access denied.");
       router.push("/dashboard");
     }
   }, [session, isPending, router]);
 
-  if (isPending || !session || session.user.role !== "ADMIN") {
+  if (isPending || !session || (session.user as any).role !== "ADMIN") {
     return (
-      <div className="h-screen bg-background flex flex-col items-center justify-center gap-8 selection:none">
+      <div className="h-screen bg-background flex flex-col items-center justify-center gap-6 selection:none">
         <div className="relative">
-          <div className="h-16 w-16 rounded-3xl border-4 border-primary border-t-transparent animate-spin" />
-          <Fingerprint className="absolute inset-0 m-auto h-6 w-6 text-primary animate-pulse" />
+          <div className="h-12 w-12 rounded-xl border-2 border-primary border-t-transparent animate-spin" />
         </div>
-        <div className="text-center space-y-2">
-          <p className="font-black text-xl uppercase tracking-tighter">Authenticating Authority</p>
-          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em]">
-            Verifying clearance level...
+        <div className="text-center space-y-1">
+          <p className="font-semibold text-lg tracking-tight">Authenticating</p>
+          <p className="text-xs text-muted-foreground">
+            Verifying access...
           </p>
         </div>
       </div>
@@ -67,24 +67,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const AdminSidebar = () => (
     <div className="flex flex-col h-full bg-foreground text-background relative selection:bg-primary/20">
-      <div className="p-8 pb-12">
-        <Link href="/" className="flex items-center gap-4 group">
-          <div className="h-12 w-12 rounded-2xl bg-primary flex items-center justify-center shadow-2xl shadow-primary/40 rotate-6 transition-transform group-hover:rotate-0">
-            <Shield className="h-7 w-7 text-primary-foreground fill-current" />
+      <div className="p-6 pb-8">
+        <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-80">
+          <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center shadow-md shadow-primary/10">
+            <Shield className="h-5 w-5 text-primary-foreground fill-current" />
           </div>
           <div className="flex flex-col">
-            <span className="text-2xl font-black tracking-tighter leading-none">ROOT_ACCESS</span>
-            <span className="text-[9px] font-black text-primary uppercase tracking-[0.4em] mt-1.5 opacity-80">
-              Authority Panel
+            <span className="text-lg font-bold tracking-tight leading-none">Admin Panel</span>
+            <span className="text-[10px] font-medium text-muted-foreground mt-1">
+              Management
             </span>
           </div>
         </Link>
       </div>
 
-      <nav className="flex-1 px-4 space-y-3 overflow-y-auto pb-8">
-        <div className="px-5 mb-6">
-          <p className="text-[10px] font-black text-background/30 uppercase tracking-[0.4em] leading-none">
-            System Nodes
+      <nav className="flex-1 px-3 space-y-1 overflow-y-auto pb-8">
+        <div className="px-3 mb-4">
+          <p className="text-[10px] font-semibold text-muted-foreground/50 uppercase tracking-widest leading-none">
+            Main Menu
           </p>
         </div>
         {adminItems.map((item) => {
@@ -94,65 +94,60 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-black transition-all group relative overflow-hidden",
+                "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors group relative",
                 isActive
-                  ? "bg-background text-foreground shadow-2xl shadow-black/20"
-                  : "text-background/40 hover:bg-background/5 hover:text-background active:scale-95",
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground/70 hover:bg-background/5 hover:text-background",
               )}
               onClick={() => setIsSidebarOpen(false)}
             >
               <item.icon
                 className={cn(
-                  "h-5 w-5 transition-transform",
-                  !isActive && "group-hover:scale-110 group-hover:rotate-3",
+                  "h-4 w-4 transition-transform",
+                  !isActive && "group-hover:scale-105",
                 )}
               />
-              <span className="uppercase tracking-tight">{item.name}</span>
-              {isActive && <Zap className="absolute right-5 h-4 w-4 text-primary fill-current animate-pulse" />}
+              <span className="tracking-tight">{item.name}</span>
             </Link>
           );
         })}
       </nav>
 
-      <div className="p-6 mt-auto border-t border-background/10 space-y-6 bg-background/5">
-        <div className="px-2">
-          <p className="text-[10px] font-black text-background/30 uppercase tracking-[0.4em]">Authority ID</p>
-        </div>
-
-        <div className="flex items-center gap-4 px-2">
-          <div className="h-12 w-12 rounded-2xl bg-background/10 border border-background/20 flex items-center justify-center overflow-hidden shrink-0">
+      <div className="p-4 mt-auto border-t border-background/10 space-y-4 bg-background/5">
+        <div className="flex items-center gap-3 px-2">
+          <div className="h-10 w-10 rounded-lg bg-background/10 border border-background/20 flex items-center justify-center overflow-hidden shrink-0">
             {session?.user?.image ? (
               <img src={session.user.image} alt="" className="w-full h-full object-cover" />
             ) : (
-              <Fingerprint className="h-6 w-6 text-primary" />
+              <User className="h-5 w-5 text-muted-foreground" />
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-black truncate tracking-tight text-background">
-              {session?.user?.name || "Root Admin"}
+            <p className="text-sm font-semibold truncate tracking-tight text-background">
+              {session?.user?.name || "Admin"}
             </p>
-            <Badge className="h-4 px-1.5 bg-primary text-primary-foreground border-none rounded-sm text-[8px] font-black tracking-widest uppercase mt-1 shadow-lg shadow-primary/20">
-              Authorized Overlord
+            <Badge className="h-4 px-1.5 bg-primary text-primary-foreground border-none rounded-sm text-[8px] font-bold tracking-wider uppercase mt-1">
+              Administrator
             </Badge>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-2 pt-2">
+        <div className="grid grid-cols-1 gap-2">
           <Button
             variant="ghost"
-            className="w-full justify-start gap-4 h-12 px-5 rounded-xl bg-background/5 text-background/60 hover:bg-background/10 hover:text-background transition-all text-[10px] font-black uppercase tracking-widest"
+            className="w-full justify-start gap-2 h-9 px-3 rounded-md bg-background/5 text-background/60 hover:bg-background/10 hover:text-background transition-colors text-xs font-medium"
             asChild
           >
             <Link href="/dashboard">
-              <LayoutDashboard className="h-4 w-4" /> RECURSIVE SWITCH
+              <LayoutDashboard className="h-4 w-4" /> Go to Dashboard
             </Link>
           </Button>
           <Button
             variant="ghost"
-            className="w-full justify-start gap-4 h-12 px-5 rounded-xl bg-destructive/10 text-destructive hover:bg-destructive hover:text-destructive-foreground transition-all text-[10px] font-black uppercase tracking-widest"
+            className="w-full justify-start gap-2 h-9 px-3 rounded-md bg-destructive/10 text-destructive hover:bg-destructive hover:text-destructive-foreground transition-colors text-xs font-medium"
             onClick={() => signOut()}
           >
-            <LogOut className="h-4 w-4" /> KILL CONNECTION
+            <LogOut className="h-4 w-4" /> Log out
           </Button>
         </div>
       </div>
@@ -212,15 +207,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="max-w-[1500px] mx-auto p-6 md:p-12 lg:p-16 xl:p-24 min-h-full flex flex-col">
             <div className="flex-1 animate-in fade-in slide-in-from-bottom-8 duration-1000">{children}</div>
 
-            {/* Terminal Footer */}
-            <div className="pt-32 pb-10 mt-auto flex flex-col md:flex-row items-center justify-between gap-8 opacity-20 hover:opacity-50 transition-opacity">
-              <div className="flex items-center gap-4">
-                <Database className="h-4 w-4 text-primary" />
-                <p className="text-[9px] font-black uppercase tracking-[0.4em]">ROOT_NODE // REGISTRY_v2.0.46</p>
+            {/* Footer */}
+            <div className="pt-24 pb-8 mt-auto flex flex-col md:flex-row items-center justify-between gap-6 opacity-30">
+              <div className="flex items-center gap-3">
+                <Shield className="h-3.5 w-3.5 text-muted-foreground" />
+                <p className="text-[10px] font-medium uppercase tracking-widest">Admin Node // v1.0.0</p>
               </div>
-              <div className="flex items-center gap-10">
-                <p className="text-[9px] font-black uppercase tracking-[0.4em]">KERNEL_LEVEL_PROTECTION_ACTIVE</p>
-                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              <div className="flex items-center gap-8">
+                <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">System Secure</p>
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
               </div>
             </div>
           </div>

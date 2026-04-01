@@ -16,5 +16,5 @@ export interface DashboardData {
     upcoming: Draw[];
     totalEntered: number;
   };
-  winnings: Winning[];
+  winnings: Winning;
 }

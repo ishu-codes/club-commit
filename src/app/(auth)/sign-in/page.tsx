@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import z from "zod";
+import { z } from "zod";
 import { signIn } from "@/lib/auth-client";
 import { toast } from "sonner";
 
@@ -98,7 +98,7 @@ export default function SignInPage() {
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
           <div className="text-center text-sm text-zinc-600 dark:text-zinc-400">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link replace href="/sign-up" className="font-medium text-primary underline-offset-4 hover:underline">
               Sign up
             </Link>

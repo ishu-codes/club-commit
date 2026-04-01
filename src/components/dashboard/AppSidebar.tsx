@@ -19,11 +19,11 @@ import Logout from "./Logout";
 
 const sidebarItems = [
   { name: "Overview", href: "/dashboard", icon: LayoutDashboardIcon },
-  { name: "Golf Scores", href: "/dashboard/scores", icon: TrophyIcon },
-  { name: "Charity Hub", href: "/dashboard/charity", icon: HeartIcon },
-  { name: "Draw Protocols", href: "/dashboard/draws", icon: HistoryIcon },
+  { name: "Scores", href: "/dashboard/scores", icon: TrophyIcon },
+  { name: "Charities", href: "/dashboard/charity", icon: HeartIcon },
+  { name: "Draw History", href: "/dashboard/draws", icon: HistoryIcon },
   { name: "Winnings", href: "/dashboard/winnings", icon: ChevronRightIcon },
-  { name: "Membership", href: "/dashboard/subscription", icon: CreditCardIcon },
+  { name: "Subscription", href: "/dashboard/subscription", icon: CreditCardIcon },
   { name: "Settings", href: "/dashboard/settings", icon: SettingsIcon },
 ];
 
@@ -32,12 +32,12 @@ export default function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="items-center py-4">
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 rotate-3 transition-transform group-hover:rotate-0">
-            <TrophyIcon className="h-6 w-6 text-primary-foreground" />
+        <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-80">
+          <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center shadow-md shadow-primary/10">
+            <TrophyIcon className="h-5 w-5 text-primary-foreground" />
           </div>
           <div className="flex flex-col">
-            <span className="text-xl font-bold tracking-tighter leading-none">ClubCommit</span>
+            <span className="text-xl font-bold tracking-tight leading-none">ClubCommit</span>
           </div>
         </Link>
       </SidebarHeader>
@@ -51,20 +51,14 @@ export default function AppSidebar() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-black transition-all group relative overflow-hidden",
+                    "flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group relative",
                     isActive
-                      ? "bg-foreground text-background shadow-2xl shadow-foreground/20 pointer-events-none"
-                      : "text-muted-foreground hover:bg-muted/50 hover:text-foreground active:scale-95",
+                      ? "bg-primary text-primary-foreground pointer-events-none"
+                      : "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
                   )}
                 >
-                  <item.icon
-                    className={cn(
-                      "h-5 w-5 transition-transform",
-                      !isActive && "group-hover:scale-110 group-hover:rotate-6",
-                    )}
-                  />
-                  <span className="uppercase tracking-tight">{item.name}</span>
-                  {isActive && <div className="absolute right-4 w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />}
+                  <item.icon className={cn("h-4 w-4 transition-transform", !isActive && "group-hover:scale-105")} />
+                  <span className="tracking-tight">{item.name}</span>
                 </Link>
               );
             })}
@@ -72,9 +66,16 @@ export default function AppSidebar() {
         </SidebarGroup>
         <SidebarGroup />
       </SidebarContent>
-      <SidebarFooter>
-        <Logout variant="ghost" className="justify-start">
-          <LogOutIcon className="h-4 w-4" /> Logout
+      <SidebarFooter className="px-4">
+        <Logout
+          variant="ghost"
+          className={cn(
+            "flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group relative w-full justify-start",
+            "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
+          )}
+        >
+          <LogOutIcon className="h-4 w-4 transition-transform group-hover:scale-105" />
+          <span className="tracking-tight">Logout</span>
         </Logout>
       </SidebarFooter>
     </Sidebar>

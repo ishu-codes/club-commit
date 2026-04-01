@@ -22,17 +22,17 @@ import { SubscriptionPlan } from "@/types/subscription";
 const plans = [
   {
     id: "MONTHLY" as SubscriptionPlan,
-    name: "Monthly Impact",
+    name: "Monthly Access",
     price: "999",
     interval: "month",
-    desc: "For seasonal players looking to make a difference.",
+    desc: "Flexible commitment for seasonal contributors.",
   },
   {
     id: "YEARLY" as SubscriptionPlan,
-    name: "Annual Hero",
+    name: "Annual Impact",
     price: "9,999",
     interval: "year",
-    desc: "The committed golfer's choice. 2 months free.",
+    desc: "Maximum impact with two months complementary.",
   },
 ];
 
@@ -57,16 +57,16 @@ export default function SubscriptionPage() {
     mutationFn: subscriptionFetchers.create,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dashboard"] });
-      toast.success("Subscription activated successfully!");
+      toast.success("Subscription activated.");
     },
-    onError: (err: any) => toast.error(err.message || "Failed to subscribe"),
+    onError: (err: any) => toast.error(err.message || "Failed to activate"),
   });
 
   const cancelMutation = useMutation({
     mutationFn: subscriptionFetchers.cancel,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dashboard"] });
-      toast.success("Subscription cancelled");
+      toast.success("Cancellation registered.");
     },
   });
 
@@ -74,214 +74,169 @@ export default function SubscriptionPage() {
 
   if (isLoading) {
     return (
-      <div className="space-y-8">
-        <Skeleton className="h-64 w-full rounded-3xl" />
-        <Skeleton className="h-96 w-full rounded-3xl" />
+      <div className="space-y-6 animate-in fade-in duration-500">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-64 w-full rounded-xl" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-32 rounded-xl" />
+          ))}
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-700">
+    <div className="space-y-8 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight underline decoration-primary/20 decoration-4 underline-offset-8">
-          Subscription Governance
-        </h1>
-        <p className="text-muted-foreground mt-4 font-medium">
-          Manage your commitment levels and strategic funding targets.
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight">Active Membership</h1>
+        <p className="text-muted-foreground mt-1 text-sm font-medium">Manage your tactical stake and impact targets.</p>
       </div>
 
       {activeSub ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <Card className="lg:col-span-2 border-primary/20 bg-primary/5 shadow-xl rounded-3xl overflow-hidden relative border-2">
-            <CardHeader className="pb-8 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Card className="lg:col-span-2 rounded-xl border shadow-sm overflow-hidden bg-muted/5">
+            <CardHeader className="pb-6 border-b">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3 font-black text-2xl tracking-tight">
-                  <Crown className="h-8 w-8 text-primary fill-primary animate-pulse" />
-                  Active {activeSub.plan} Protocol
+                <div className="flex items-center gap-2">
+                  <Crown className="h-5 w-5 text-primary" />
+                  <CardTitle className="text-xl">Active {activeSub.plan} Protocol</CardTitle>
                 </div>
-                <Badge className="bg-primary text-primary-foreground border-none px-4 py-1.5 font-black uppercase tracking-widest text-[10px] rounded-full">
-                  ESTABLISHED
-                </Badge>
+                <Badge className="bg-primary text-primary-foreground font-bold text-[10px] uppercase px-2 h-5">Established</Badge>
               </div>
-              <CardDescription className="text-base font-medium mt-2">
-                Next billing cycle initialized on{" "}
-                <span className="font-bold text-foreground underline decoration-primary/20">
-                  {new Date(activeSub.endDate).toLocaleDateString()}
-                </span>
+              <CardDescription className="text-xs font-semibold uppercase tracking-widest mt-2">
+                Renewal programmed for {new Date(activeSub.endDate).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-8 relative z-10">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="p-8 rounded-2xl shadow-sm border bg-background group hover:border-primary/20 transition-all">
-                  <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-2">
-                    Billing Rate
-                  </p>
-                  <p className="text-4xl font-black tracking-tighter">
-                    &#8377; {activeSub.plan === "YEARLY" ? "8.33" : "9.99"}
-                    <span className="text-sm font-medium text-muted-foreground">/mo</span>
+            <CardContent className="space-y-6 pt-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-5 rounded-lg border bg-background flex flex-col justify-center">
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Monthly Cost</p>
+                  <p className="text-2xl font-bold tracking-tight text-foreground/80">
+                    &#8377; {activeSub.plan === "YEARLY" ? "833" : "999"}
+                    <span className="text-xs font-medium text-muted-foreground ml-1">/mo</span>
                   </p>
                 </div>
-                <div className="p-8 rounded-2xl shadow-sm border bg-background group hover:border-destructive/20 transition-all">
-                  <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-2">
-                    Impact Coefficient
-                  </p>
-                  <p className="text-4xl font-black text-destructive tracking-tighter">
-                    {activeSub.contributionPercent}%
+                <div className="p-5 rounded-lg border bg-background flex flex-col justify-center">
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Commitment Weight</p>
+                  <p className="text-2xl font-bold tracking-tight text-primary">
+                    {activeSub.contributionPercent}% Allocation
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-6 p-8 rounded-2xl border-2 border-primary/10 bg-background/50 backdrop-blur-sm group">
-                <div className="h-20 w-20 shrink-0 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:rotate-12 transition-transform">
-                  <Heart className="h-10 w-10 fill-current" />
+              <div className="flex items-center gap-4 p-5 rounded-lg border bg-background/50 group">
+                <div className="h-10 w-10 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
+                  <Heart className="h-5 w-5 fill-primary/20" />
                 </div>
-                <div>
-                  <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-1">Impact Target</p>
-                  <p className="text-2xl font-black tracking-tight">{activeSub.charity?.name || "No primary target"}</p>
-                  <Link
-                    href="/dashboard/charity"
-                    className="text-xs font-black text-primary hover:underline mt-2 flex items-center gap-1.5 uppercase tracking-widest"
-                  >
-                    MODIFY PARTNER <ArrowRight className="h-3 w-3" />
-                  </Link>
+                <div className="flex-1">
+                  <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-0.5">Primary Recipient</p>
+                  <p className="font-bold text-lg">{activeSub.charity?.name || "System default"}</p>
                 </div>
+                <Button variant="ghost" size="sm" asChild className="text-primary font-bold h-8 text-[10px] uppercase border">
+                  <Link href="/dashboard/charity">Recalibrate Target</Link>
+                </Button>
               </div>
             </CardContent>
-            <CardFooter className="flex flex-col sm:flex-row justify-between border-t p-8 bg-background/30 rounded-b-3xl gap-4 relative z-10">
-              <div className="text-xs text-muted-foreground flex items-center gap-2 font-bold uppercase tracking-widest">
-                <ShieldCheck className="h-4 w-4 text-primary" /> SECURE END-TO-END ENCRYPTION ACTIVE
+            <CardFooter className="bg-muted/10 border-t py-4 px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-[10px] text-muted-foreground flex items-center gap-2 font-bold uppercase tracking-widest">
+                <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Secure Protocol Active
               </div>
               <Button
                 variant="ghost"
-                className="text-muted-foreground/60 hover:text-destructive hover:bg-destructive/5 font-black text-xs uppercase tracking-widest h-10 px-6 rounded-xl"
+                size="sm"
+                className="text-muted-foreground hover:text-destructive hover:bg-destructive/5 font-bold text-[10px] uppercase h-8 px-4 border"
                 onClick={() => {
-                  if (
-                    confirm(
-                      "TERMINATE COMMITMENT: Are you sure you want to cancel your stake? Access will be revoked at the end of the current cycle.",
-                    )
-                  ) {
+                  if (confirm("Deactivate membership? Eligibility will cease at the end of the current term.")) {
                     cancelMutation.mutate();
                   }
                 }}
               >
-                Terminate Protocol
+                Disconnect Node
               </Button>
             </CardFooter>
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
           </Card>
 
-          <Card className="border-none shadow-sm h-fit rounded-3xl bg-muted/5">
+          <Card className="rounded-xl border shadow-sm h-fit">
             <CardHeader className="pb-4">
-              <CardTitle className="text-lg font-black uppercase tracking-tight">OPERATIONAL BENEFITS</CardTitle>
+              <CardTitle className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Active Load Benefits</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6 pt-0">
+            <CardContent className="space-y-4 pt-0">
               {[
-                "Unlimited Temporal Data Tracking",
-                "Global Prize Draw Eligibility",
-                "Priority impact Contribution",
-                "Verified Humanitarian Beacon",
-                "Member Network Access",
+                "Unlimited Performance Tracking",
+                "Verified Prize Pool Eligibility",
+                "Priority Social Impact Index",
+                "Authenticated Network Identity",
+                "Community Node Registry",
               ].map((benefit, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-4 text-xs font-bold uppercase tracking-tight text-foreground/70"
-                >
-                  <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                    <CheckCircle2 className="h-3.5 w-3.5" />
-                  </div>
+                <div key={i} className="flex items-center gap-3 text-xs font-semibold text-foreground/80">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" />
                   <span>{benefit}</span>
                 </div>
               ))}
             </CardContent>
-            <Separator className="bg-muted/10" />
-            <CardFooter className="pt-6 text-[10px] uppercase font-black tracking-widest text-muted-foreground/50 leading-relaxed">
-              "Every stroke in the system translates to real-world capital recovery for our strategic partners."
+            <Separator className="opacity-50" />
+            <CardFooter className="pt-4 pb-6">
+              <p className="text-[9px] uppercase font-bold tracking-widest text-muted-foreground/40 leading-relaxed text-center w-full italic">
+                Stake distributions are audited monthly.
+              </p>
             </CardFooter>
           </Card>
         </div>
       ) : (
-        <div className="max-w-4xl mx-auto space-y-12 pb-12">
-          <Card className="border-none shadow-2xl overflow-hidden rounded-[2.5rem]">
-            <CardHeader className="bg-primary text-primary-foreground text-center py-16 px-10 relative overflow-hidden">
-              <div className="relative z-10">
-                <h2 className="text-5xl font-black tracking-tighter uppercase leading-none">COMMIT TO THE MISSION</h2>
-                <p className="text-primary-foreground/70 mt-6 text-xl font-medium max-w-xl mx-auto leading-relaxed">
-                  Establish your monthly stake to unlock performance tracking and global draw eligibility.
-                </p>
-              </div>
-              <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-white/10 rounded-full blur-3xl" />
+        <div className="max-w-4xl mx-auto space-y-8 pb-12">
+          <Card className="overflow-hidden border shadow-sm rounded-xl">
+            <CardHeader className="bg-primary text-primary-foreground text-center py-12 border-b">
+              <CardTitle className="text-4xl font-extrabold tracking-tight mb-2">Initialize Membership</CardTitle>
+              <CardDescription className="text-primary-foreground/80 font-medium text-base">
+                Commit your monthly stake to unlock full system protocols.
+              </CardDescription>
             </CardHeader>
-            <CardContent className="p-12 md:p-16 space-y-12 bg-background">
-              <div className="flex flex-col gap-6">
-                <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
-                  01. TEMPORAL DURATION PROTOCOL
-                </Label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <CardContent className="p-8 md:p-10 space-y-10">
+              <div className="space-y-4">
+                <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Select Temporal Cycle</Label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {plans.map((plan) => (
                     <div
                       key={plan.id}
                       onClick={() => setSelectedPlan(plan.id)}
                       className={cn(
-                        "relative p-10 rounded-[2rem] border-2 cursor-pointer transition-all duration-500 group",
+                        "relative p-6 rounded-xl border-2 cursor-pointer transition-all flex flex-col group",
                         selectedPlan === plan.id
-                          ? "border-primary bg-primary/5 ring-4 ring-primary/5 shadow-2xl scale-[1.02]"
-                          : "border-muted/10 hover:border-primary/20 bg-muted/5",
+                          ? "border-primary bg-primary/5 ring-1 ring-primary/20"
+                          : "border-muted hover:border-primary/30 bg-muted/5",
                       )}
                     >
-                      {selectedPlan === plan.id && (
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] font-black px-4 py-1.5 rounded-full shadow-xl tracking-widest">
-                          SELECTED
-                        </div>
-                      )}
-                      <p className="font-black text-2xl uppercase tracking-tighter transition-colors group-hover:text-primary">
-                        {plan.name}
-                      </p>
-                      <div className="flex items-baseline gap-1 mt-6 flex-wrap">
-                        <span className="text-5xl font-black tracking-tighter">&#8377; {plan.price}</span>
-                        <span className="text-xs self-end font-bold text-muted-foreground uppercase tracking-widest">
-                          / {plan.interval}
-                        </span>
+                      <div className="flex justify-between items-center mb-4">
+                        <p className="font-bold text-lg">{plan.name}</p>
+                        {selectedPlan === plan.id && <div className="h-2 w-2 rounded-full bg-primary" />}
                       </div>
-                      <p className="text-sm text-muted-foreground font-medium mt-6 leading-relaxed">{plan.desc}</p>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-3xl font-bold tracking-tight">&#8377; {plan.price}</span>
+                        <span className="text-[10px] font-bold text-muted-foreground uppercase opacity-60">/ {plan.interval}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground font-medium mt-4 leading-relaxed">{plan.desc}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="space-y-8">
-                <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
-                  02. PRIMARY IMPACT TARGET
-                </Label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-h-[350px] overflow-y-auto pr-6 custom-scrollbar">
+              <div className="space-y-4">
+                <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Select Impact Target</Label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[300px] overflow-y-auto pr-4 custom-scrollbar border rounded-lg p-3 bg-muted/10">
                   {charities?.map((charity) => (
                     <div
                       key={charity.id}
                       onClick={() => setSelectedCharityId(charity.id)}
                       className={cn(
-                        "flex items-center gap-5 p-6 rounded-2xl border-2 cursor-pointer transition-all hover:shadow-md",
-                        selectedCharityId === charity.id
-                          ? "border-primary bg-primary/5"
-                          : "border-muted/10 hover:border-primary/30 bg-muted/5",
+                        "flex items-center gap-4 p-4 rounded-lg border-2 cursor-pointer transition-all",
+                        selectedCharityId === charity.id ? "border-primary bg-primary/5" : "border-transparent bg-background",
                       )}
                     >
-                      <div
-                        className={cn(
-                          "h-7 w-7 rounded-xl border-2 flex items-center justify-center transition-all",
-                          selectedCharityId === charity.id
-                            ? "border-primary bg-primary shadow-lg shadow-primary/20"
-                            : "border-muted/20 bg-background",
-                        )}
-                      >
-                        {selectedCharityId === charity.id && <CheckCircle2 className="h-4 w-4 text-white" />}
+                      <div className={cn("h-5 w-5 rounded-full border-2 flex items-center justify-center", selectedCharityId === charity.id ? "border-primary bg-primary" : "border-muted")}>
+                        {selectedCharityId === charity.id && <CheckCircle2 className="h-3 w-3 text-white" />}
                       </div>
-                      <span
-                        className={cn(
-                          "font-black text-sm uppercase tracking-tight transition-colors",
-                          selectedCharityId === charity.id ? "text-primary" : "text-muted-foreground",
-                        )}
-                      >
+                      <span className={cn("font-bold text-xs uppercase tracking-tight", selectedCharityId === charity.id ? "text-primary" : "text-muted-foreground/60")}>
                         {charity.name}
                       </span>
                     </div>
@@ -289,63 +244,34 @@ export default function SubscriptionPage() {
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="bg-muted/10 flex flex-col p-12 md:p-16 gap-10 border-t">
+            <CardFooter className="bg-muted/5 border-t p-8 flex flex-col gap-6">
               <Button
-                className="w-full h-20 text-2xl font-black rounded-3xl shadow-2xl shadow-primary/20 transition-all hover:scale-[1.01] active:scale-[0.98]"
+                className="w-full h-12 font-bold rounded-lg shadow-sm"
                 disabled={!selectedCharityId || subscribeMutation.isPending}
                 onClick={() => subscribeMutation.mutate({ plan: selectedPlan, charityId: selectedCharityId })}
               >
-                {subscribeMutation.isPending ? "PROCESSING SECURE PROTOCOL..." : "INITIALIZE MEMBERSHIP"}
+                {subscribeMutation.isPending ? "Connecting Protocol..." : "Activate Membership"}
               </Button>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full">
-                <div className="flex items-center justify-center gap-3 text-[10px] font-black text-muted-foreground/60 uppercase tracking-widest">
-                  <ShieldCheck className="h-5 w-5 text-primary" /> SOC2 COMPLIANT ENCRYPTION
+              <div className="grid grid-cols-2 gap-4 w-full opacity-60">
+                <div className="flex items-center justify-center gap-2 text-[9px] font-bold text-muted-foreground uppercase tracking-widest">
+                  <ShieldCheck className="h-4 w-4 text-primary" /> SECURE GATEWAY
                 </div>
-                <div className="flex items-center justify-center gap-3 text-[10px] font-black text-muted-foreground/60 uppercase tracking-widest">
-                  <CreditCard className="h-5 w-5 text-primary" /> INSTANT DATA CLEARANCE
+                <div className="flex items-center justify-center gap-2 text-[9px] font-bold text-muted-foreground uppercase tracking-widest">
+                  <CreditCard className="h-4 w-4 text-primary" /> INSTANT SYNC
                 </div>
               </div>
             </CardFooter>
           </Card>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              {
-                icon: ShieldCheck,
-                title: "Tax Efficient",
-                desc: "Financial flows managed through verified secure gateways.",
-                color: "text-primary",
-                bg: "bg-primary/5",
-              },
-              {
-                icon: Heart,
-                title: "Tactical Choice",
-                desc: "Recalibrate your impact target at any point in the cycle.",
-                color: "text-destructive",
-                bg: "bg-destructive/5",
-              },
-              {
-                icon: Calendar,
-                title: "Non-Custodial",
-                desc: "No term requirements. Disconnect easily from your hub.",
-                color: "text-chart-4",
-                bg: "bg-chart-4/5",
-              },
+              { icon: ShieldCheck, title: "Identity Cleared", desc: "Transactions verified via SOC2 compliant infrastructure.", color: "text-primary" },
+              { icon: Heart, title: "Fluid Allocation", desc: "Modify your impact recipient at any peak in the cycle.", color: "text-primary" },
+              { icon: Calendar, title: "Non-Custodial", desc: "No term locks. Disconnect your identity at your discretion.", color: "text-primary" },
             ].map((feat, i) => (
-              <div
-                key={i}
-                className="p-10 rounded-[2.5rem] bg-background space-y-4 text-center border-2 border-muted/10 group hover:border-primary/20 transition-all hover:shadow-xl"
-              >
-                <div
-                  className={cn(
-                    "mx-auto h-16 w-16 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 group-hover:rotate-12",
-                    feat.bg,
-                    feat.color,
-                  )}
-                >
-                  <feat.icon className="h-8 w-8" />
-                </div>
-                <h4 className="font-black text-xl uppercase tracking-tighter mt-4">{feat.title}</h4>
+              <div key={i} className="p-6 rounded-xl bg-card border shadow-sm space-y-3 text-center transition-all hover:border-primary/20">
+                <feat.icon className={cn("mx-auto h-6 w-6 opacity-80", feat.color)} />
+                <h4 className="font-bold text-sm uppercase tracking-widest">{feat.title}</h4>
                 <p className="text-xs text-muted-foreground leading-relaxed font-medium">{feat.desc}</p>
               </div>
             ))}

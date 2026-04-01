@@ -10,7 +10,7 @@ import {
   TrendingUp,
   ArrowRight,
   Info,
-  HistoryIcon,
+  History as HistoryIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -51,11 +51,11 @@ export default function DrawsPage() {
 
   if (loadingDraws || loadingDashboard) {
     return (
-      <div className="space-y-8 animate-in fade-in duration-500">
-        <Skeleton className="h-64 w-full rounded-[2rem]" />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="space-y-6 animate-in fade-in duration-500">
+        <Skeleton className="h-48 w-full rounded-xl" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-56 rounded-3xl" />
+            <Skeleton key={i} className="h-40 rounded-xl" />
           ))}
         </div>
       </div>
@@ -67,247 +67,158 @@ export default function DrawsPage() {
   const entries = dashboard?.draws.entries || [];
 
   return (
-    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-8 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight underline decoration-primary/20 decoration-4 underline-offset-8">
-          Engagement Registry
-        </h1>
-        <p className="text-muted-foreground mt-4 font-medium text-balance max-w-2xl">
-          Exclusive tactical competitions initialized for the elite commitment network.
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight">Competitions</h1>
+        <p className="text-muted-foreground mt-1 text-sm font-medium">Verify your eligibility and enter active prize cycles.</p>
       </div>
 
-      {/* Featured Upcoming Draw */}
       {upcomingDraws.length > 0 && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <Card className="lg:col-span-2 bg-foreground text-background overflow-hidden relative border-none rounded-[2.5rem] shadow-2xl group">
-            <CardHeader className="pb-8 relative z-10 p-12">
-              <div className="flex items-center justify-between mb-8">
-                <Badge className="bg-primary text-primary-foreground border-none px-5 py-2 font-black uppercase text-[10px] tracking-[0.2em] rounded-full">
-                  LIVE REGISTRATION
-                </Badge>
-                <div className="flex items-center gap-2 text-background/50 text-[10px] font-black uppercase tracking-widest">
-                  <Clock className="h-4 w-4 text-primary animate-spin-slow" />
-                  TEMPORAL GATE OPEN
-                </div>
-              </div>
-              <CardTitle className="text-7xl font-black tracking-tighter uppercase leading-none">
-                {new Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date(0, upcomingDraws[0].month - 1))}
-                <span className="block text-primary text-4xl mt-2 not-italic font-black opacity-80">
-                  {upcomingDraws[0].year} RECOVERY FUND
-                </span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="relative z-10 space-y-10 pb-12 px-12">
-              <div className="flex items-baseline gap-6">
-                <span className="text-9xl font-black text-primary leading-none tracking-tighter drop-shadow-2xl">
-                  ${upcomingDraws[0].prizePool}
-                </span>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <Card className="lg:col-span-3 overflow-hidden border shadow-sm rounded-xl">
+            <CardHeader className="bg-muted/10 pb-6 border-b">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="space-y-1">
-                  <p className="text-background/40 font-black uppercase text-[10px] tracking-[0.3em] leading-none">
-                    PROJECTED
-                  </p>
-                  <p className="text-background/80 font-black uppercase text-2xl tracking-tighter leading-none">
-                    POOL VALUE
-                  </p>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Badge className="bg-primary text-primary-foreground font-bold text-[10px] uppercase px-2 h-5">Live Now</Badge>
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-1">
+                      <Clock className="h-3 w-3" /> Ends Soon
+                    </span>
+                  </div>
+                  <CardTitle className="text-3xl font-bold">
+                    {new Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date(0, upcomingDraws[0].month - 1))}
+                    <span className="text-primary ml-2 uppercase opacity-80">{upcomingDraws[0].year}</span>
+                  </CardTitle>
+                  <CardDescription className="text-sm font-medium">Active recovery fund distribution cycle.</CardDescription>
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none mb-1">Prize Pool</p>
+                  <div className="text-4xl font-bold text-primary tracking-tight">${upcomingDraws[0].prizePool}</div>
                 </div>
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-6">
-                <div className="bg-background/5 rounded-3xl p-8 border border-background/10 backdrop-blur-md group-hover:bg-background/10 transition-all border-l-4 border-l-primary">
-                  <p className="text-[10px] text-background/40 uppercase font-black tracking-[0.3em] mb-3 leading-none">
-                    ALGORITHM LOAD
-                  </p>
-                  <p className="font-black text-xl uppercase tracking-tight">
-                    {upcomingDraws[0].drawType === "ALGORITHM" ? "Weighted Performance" : "Full Randomization"}
+            </CardHeader>
+            <CardContent className="py-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 rounded-lg bg-muted/20 border flex flex-col justify-center">
+                  <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">Entry Protocol</p>
+                  <p className="font-semibold text-sm">
+                    {upcomingDraws[0].drawType === "ALGORITHM" ? "Performance Weighted" : "Random Selection"}
                   </p>
                 </div>
-                <div className="bg-background/5 rounded-3xl p-8 border border-background/10 backdrop-blur-md group-hover:bg-background/10 transition-all border-l-4 border-l-primary">
-                  <p className="text-[10px] text-background/40 uppercase font-black tracking-[0.3em] mb-3 leading-none">
-                    ACTIVE NODES
-                  </p>
-                  <p className="font-black text-xl uppercase tracking-tight">
-                    {upcomingDraws[0]._count?.entries || 0} ELIGIBLE DATA POINTS
+                <div className="p-4 rounded-lg bg-muted/20 border flex flex-col justify-center">
+                  <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">Total Entries</p>
+                  <p className="font-semibold text-sm">
+                    {upcomingDraws[0]._count?.entries || 0} Registered Competitors
                   </p>
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="relative z-10 bg-background/5 p-12 border-t border-background/10 backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-8">
+            <CardFooter className="bg-muted/5 border-t py-4 px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="text-sm">
                 {entries.some((e: any) => e.drawId === upcomingDraws[0].id) ? (
-                  <span className="flex items-center gap-3 text-primary font-black uppercase tracking-widest text-lg">
-                    <CheckCircle2 className="h-6 w-6 stroke-[3px]" /> Participation Locked
-                  </span>
+                  <div className="flex items-center gap-2 text-emerald-600 font-bold text-xs uppercase tracking-widest">
+                    <CheckCircle2 className="h-4 w-4" /> Participation Verified
+                  </div>
                 ) : (
-                  <div className="flex items-center gap-3 text-background/40 font-medium">
-                    <Info className="h-5 w-5 text-primary" />
-                    <span className="text-xs uppercase tracking-wider font-bold">
-                      Protocol requires:{" "}
-                      <span className="text-background underline decoration-primary decoration-2">ACTIVE STAKE</span> +{" "}
-                      <span className="text-background underline decoration-primary decoration-2">VERIFIED SCORE</span>
-                    </span>
+                  <div className="flex items-center gap-2 text-muted-foreground text-xs font-semibold uppercase">
+                    <Info className="h-4 w-4" /> Entry requires active stake
                   </div>
                 )}
               </div>
               <Button
-                size="lg"
-                className="w-full sm:w-auto h-20 px-16 text-2xl font-black shadow-2xl rounded-2xl group/btn overflow-hidden"
+                size="sm"
+                className="w-full sm:w-auto font-bold rounded-lg px-8 h-9"
                 disabled={entries.some((e: any) => e.drawId === upcomingDraws[0].id) || enterMutation.isPending}
                 onClick={() => enterMutation.mutate(upcomingDraws[0].id)}
               >
-                <span className="relative z-10">
-                  {entries.some((e: any) => e.drawId === upcomingDraws[0].id) ? "DEPLOYED" : "INITIALIZE ENTRY"}
-                </span>
-                <div className="absolute inset-0 bg-primary-foreground transform scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left opacity-10" />
+                {entries.some((e: any) => e.drawId === upcomingDraws[0].id) ? "Successfully Entered" : "Enter Competition"}
               </Button>
             </CardFooter>
-            <div className="absolute top-0 right-0 w-[60%] h-full bg-primary/20 blur-[150px] rounded-full -translate-y-1/2 translate-x-1/4 transition-opacity duration-1000 group-hover:opacity-40 pointer-events-none" />
           </Card>
 
-          <Card className="border-none bg-muted/5 shadow-sm rounded-[2.5rem] h-full flex flex-col border-2 border-muted/10 group">
-            <CardHeader className="p-10 pb-6">
-              <CardTitle className="text-sm font-black flex items-center gap-3 uppercase tracking-[0.3em] text-muted-foreground/60">
-                <Ticket className="h-5 w-5 text-primary" /> Qualification Status
+          <Card className="rounded-xl border shadow-sm bg-muted/5 flex flex-col">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-xs font-bold flex items-center gap-2 uppercase tracking-widest text-muted-foreground">
+                <Ticket className="h-4 w-4 text-primary" /> Status Audit
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-10 p-10 pt-6 flex-1">
-              <div className="space-y-8">
-                <div className="flex items-center justify-between border-b border-muted/10 pb-4">
-                  <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-                    Network Stake
-                  </span>
+            <CardContent className="space-y-5 flex-1">
+              <div className="space-y-4">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-muted-foreground font-medium">Monthly Stake</span>
                   {dashboard?.subscription ? (
-                    <Badge className="bg-primary/20 text-primary border-none px-4 py-1 font-black text-[10px] uppercase tracking-widest">
-                      ESTABLISHED
-                    </Badge>
+                    <Badge variant="secondary" className="bg-emerald-50 text-emerald-700 border-emerald-100 text-[9px] font-bold uppercase">Active</Badge>
                   ) : (
-                    <Badge variant="destructive" className="font-black text-[10px] uppercase tracking-widest px-4 py-1">
-                      DISCONNECTED
-                    </Badge>
+                    <Badge variant="outline" className="text-[9px] font-bold uppercase text-red-500 border-red-100 bg-red-50/50">Missing</Badge>
                   )}
                 </div>
-                <div className="flex items-center justify-between border-b border-muted/10 pb-4">
-                  <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-                    Temporal Load
-                  </span>
-                  <div className="flex items-center gap-3">
-                    <span className="font-black text-2xl tracking-tighter">{dashboard?.scores.active.length || 0}</span>
-                    <span className="text-[10px] text-muted-foreground/40 font-black uppercase tracking-widest">
-                      / 5 DATA
-                    </span>
-                  </div>
+                <Separator />
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-muted-foreground font-medium">Verified Scores</span>
+                  <span className="font-bold">{dashboard?.scores.active.length || 0} / 5</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-                    Current Seed
-                  </span>
-                  <span className="font-black text-4xl tracking-tighter text-primary">
-                    {dashboard?.scores.average || "0.00"}
-                  </span>
+                <Separator />
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-muted-foreground font-medium">Ref Seed</span>
+                  <span className="font-bold text-primary">{dashboard?.scores.average || "0.00"}</span>
                 </div>
-              </div>
-
-              <div className="bg-background p-6 rounded-3xl border-2 border-dashed border-muted/20 relative overflow-hidden">
-                <p className="text-[10px] font-bold text-muted-foreground/60 leading-relaxed uppercase tracking-tighter relative z-10 text-center">
-                  "Efficiency is the byproduct of discipline. Rebuild your handicaps to optimize your draw weight."
-                </p>
-                <div className="absolute top-0 left-0 w-full h-1 bg-primary transform -translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
               </div>
             </CardContent>
-            <CardFooter className="p-10 pt-0">
-              <Link href="/dashboard/scores" className="w-full">
-                <Button
-                  variant="outline"
-                  className="w-full gap-3 font-black text-xs uppercase tracking-[0.2em] border-2 h-14 rounded-2xl group transition-all hover:bg-primary/5 hover:border-primary/30"
-                >
-                  <TrendingUp className="h-4 w-4 text-primary group-hover:scale-125 transition-transform" /> OPTIMIZE
-                  RECOGNITION
-                </Button>
-              </Link>
+            <CardFooter className="pt-2 pb-6 px-6">
+              <Button variant="outline" size="sm" className="w-full text-xs font-bold rounded-lg border-primary/20 hover:bg-primary/5 text-primary" asChild>
+                <Link href="/dashboard/scores">Log Round</Link>
+              </Button>
             </CardFooter>
           </Card>
         </div>
       )}
 
-      {/* Participation History */}
-      <div className="space-y-10 pt-8">
-        <h2 className="text-sm font-black tracking-[0.3em] uppercase text-muted-foreground flex items-center gap-3">
-          <HistoryIcon className="h-5 w-5 text-primary opacity-50" /> ARCHIVAL PERFORMANCE REGISTRY
+      <div className="space-y-4 pt-4">
+        <h2 className="text-sm font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+          <HistoryIcon className="h-4 w-4" /> Performance History
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {pastDraws.length > 0 ? (
             pastDraws.map((draw) => {
               const entry = entries.find((e: any) => e.drawId === draw.id);
               return (
-                <Card
-                  key={draw.id}
-                  className="group overflow-hidden border-none shadow-lg bg-background rounded-3xl transition-all hover:shadow-xl hover:-translate-y-1 relative"
-                >
-                  <CardHeader className="bg-muted/5 pb-8 p-10 transition-colors group-hover:bg-muted/10 border-b border-muted/10">
-                    <div className="flex items-center justify-between mb-6">
-                      <CardTitle className="text-3xl font-black tracking-tighter uppercase">
+                <Card key={draw.id} className="overflow-hidden border shadow-sm rounded-xl group transition-all hover:border-primary/20">
+                  <CardHeader className="bg-muted/10 pb-4 border-b">
+                    <div className="flex items-center justify-between mb-1">
+                      <CardTitle className="text-lg font-bold">
                         {new Intl.DateTimeFormat("en-US", { month: "short" }).format(new Date(0, draw.month - 1))}
-                        <span className="text-primary font-black ml-2">{draw.year}</span>
+                        <span className="text-primary ml-1.5">{draw.year}</span>
                       </CardTitle>
-                      <Badge
-                        variant="outline"
-                        className="text-[8px] h-4 font-black px-2 border-muted-foreground/20 uppercase tracking-widest"
-                      >
+                      <Badge variant="outline" className="text-[9px] h-4 font-bold border-muted-foreground/20 leading-none">
                         {draw.status}
                       </Badge>
                     </div>
-                    <div className="flex items-baseline gap-2 text-4xl font-black text-foreground leading-none tracking-tighter uppercase">
-                      <span className="text-primary not-italic text-2xl font-bold">$</span>
-                      {draw.prizePool.toLocaleString()}
-                    </div>
+                    <p className="text-xl font-bold text-foreground tracking-tight">${draw.prizePool.toLocaleString()}</p>
                   </CardHeader>
-                  <CardContent className="pt-10 p-10 bg-background relative z-10">
+                  <CardContent className="py-4">
                     {entry ? (
-                      <div className="space-y-6">
-                        <div className="flex items-center justify-between border-b border-muted/5 pb-4">
-                          <span className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.2em]">
-                            ENTRY SEED
-                          </span>
-                          <span className="font-black text-2xl tracking-tighter group-hover:text-primary transition-colors">
-                            {entry.entryScore}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.2em]">
-                            AUDIT STATE
-                          </span>
-                          <span className="text-primary font-black text-[10px] uppercase flex items-center gap-2 tracking-widest bg-primary/10 px-3 py-1 rounded-full">
-                            <CheckCircle2 className="h-3.5 w-3.5 stroke-[3px]" /> VERIFIED
-                          </span>
-                        </div>
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground font-medium">Logged Seed</span>
+                        <span className="font-bold text-primary bg-primary/5 px-2 py-0.5 rounded border border-primary/10">{entry.entryScore}</span>
                       </div>
                     ) : (
-                      <div className="flex flex-col items-center justify-center py-10 bg-muted/5 text-muted-foreground/30 text-[10px] font-black uppercase tracking-[0.2em] border-2 border-dashed border-muted/10 rounded-2xl">
-                        NODE INACTIVE DURING CALL
+                      <div className="py-2 text-center text-[10px] text-muted-foreground/40 font-bold uppercase tracking-widest border border-dashed rounded-md bg-muted/5">
+                        No Participation
                       </div>
                     )}
                   </CardContent>
-                  <CardFooter className="border-t border-muted/5 bg-muted/5 p-0">
-                    <Button
-                      variant="ghost"
-                      className="w-full h-16 rounded-none gap-3 font-black text-[10px] uppercase tracking-[0.3em] group-hover:bg-primary/5 transition-all text-muted-foreground/70 hover:text-primary"
-                    >
-                      AUDIT FULL RESULTS{" "}
-                      <ArrowRight className="h-4 w-4 group-hover:translate-x-2 transition-transform" />
+                  <CardFooter className="pt-0 pb-6 px-6">
+                    <Button variant="ghost" size="sm" className="w-full h-8 text-[10px] font-bold uppercase tracking-widest gap-2 bg-muted/30 hover:bg-primary/10 hover:text-primary transition-all">
+                      Audit Results <ArrowRight className="h-3 w-3" />
                     </Button>
                   </CardFooter>
-                  <div className="absolute bottom-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-3xl -mb-12 -mr-12 group-hover:bg-primary/10 transition-colors" />
                 </Card>
               );
             })
           ) : (
-            <div className="col-span-full py-32 text-center border-2 border-dashed rounded-[2.5rem] bg-muted/5 border-muted/20">
-              <div className="h-16 w-16 bg-muted/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                <HistoryIcon className="h-8 w-8 text-muted-foreground/40 animate-pulse" />
-              </div>
-              <p className="text-muted-foreground/40 font-black uppercase tracking-[0.4em] text-xs">
-                Archival history loading...
-              </p>
+            <div className="col-span-full py-16 text-center border-2 border-dashed rounded-xl bg-muted/5">
+              <HistoryIcon className="h-8 w-8 text-muted-foreground/20 mx-auto mb-3" />
+              <p className="text-muted-foreground font-semibold text-xs uppercase tracking-widest opacity-40">History Loading...</p>
             </div>
           )}
         </div>

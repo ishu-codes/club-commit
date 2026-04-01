@@ -1,19 +1,7 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  Trophy,
-  Upload,
-  CheckCircle2,
-  Clock,
-  AlertCircle,
-  ExternalLink,
-  ChevronRight,
-  ArrowUpRight,
-  ShieldCheck,
-  Zap,
-  Image as ImageIcon,
-} from "lucide-react";
+import { Trophy, Upload, CheckCircle2, Clock, ImageIcon, TrophyIcon, ZapIcon, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -32,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+// import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 import { winnerFetchers } from "@/fetchers/winner";
@@ -61,11 +49,11 @@ export default function WinningsPage() {
     mutationFn: (values: { id: string; proofUrl: string }) => winnerFetchers.uploadProof(values.id, values.proofUrl),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["winners", "mine"] });
-      toast.success("Proof uploaded successfully! Admin will review it shortly.");
+      toast.success("Verification data submitted.");
       setIsUploadOpen(false);
       setBase64Image(null);
     },
-    onError: (err: any) => toast.error(err.message || "Failed to upload proof"),
+    onError: (err: any) => toast.error(err.message || "Upload failed"),
   });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,9 +69,13 @@ export default function WinningsPage() {
 
   if (loadingWinnings || loadingDashboard) {
     return (
-      <div className="space-y-8">
-        <Skeleton className="h-48 w-full rounded-3xl" />
-        <Skeleton className="h-96 w-full rounded-3xl" />
+      <div className="space-y-6 animate-in fade-in duration-500">
+        <Skeleton className="h-8 w-48" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Skeleton className="h-48 rounded-xl" />
+          <Skeleton className="lg:col-span-2 h-48 rounded-xl" />
+        </div>
+        <Skeleton className="h-96 rounded-xl" />
       </div>
     );
   }
@@ -92,40 +84,33 @@ export default function WinningsPage() {
     switch (status) {
       case "PENDING_PROOF":
         return (
-          <Badge
-            variant="outline"
-            className="border-destructive/20 text-destructive bg-destructive/5 font-black text-[10px] uppercase tracking-widest px-3"
-          >
-            REQUIRED PROOF
+          <Badge variant="destructive" className="rounded-md px-2 text-[10px] font-bold uppercase tracking-wider">
+            Proof Required
           </Badge>
         );
       case "PROOFS_UPLOADED":
         return (
           <Badge
             variant="secondary"
-            className="bg-primary/10 text-primary border-none font-black text-[10px] uppercase tracking-widest px-3"
+            className="rounded-md px-2 text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary"
           >
-            VERIFYING...
+            Auditing
           </Badge>
         );
       case "VERIFIED":
         return (
           <Badge
             variant="secondary"
-            className="bg-primary/20 text-primary border-none font-black text-[10px] uppercase tracking-widest px-3"
+            className="rounded-md px-2 text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-600"
           >
-            VERIFIED
+            Verified
           </Badge>
         );
       case "PAID":
-        return (
-          <Badge className="bg-primary text-primary-foreground border-none font-black text-[10px] uppercase tracking-widest px-3">
-            PAID
-          </Badge>
-        );
+        return <Badge className="rounded-md px-2 text-[10px] font-bold uppercase tracking-wider">Paid</Badge>;
       default:
         return (
-          <Badge variant="outline" className="font-black text-[10px] uppercase px-3">
+          <Badge variant="outline" className="rounded-md px-2 text-[10px] font-bold uppercase tracking-wider">
             {status}
           </Badge>
         );
@@ -135,90 +120,67 @@ export default function WinningsPage() {
   return (
     <div className="space-y-10 animate-in fade-in duration-700">
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight underline decoration-primary/20 decoration-4 underline-offset-8">
-          Prize Management
-        </h1>
-        <p className="text-muted-foreground mt-4 font-medium">
-          Securely claim and track your rewards from the global commitment pool.
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight">Prize Registry</h1>
+        <p className="text-muted-foreground mt-2">Track allocations and verify your tournament recovery data.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Summary Card */}
-        <Card className="border-none bg-foreground text-background shadow-2xl relative overflow-hidden group rounded-[2.5rem]">
-          <CardHeader className="relative z-10 p-10">
-            <CardTitle className="text-background/40 uppercase tracking-[0.3em] text-[10px] font-black flex items-center gap-3">
-              <Zap className="h-4 w-4 text-primary" /> Total Equity Gained
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="bg-primary text-primary-foreground border-none shadow-lg rounded-xl overflow-hidden relative group">
+          <CardHeader className="relative z-10">
+            <CardTitle className="text-[10px] uppercase font-bold tracking-[0.2em] opacity-80 flex items-center gap-2">
+              <ZapIcon className="h-3 w-3" /> Total Distribution
             </CardTitle>
           </CardHeader>
-          <CardContent className="relative z-10 pt-0 px-10 pb-12">
-            <div className="flex items-baseline gap-3">
-              <span className="text-8xl font-black tracking-tighter drop-shadow-2xl opacity-90">
-                &#8377; {dashboard?.winnings.totalWon || 0}
-              </span>
-              <Badge className="bg-primary text-primary-foreground border-none font-black text-[10px] uppercase tracking-widest px-3 h-6">
-                INR
-              </Badge>
+          <CardContent className="relative z-10 pt-0">
+            <div className="flex items-baseline gap-2">
+              <span className="text-5xl font-bold tracking-tight">&#8377;{dashboard?.winnings.totalWon || 0}</span>
+              <span className="text-[10px] font-bold uppercase opacity-60">INR</span>
             </div>
-            <div className="mt-10 flex items-center gap-10">
-              <div className="space-y-2">
-                <p className="text-[10px] font-black text-background/40 uppercase tracking-widest leading-none">
-                  PENDING DATA
-                </p>
-                <p className="text-3xl font-black text-background/80 leading-none tracking-tighter">
-                  {dashboard?.winnings.pendingPayments || 0}
-                </p>
+            <div className="mt-8 grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <p className="text-[10px] font-bold uppercase tracking-wider opacity-60">Reserved</p>
+                <p className="text-xl font-bold">{dashboard?.winnings.pendingPayments || 0}</p>
               </div>
-              <Separator orientation="vertical" className="h-12 bg-background/10" />
-              <div className="space-y-2">
-                <p className="text-[10px] font-black text-background/40 uppercase tracking-widest leading-none">
-                  AUDITED
-                </p>
-                <p className="text-3xl font-black text-background/80 leading-none tracking-tighter">
+              <div className="space-y-1">
+                <p className="text-[10px] font-bold uppercase tracking-wider opacity-60">Cleared</p>
+                <p className="text-xl font-bold">
                   {myWinnings?.list.filter((w) => w.status === "VERIFIED" || w.status === "PAID").length || 0}
                 </p>
               </div>
             </div>
           </CardContent>
-          <div className="absolute top-0 right-0 w-80 h-80 bg-primary/30 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 transition-opacity group-hover:opacity-40" />
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-110 transition-transform" />
         </Card>
 
-        {/* Hall of Fame / Global Motivation */}
-        <Card className="lg:col-span-2 border-none shadow-sm bg-muted/5 rounded-[2.5rem] border-2 border-muted/10 group overflow-hidden">
-          <CardHeader className="pb-4 p-10">
-            <CardTitle className="text-xl font-black flex items-center gap-3 tracking-tight uppercase">
-              <Trophy className="h-6 w-6 text-primary" /> Global Winners Circle
+        <Card className="lg:col-span-2 rounded-xl border shadow-sm flex flex-col">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-lg font-bold flex items-center gap-2 tracking-tight">
+              <Trophy className="h-5 w-5 text-primary" /> Network Hall of Fame
             </CardTitle>
-            <CardDescription className="font-medium">
-              Verified impact, distributed rewards. Participation leads to outcome.
-            </CardDescription>
+            <CardDescription className="text-xs">Peer performance indicators and impact highlights.</CardDescription>
           </CardHeader>
-          <CardContent className="px-10 pb-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <CardContent>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                { name: "John D.", amount: 840, draw: "March 2026", impact: "Health" },
-                { name: "Sarah K.", amount: 910, draw: "February 2026", impact: "Water" },
-                { name: "Mike R.", amount: 760, draw: "January 2026", impact: "Ocean" },
-                { name: "Emma L.", amount: 620, draw: "Dec 2025", impact: "Trees" },
+                { name: "John D.", amount: 840, draw: "March 2026" },
+                { name: "Sarah K.", amount: 910, draw: "February 2026" },
+                { name: "Mike R.", amount: 760, draw: "January 2026" },
+                { name: "Emma L.", amount: 620, draw: "Dec 2025" },
               ].map((w, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between p-5 rounded-2xl bg-background border-2 border-muted/10 group-hover:border-primary/20 transition-all hover:scale-[1.02] hover:shadow-lg"
+                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/30 hover:bg-muted/50 transition-colors"
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center font-black text-primary text-xs">
+                  <div className="flex items-center gap-3">
+                    <div className="h-7 w-7 rounded-md bg-background border flex items-center justify-center text-[10px] font-bold text-muted-foreground">
                       #{i + 1}
                     </div>
                     <div>
-                      <p className="font-black text-sm tracking-tight">{w.name}</p>
-                      <p className="text-[10px] text-muted-foreground font-black uppercase tracking-widest leading-none mt-1.5">
-                        {w.draw} • {w.impact}
-                      </p>
+                      <p className="text-xs font-bold">{w.name}</p>
+                      <p className="text-[10px] text-muted-foreground uppercase font-medium">{w.draw}</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-xl font-black text-primary leading-none tracking-tighter">&#8377; {w.amount}</p>
-                  </div>
+                  <p className="text-sm font-bold text-primary">&#8377; {w.amount}</p>
                 </div>
               ))}
             </div>
@@ -226,48 +188,48 @@ export default function WinningsPage() {
         </Card>
       </div>
 
-      <div className="space-y-8">
-        <h2 className="text-sm font-black tracking-[0.3em] uppercase text-muted-foreground flex items-center gap-3">
-          <Clock className="h-5 w-5 text-primary opacity-50" /> INDIVIDUAL PRIZE REGISTRY
-        </h2>
-        <div className="grid grid-cols-1 gap-6">
+      <div className="space-y-6">
+        <div className="flex items-center gap-2 px-1">
+          <Clock className="h-4 w-4 text-primary" />
+          <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">Verification Queue</h2>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4">
           {myWinnings?.list.length ? (
             myWinnings?.list.map((winner) => (
               <Card
                 key={winner.id}
-                className="border-none shadow-sm bg-background border-2 border-muted/10 group hover:border-primary/20 transition-all rounded-[1.5rem] overflow-hidden"
+                className="rounded-xl border shadow-sm overflow-hidden group hover:border-primary/20 transition-all"
               >
-                <CardContent className="p-8">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
-                    <div className="flex items-center gap-8">
-                      <div className="h-20 w-20 rounded-2xl bg-muted/30 flex items-center justify-center transition-transform group-hover:rotate-6">
-                        <Trophy
+                <CardContent className="p-6">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div className="flex items-center gap-6">
+                      <div className="h-14 w-14 rounded-lg bg-muted flex items-center justify-center group-hover:bg-primary/5 transition-colors">
+                        <TrophyIcon
                           className={cn(
-                            "h-10 w-10",
-                            winner.status === "PAID" ? "text-primary fill-primary" : "text-muted-foreground/30",
+                            "h-6 w-6",
+                            winner.status === "PAID" ? "text-primary fill-primary" : "text-muted-foreground",
                           )}
                         />
                       </div>
-                      <div>
-                        <div className="flex flex-wrap items-center gap-4 mb-3">
-                          <p className="text-2xl font-black leading-none tracking-tight uppercase">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-3">
+                          <p className="font-bold text-sm uppercase tracking-tight">
                             {new Intl.DateTimeFormat("en-US", { month: "long" }).format(
                               new Date(0, winner.draw.month - 1),
                             )}{" "}
-                            {winner.draw.year} RECOVERY
+                            {winner.draw.year} Cycle
                           </p>
                           {getStatusBadge(winner.status)}
                         </div>
-                        <p className="text-xs font-black text-muted-foreground uppercase tracking-[0.2em] leading-none">
-                          ALLOCATION:{" "}
-                          <span className="text-foreground tracking-normal not-italic ml-2">
-                            &#8377; {winner.amount.toLocaleString()} INR
-                          </span>
+                        <p className="text-xs text-muted-foreground font-medium">
+                          Allocation:{" "}
+                          <span className="text-foreground font-bold">&#8377;{winner.amount.toLocaleString()}</span>
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-5">
+                    <div className="flex items-center gap-4">
                       {winner.status === "PENDING_PROOF" && (
                         <Dialog
                           open={isUploadOpen && selectedWinnerId === winner.id}
@@ -277,85 +239,62 @@ export default function WinningsPage() {
                           }}
                         >
                           <DialogTrigger asChild>
-                            <Button className="rounded-xl px-8 h-12 shadow-xl shadow-destructive/10 hover:shadow-destructive/20 gap-3 border-none font-black text-sm tracking-tight bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                              <Upload className="h-4 w-4" /> INITIALIZE AUDIT
+                            <Button size="sm" className="rounded-lg font-bold h-9 px-4 gap-2">
+                              <Upload className="h-3.5 w-3.5" /> Submit Audit
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="rounded-3xl p-0 overflow-hidden border-none shadow-2xl">
-                            <DialogHeader className="bg-destructive text-destructive-foreground p-8">
-                              <DialogTitle className="text-2xl font-black uppercase tracking-tight">
-                                DATA VERIFICATION REQUIRED
+                          <DialogContent className="rounded-xl p-0 overflow-hidden border-none shadow-2xl max-w-md">
+                            <DialogHeader className="bg-primary text-primary-foreground p-6">
+                              <DialogTitle className="text-lg font-bold uppercase tracking-tight">
+                                Evidence Submission
                               </DialogTitle>
-                              <DialogDescription className="text-destructive-foreground/80 font-medium">
-                                Upload your temporal scorecard data from a club system or recognized handicap protocol
-                                for terminal clearance.
+                              <DialogDescription className="text-primary-foreground/70 text-xs">
+                                Upload your club scorecard data for terminal verification.
                               </DialogDescription>
                             </DialogHeader>
-                            <div className="p-8 space-y-8 bg-background">
-                              <div className="space-y-4">
-                                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
-                                  SELECT SOURCE IMAGE FILE
+                            <div className="p-6 space-y-6">
+                              <div className="space-y-3">
+                                <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                                  Select data log
                                 </Label>
                                 <Input
                                   type="file"
                                   accept="image/*"
                                   onChange={handleFileChange}
-                                  className="cursor-pointer h-14 rounded-2xl border-2 border-dashed border-muted-foreground/10 flex items-center px-4"
+                                  className="cursor-pointer h-10 text-xs rounded-lg border-dashed bg-muted/20"
                                 />
                                 {base64Image && (
-                                  <div className="aspect-video relative rounded-3xl overflow-hidden border-4 border-primary/20 bg-muted/20 shadow-inner group/preview">
-                                    <img
-                                      src={base64Image}
-                                      className="object-cover w-full h-full"
-                                      alt="Registry Proof Preview"
-                                    />
-                                    <div className="absolute inset-0 bg-primary/10 backdrop-blur-[1px]" />
+                                  <div className="aspect-video rounded-lg overflow-hidden border bg-muted/10">
+                                    <img src={base64Image} className="object-cover w-full h-full" alt="Preview" />
                                   </div>
                                 )}
                               </div>
-                              <div className="bg-muted/30 p-6 rounded-2xl flex gap-4 text-muted-foreground text-xs font-bold leading-relaxed border border-muted/20 leading-snug">
-                                <ShieldCheck className="h-6 w-6 shrink-0 text-primary" />
-                                <span>
-                                  Registry proofs are only visible to system auditors and permanently purged
-                                  post-clearance.
-                                </span>
+                              <div className="bg-muted/30 p-4 rounded-lg flex gap-3 items-start border">
+                                <ShieldCheck className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                                <p className="text-[10px] text-muted-foreground font-medium leading-relaxed">
+                                  Proofs are audited by system nodes and purged within 24 hours of clearance.
+                                </p>
                               </div>
                             </div>
-                            <DialogFooter className="p-8 pt-0 bg-background">
+                            <DialogFooter className="p-6 pt-0">
                               <Button
-                                className="w-full h-16 text-lg font-black rounded-2xl shadow-xl shadow-primary/20 transition-all hover:scale-[1.01]"
+                                className="w-full font-bold rounded-lg"
                                 disabled={!base64Image || uploadProofMutation.isPending}
                                 onClick={() => uploadProofMutation.mutate({ id: winner.id, proofUrl: base64Image! })}
                               >
-                                {uploadProofMutation.isPending ? "PROCESSING DATA LOAD..." : "COMMIT TO AUDIT"}
+                                {uploadProofMutation.isPending ? "Syncing..." : "Commit Data"}
                               </Button>
                             </DialogFooter>
                           </DialogContent>
                         </Dialog>
                       )}
 
-                      {winner.status === "PROOFS_UPLOADED" && (
-                        <div className="flex flex-col items-end gap-1">
-                          <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] animate-pulse">
-                            AUDIT IN PROGRESS
-                          </p>
-                          <p className="text-xs font-medium text-muted-foreground/60">
-                            Temporal data pending clearance
-                          </p>
-                        </div>
-                      )}
-
                       {winner.status === "PAID" && (
-                        <div className="bg-primary/5 px-6 py-3 rounded-2xl border border-primary/10 flex items-center gap-3">
-                          <ShieldCheck className="h-5 w-5 text-primary" />
-                          <div className="text-left">
-                            <p className="text-[10px] font-black text-primary uppercase tracking-widest leading-none">
-                              FUNDED
-                            </p>
-                            <p className="text-xs font-bold text-foreground/70 mt-1">
-                              {new Date(winner.paidAt!).toLocaleDateString()}
-                            </p>
-                          </div>
+                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-100">
+                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                          <span className="text-[10px] font-bold text-emerald-600 uppercase tabular-nums">
+                            {new Date(winner.paidAt!).toLocaleDateString()}
+                          </span>
                         </div>
                       )}
                     </div>
@@ -364,16 +303,14 @@ export default function WinningsPage() {
               </Card>
             ))
           ) : (
-            <div className="py-40 text-center border-2 border-dashed rounded-[2.5rem] bg-muted/5 border-muted/10 flex flex-col items-center justify-center space-y-8">
-              <div className="h-24 w-24 rounded-full bg-muted/20 flex items-center justify-center text-muted-foreground/20 animate-bounce">
-                <Trophy className="h-12 w-12" />
-              </div>
-              <div className="space-y-3">
-                <p className="text-muted-foreground font-black text-2xl uppercase tracking-tighter">
-                  Temporal Cabinet Empty
+            <div className="py-24 text-center border-2 border-dashed rounded-xl bg-muted/5 flex flex-col items-center justify-center space-y-4">
+              <Trophy className="h-8 w-8 text-muted-foreground/20" />
+              <div className="space-y-1">
+                <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground/60">
+                  No prize records found
                 </p>
-                <p className="text-sm font-medium text-muted-foreground/40 max-w-sm mx-auto leading-relaxed">
-                  Establish consistent data loads and commit to the next draw to initialize your prize registry.
+                <p className="text-xs text-muted-foreground/40 max-w-[200px] mx-auto">
+                  Engage in cycles and commit data to initialize your registry.
                 </p>
               </div>
             </div>
