@@ -1,8 +1,11 @@
 import dotenv from "dotenv";
-import os from "node:os";
-import app from "./app";
+dotenv.config();
 
-// Network URL
+import os from "node:os";
+import app from "./app.js";
+
+const PORT = Number(process.env.PORT) || 8080;
+
 function getLocalIP() {
   const nets = os.networkInterfaces();
   for (const name of Object.keys(nets)) {
@@ -12,7 +15,6 @@ function getLocalIP() {
   return "127.0.0.1";
 }
 
-// Serve
 app.listen(PORT, "0.0.0.0", () => {
   const localIP = getLocalIP();
   const localUrl = `http://localhost:${PORT}`;

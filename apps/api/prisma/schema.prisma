@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  // output   = "../src/database/prisma"
 }
 
 datasource db {
@@ -8,35 +7,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ─── Auth Models (managed by better-auth) ────────────────────────────────
+
 model User {
   id             String   @id @default(ulid())
-  username       String?  @unique
+  name           String
   email          String   @unique
   emailVerified  Boolean  @default(false)
-  hashedPassword String
-  name           String?
-  bio            String?
-  profileImage   String?
-  role           String   @default("user")
+  image   String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  image     String?
-  sessions  Session[]
-  accounts  Account[]
+  bio            String?
+  role           String   @default("user") // "user" | "admin"
+  sessions Session[]
+  accounts Account[]
+
+  // Domain relations
+  subscriptions Subscription[]
+  golfScores    GolfScore[]
+  drawEntries   DrawEntry[]
+  winners       Winner[]
 
   @@map("user")
 }
 
 model Session {
   id        String   @id
-  expiresAt DateTime
+  userId    String
   token     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  expiresAt DateTime
   ipAddress String?
   userAgent String?
-  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([token])
@@ -45,19 +50,20 @@ model Session {
 
 model Account {
   id                    String    @id
+  userId                String
   accountId             String
   providerId            String
-  userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
-  idToken               String?
   accessTokenExpiresAt  DateTime?
   refreshTokenExpiresAt DateTime?
   scope                 String?
+  idToken               String?
   password              String?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
+
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("account")
 }
@@ -71,4 +77,135 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+// ─── Domain Models ───────────────────────────────────────────────────────
+
+enum SubscriptionPlan {
+  MONTHLY
+  YEARLY
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+}
+
+model Subscription {
+  id                  String             @id @default(ulid())
+  userId              String
+  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan                SubscriptionPlan
+  status              SubscriptionStatus @default(ACTIVE)
+  price               Float              // e.g. 9.99 monthly, 99.99 yearly
+  charityId           String?
+  charity             Charity?           @relation(fields: [charityId], references: [id])
+  contributionPercent Int                @default(10) // % of subscription going to charity (5–50)
+  startDate           DateTime           @default(now())
+  endDate             DateTime
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@map("subscription")
+}
+
+model GolfScore {
+  id         String   @id @default(ulid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score      Int      // Stableford points (0–50 typical range)
+  courseName String?
+  playedAt   DateTime @default(now())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId, playedAt(sort: Desc)])
+  @@map("golf_score")
+}
+
+model Charity {
+  id            String   @id @default(ulid())
+  name          String
+  description   String
+  imageUrl      String?
+  website       String?
+  isActive      Boolean  @default(true)
+  totalReceived Float    @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  subscriptions Subscription[]
+
+  @@map("charity")
+}
+
+enum DrawStatus {
+  PENDING
+  OPEN      // accepting entries
+  RUNNING
+  COMPLETED
+}
+
+enum DrawType {
+  RANDOM
+  ALGORITHM // weighted by score performance
+}
+
+model Draw {
+  id        String     @id @default(ulid())
+  month     Int        // 1–12
+  year      Int
+  status    DrawStatus @default(PENDING)
+  drawType  DrawType   @default(RANDOM)
+  prizePool Float      @default(0)
+  drawnAt   DateTime?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  entries DrawEntry[]
+  winner  Winner?
+
+  @@unique([month, year])
+  @@index([status])
+  @@map("draw")
+}
+
+model DrawEntry {
+  id           String   @id @default(ulid())
+  drawId       String
+  draw         Draw     @relation(fields: [drawId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  averageScore Float    // computed from latest 5 scores at entry time
+  createdAt    DateTime @default(now())
+
+  @@unique([drawId, userId])
+  @@index([drawId])
+  @@map("draw_entry")
+}
+
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Winner {
+  id                 String             @id @default(ulid())
+  drawId             String             @unique
+  draw               Draw               @relation(fields: [drawId], references: [id], onDelete: Cascade)
+  userId             String
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  prizeAmount        Float
+  proofUrl           String?
+  verificationStatus VerificationStatus @default(PENDING)
+  paidAt             DateTime?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@index([userId])
+  @@map("winner")
 }
