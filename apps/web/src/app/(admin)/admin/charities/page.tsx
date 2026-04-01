@@ -199,7 +199,7 @@ export default function AdminCharitiesPage() {
                       <td className="px-6 py-4">
                         <div className="space-y-0.5">
                           <p className="font-bold text-primary">
-                            ${charity.totalReceived?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || "0.00"}
+                            &#8377;{charity.totalReceived?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || "0.00"}
                           </p>
                           <p className="text-[10px] text-muted-foreground uppercase font-medium">Total Donated</p>
                         </div>

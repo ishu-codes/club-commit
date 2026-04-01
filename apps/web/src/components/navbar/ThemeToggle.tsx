@@ -2,12 +2,17 @@
 
 import { useTheme } from "next-themes";
 import { MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-// import { cn } from "@/lib/utils";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const toggleTheme = () => {
     switch (theme) {
@@ -24,6 +29,15 @@ export function ThemeToggle() {
         break;
     }
   };
+
+  if (!mounted) {
+    return (
+      <Button variant="ghost" size="lg" disabled>
+        <div className="h-[1.2rem] w-[1.2rem]" />
+        <span className="sr-only">Toggle theme</span>
+      </Button>
+    );
+  }
 
   return (
     <Button variant="ghost" size="lg" onClick={toggleTheme}>

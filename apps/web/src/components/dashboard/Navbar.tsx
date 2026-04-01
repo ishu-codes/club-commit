@@ -21,7 +21,7 @@ export default function Navbar() {
             <PopoverTrigger>
               <Avatar className="cursor-pointer transition-opacity hover:opacity-80">
                 <AvatarImage src={session?.user.image ?? ""} alt="profile" />
-                <AvatarFallback className="font-semibold">{session?.user.name.charAt(0)}</AvatarFallback>
+                <AvatarFallback className="font-semibold">{session?.user.name?.charAt(0) || "U"}</AvatarFallback>
               </Avatar>
             </PopoverTrigger>
             <PopoverContent className="w-80 rounded-xl p-6 shadow-xl border-border/50" align="end">
@@ -29,7 +29,9 @@ export default function Navbar() {
                 <div className="flex items-center gap-4">
                   <Avatar className="w-10 h-10">
                     <AvatarImage src={session?.user.image ?? ""} alt="profile" />
-                    <AvatarFallback className="text-base font-semibold">{session?.user.name.charAt(0)}</AvatarFallback>
+                    <AvatarFallback className="text-base font-semibold">
+                      {session?.user.name?.charAt(0) || "U"}
+                    </AvatarFallback>
                   </Avatar>
                   <div>
                     <h3 className="text-sm font-semibold leading-none mb-1">{session?.user.name}</h3>
