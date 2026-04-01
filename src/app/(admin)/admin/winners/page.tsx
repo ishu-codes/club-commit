@@ -133,7 +133,7 @@ export default function AdminWinnersPage() {
                   <CardContent className="flex-1 space-y-6">
                     <div className="space-y-1">
                       <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">Prize Allocation</p>
-                      <p className="text-3xl font-bold text-foreground tracking-tight">${winner.amount?.toLocaleString()}</p>
+                      <p className="text-3xl font-bold text-foreground tracking-tight">&#8377;{winner.amount?.toLocaleString()}</p>
                     </div>
                     <div className="aspect-video bg-muted/30 rounded-lg border border-dashed flex flex-col items-center justify-center overflow-hidden relative group-hover:border-primary/40 transition-colors">
                       {winner.proofUrl ? (
@@ -192,7 +192,7 @@ export default function AdminWinnersPage() {
                         </td>
                         <td className="px-6 py-5">
                           <p className="font-bold text-xl text-primary tracking-tight">
-                            ${winner.amount?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                            &#8377;{winner.amount?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                           </p>
                         </td>
                         <td className="px-6 py-5">
@@ -247,7 +247,7 @@ export default function AdminWinnersPage() {
                           <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tight">{winner.user?.email}</p>
                         </td>
                         <td className="px-6 py-4 font-bold text-primary">
-                          ${winner.amount?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                          &#8377;{winner.amount?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                         </td>
                         <td className="px-6 py-4 text-muted-foreground text-xs font-semibold tabular-nums uppercase">
                           {new Date(winner.paidAt!).toLocaleDateString()}
@@ -290,11 +290,11 @@ export default function AdminWinnersPage() {
                     </div>
                     <div className="flex justify-between items-center text-sm">
                       <span className="text-muted-foreground font-medium">Allocated Pool</span>
-                      <span className="font-bold text-primary">${selectedWinner?.prizeAmount?.toLocaleString()}</span>
+                      <span className="font-bold text-primary">&#8377;{selectedWinner?.amount?.toLocaleString() || '0'}</span>
                     </div>
                     <div className="flex justify-between items-center text-[10px]">
                       <span className="text-muted-foreground font-medium">Hex Identifier</span>
-                      <span className="font-mono text-muted-foreground/60">#{selectedWinner?.id.slice(-12).toUpperCase()}</span>
+                      <span className="font-mono text-muted-foreground/60">#{selectedWinner?.id?.slice(-12).toUpperCase()}</span>
                     </div>
                   </div>
                 </div>

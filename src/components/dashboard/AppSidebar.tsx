@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  ChevronRightIcon,
   CreditCardIcon,
+  CrownIcon,
   HeartIcon,
   HistoryIcon,
   LayoutDashboardIcon,
@@ -22,7 +22,7 @@ const sidebarItems = [
   { name: "Scores", href: "/dashboard/scores", icon: TrophyIcon },
   { name: "Charities", href: "/dashboard/charity", icon: HeartIcon },
   { name: "Draw History", href: "/dashboard/draws", icon: HistoryIcon },
-  { name: "Winnings", href: "/dashboard/winnings", icon: ChevronRightIcon },
+  { name: "Winnings", href: "/dashboard/winnings", icon: CrownIcon },
   { name: "Subscription", href: "/dashboard/subscription", icon: CreditCardIcon },
   { name: "Settings", href: "/dashboard/settings", icon: SettingsIcon },
 ];

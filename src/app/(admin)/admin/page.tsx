@@ -63,7 +63,7 @@ export default function AdminDashboardPage() {
     },
     {
       label: "Revenue",
-      value: `$${(stats?.subscriptions.totalRevenue || 0).toLocaleString()}`,
+      value: `&#8377;${(stats?.subscriptions.totalRevenue || 0).toLocaleString()}`,
       icon: DollarSign,
       trend: "+8%",
     },
@@ -75,7 +75,7 @@ export default function AdminDashboardPage() {
     },
     {
       label: "Distributed",
-      value: `$${(stats?.winners.totalPaid || 0).toLocaleString()}`,
+      value: `&#8377;${(stats?.winners.totalPaid || 0).toLocaleString()}`,
       icon: Trophy,
       trend: "+24%",
     },
@@ -111,7 +111,7 @@ export default function AdminDashboardPage() {
               <card.icon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{card.value}</div>
+              <div className="text-2xl font-bold" dangerouslySetInnerHTML={{ __html: String(card.value) }} />
               <p className="text-xs text-muted-foreground mt-1">
                 <span className="text-emerald-500 font-medium">{card.trend}</span> from last month
               </p>
@@ -140,7 +140,7 @@ export default function AdminDashboardPage() {
                   Total Distributed
                 </p>
                 <p className="text-4xl font-bold tracking-tight text-primary">
-                  ${(stats?.winners.totalPaid || 0).toLocaleString()}
+                  &#8377;{(stats?.winners.totalPaid || 0).toLocaleString()}
                 </p>
               </div>
               <div className="text-right space-y-1">
@@ -148,18 +148,18 @@ export default function AdminDashboardPage() {
                   Target Delta
                 </p>
                 <p className="text-xl font-semibold opacity-50">
-                  ${(250000 - (stats?.winners.totalPaid || 0)).toLocaleString()}
+                  &#8377;{(2500000 - (stats?.winners.totalPaid || 0)).toLocaleString()}
                 </p>
               </div>
             </div>
             <div className="space-y-2">
               <Progress
-                value={((stats?.winners.totalPaid || 0) / 250000) * 100}
+                value={((stats?.winners.totalPaid || 0) / 2500000) * 100}
                 className="h-2 rounded-full"
               />
               <div className="flex justify-between text-[10px] font-medium text-muted-foreground/60 uppercase tracking-widest">
                 <span>Phase Start</span>
-                <span>$250k Target</span>
+                <span>&#8377;2.5M Target</span>
               </div>
             </div>
           </CardContent>
@@ -180,7 +180,7 @@ export default function AdminDashboardPage() {
               <div key={i} className="space-y-2">
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium truncate max-w-[150px]">{item.name}</span>
-                  <span className="text-sm font-semibold">${item.totalReceived.toLocaleString()}</span>
+                  <span className="text-sm font-semibold">&#8377;{item.totalReceived.toLocaleString()}</span>
                 </div>
                 <Progress value={Math.min((item.totalReceived / (stats?.winners.totalPaid || 1)) * 100, 100)} className="h-1.5" />
               </div>

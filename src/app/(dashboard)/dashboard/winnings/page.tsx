@@ -157,27 +157,27 @@ export default function WinningsPage() {
             <CardTitle className="text-lg font-bold flex items-center gap-2 tracking-tight">
               <Trophy className="h-5 w-5 text-primary" /> Network Hall of Fame
             </CardTitle>
-            <CardDescription className="text-xs">Peer performance indicators and impact highlights.</CardDescription>
+            <CardDescription>Peer performance indicators and impact highlights.</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                { name: "John D.", amount: 840, draw: "March 2026" },
-                { name: "Sarah K.", amount: 910, draw: "February 2026" },
-                { name: "Mike R.", amount: 760, draw: "January 2026" },
-                { name: "Emma L.", amount: 620, draw: "Dec 2025" },
+                { name: "John D.", amount: 8400, draw: "Mar 2026" },
+                { name: "Sarah K.", amount: 9100, draw: "Feb 2026" },
+                { name: "Mike R.", amount: 7600, draw: "Jan 2026" },
+                { name: "Emma L.", amount: 6200, draw: "Dec 2025" },
               ].map((w, i) => (
                 <div
                   key={i}
                   className="flex items-center justify-between p-3 rounded-lg border bg-muted/30 hover:bg-muted/50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="h-7 w-7 rounded-md bg-background border flex items-center justify-center text-[10px] font-bold text-muted-foreground">
+                    <div className="h-7 w-7 flex items-center justify-center font-semibold text-muted-foreground">
                       #{i + 1}
                     </div>
                     <div>
-                      <p className="text-xs font-bold">{w.name}</p>
-                      <p className="text-[10px] text-muted-foreground uppercase font-medium">{w.draw}</p>
+                      <p className="text-sm font-bold">{w.name}</p>
+                      <p className="text-xs text-muted-foreground font-medium">{w.draw}</p>
                     </div>
                   </div>
                   <p className="text-sm font-bold text-primary">&#8377; {w.amount}</p>

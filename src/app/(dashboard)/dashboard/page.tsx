@@ -40,7 +40,12 @@ export default function DashboardPage() {
 
   const stats = [
     { name: "Rolling Average", value: dashboard?.scores.average || 0, icon: TrendingUp, color: "text-primary" },
-    { name: "Total Winnings", value: `$${dashboard?.winnings.totalWon || 0}`, icon: Award, color: "text-primary" },
+    {
+      name: "Total Winnings",
+      value: `₹ ${dashboard?.winnings.totalWon || 0}`,
+      icon: Award,
+      color: "text-primary",
+    },
     { name: "Active Draws", value: dashboard?.draws.upcoming.length || 0, icon: Trophy, color: "text-primary" },
     {
       name: "Status",
@@ -101,7 +106,11 @@ export default function DashboardPage() {
                       <div>
                         <p className="font-semibold text-sm">{score.courseName}</p>
                         <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-tighter">
-                          {new Date(score.playedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                          {new Date(score.playedAt).toLocaleDateString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })}
                         </p>
                       </div>
                     </div>
@@ -127,7 +136,10 @@ export default function DashboardPage() {
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Ticket className="h-4 w-4 text-primary" /> Next Draw
                 </CardTitle>
-                <Badge variant={dashboard?.subscription ? "default" : "outline"} className="text-[10px] font-bold px-2 py-0.5">
+                <Badge
+                  variant={dashboard?.subscription ? "default" : "outline"}
+                  className="text-[10px] font-bold px-2 py-0.5"
+                >
                   {dashboard?.subscription ? "QUALIFIED" : "NOT ELIGIBLE"}
                 </Badge>
               </div>
@@ -138,7 +150,9 @@ export default function DashboardPage() {
             <CardContent className="space-y-4">
               <div className="space-y-1">
                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Prize Pool</p>
-                <div className="text-3xl font-bold tracking-tight text-primary">${dashboard?.draws.upcoming[0]?.prizePool?.toLocaleString() || 0}</div>
+                <div className="text-3xl font-bold tracking-tight text-primary">
+                  &#8377; {dashboard?.draws.upcoming[0]?.prizePool?.toLocaleString() || 0}
+                </div>
               </div>
               <Separator />
               <div className="flex items-center justify-between text-xs">
@@ -162,7 +176,7 @@ export default function DashboardPage() {
             <CardContent className="space-y-3">
               <p className="text-sm font-semibold leading-relaxed">
                 {dashboard?.subscription
-                  ? `Supporting: ${dashboard.subscription.charity?.name}`
+                  ? `Supporting: &#8377; {dashboard.subscription.charity?.name}`
                   : "Start making an impact today."}
               </p>
               <p className="text-xs text-muted-foreground leading-relaxed font-medium">
@@ -170,12 +184,7 @@ export default function DashboardPage() {
               </p>
             </CardContent>
             <CardFooter className="pt-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full text-xs font-bold"
-                asChild
-              >
+              <Button variant="outline" size="sm" className="w-full text-xs font-bold" asChild>
                 <Link href="/dashboard/charity">Update Preference</Link>
               </Button>
             </CardFooter>

@@ -22,11 +22,14 @@ export default function LandingPage() {
                 Your Game, Their <span className="text-primary">Future.</span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground max-w-2xl font-medium leading-relaxed">
-                The elite golf platform where performance translates to impact. Subscribe, compete, and fund vetted charities through every round committed.
+                The elite golf platform where performance translates to impact. Subscribe, compete, and fund vetted
+                charities through every round committed.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button size="lg" className="px-8 h-12 text-sm font-bold gap-2 rounded-lg" asChild>
-                  <Link href="/sign-up">Initialize Mission <ArrowRight className="h-4 w-4" /></Link>
+                  <Link href="/sign-up">
+                    Initialize Mission <ArrowRight className="h-4 w-4" />
+                  </Link>
                 </Button>
                 <Button size="lg" variant="outline" className="px-8 h-12 text-sm font-bold rounded-lg border-2" asChild>
                   <Link href="#how-it-works">Review Protocol</Link>
@@ -36,19 +39,27 @@ export default function LandingPage() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-12 w-full max-w-2xl border-t mt-12 bg-muted/5 p-8 rounded-xl ring-1 ring-muted">
                 <div className="flex flex-col gap-1">
                   <span className="text-2xl font-bold tracking-tight">$1.2M+</span>
-                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Recovered</span>
+                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
+                    Recovered
+                  </span>
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-2xl font-bold tracking-tight">24k+</span>
-                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Active Nodes</span>
+                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
+                    Active Nodes
+                  </span>
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-2xl font-bold tracking-tight">150k+</span>
-                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Logged Data</span>
+                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
+                    Logged Data
+                  </span>
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-2xl font-bold tracking-tight">$500k+</span>
-                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Distributed</span>
+                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
+                    Distributed
+                  </span>
                 </div>
               </div>
             </div>
@@ -86,9 +97,14 @@ export default function LandingPage() {
                   icon: <Heart className="h-5 w-5 text-primary" />,
                 },
               ].map((step, i) => (
-                <Card key={i} className="border bg-background shadow-sm rounded-lg overflow-hidden group hover:border-primary/30 transition-all">
+                <Card
+                  key={i}
+                  className="border bg-background shadow-sm rounded-lg overflow-hidden group hover:border-primary/30 transition-all"
+                >
                   <CardHeader className="pb-2">
-                    <div className="mb-4 h-10 w-10 flex items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">{step.icon}</div>
+                    <div className="mb-4 h-10 w-10 flex items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">
+                      {step.icon}
+                    </div>
                     <CardTitle className="text-sm font-bold uppercase tracking-widest">{step.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="text-muted-foreground text-xs font-medium leading-relaxed">
@@ -110,7 +126,11 @@ export default function LandingPage() {
                   We funnel capital to vetted organizations dedicated to character development through sport.
                 </p>
               </div>
-              <Button variant="ghost" size="sm" className="text-[10px] font-bold uppercase tracking-widest border h-8 px-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-[10px] font-bold uppercase tracking-widest border h-8 px-4"
+              >
                 Full Registry <ArrowRight className="h-3.5 w-3.5 ml-2" />
               </Button>
             </div>
@@ -133,7 +153,10 @@ export default function LandingPage() {
                   image: "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=800",
                 },
               ].map((charity, i) => (
-                <div key={i} className="group relative overflow-hidden rounded-xl bg-muted aspect-video border shadow-sm">
+                <div
+                  key={i}
+                  className="group relative overflow-hidden rounded-xl bg-muted aspect-video border shadow-sm"
+                >
                   <img
                     src={charity.image}
                     alt={charity.name}
@@ -141,7 +164,9 @@ export default function LandingPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-6 flex flex-col justify-end">
                     <h3 className="text-sm font-bold text-white uppercase tracking-widest mb-1">{charity.name}</h3>
-                    <p className="text-white/70 text-[10px] font-medium leading-relaxed line-clamp-2 max-w-[200px]">{charity.desc}</p>
+                    <p className="text-white/70 text-[10px] font-medium leading-relaxed line-clamp-2 max-w-[200px]">
+                      {charity.desc}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -163,12 +188,16 @@ export default function LandingPage() {
               <Card className="bg-background text-foreground border-none shadow-xl rounded-xl overflow-hidden">
                 <CardHeader className="pb-8 border-b bg-muted/5">
                   <CardTitle className="text-lg font-bold uppercase tracking-widest">Standard Entry</CardTitle>
-                  <CardDescription className="font-semibold text-[10px] uppercase text-muted-foreground/60">Seasonal Deployment</CardDescription>
+                  <CardDescription className="font-semibold text-[10px] uppercase text-muted-foreground/60">
+                    Seasonal Deployment
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-8 pt-8">
                   <div className="flex items-baseline">
-                    <span className="text-4xl font-bold tracking-tight text-foreground/80">$9.99</span>
-                    <span className="text-muted-foreground font-bold text-[10px] uppercase ml-1.5 opacity-60">/ Month</span>
+                    <span className="text-4xl font-bold tracking-tight text-foreground/80">&#8377; 999</span>
+                    <span className="text-muted-foreground font-bold text-[10px] uppercase ml-1.5 opacity-60">
+                      / Month
+                    </span>
                   </div>
                   <ul className="space-y-4">
                     {[
@@ -178,7 +207,10 @@ export default function LandingPage() {
                       "Authenticated Dashboard",
                       "Member Identification",
                     ].map((item, i) => (
-                      <li key={i} className="flex items-center gap-3 text-xs font-semibold text-foreground/70 uppercase tracking-tight">
+                      <li
+                        key={i}
+                        className="flex items-center gap-3 text-xs font-semibold text-foreground/70 tracking-tight"
+                      >
                         <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                         <span>{item}</span>
                       </li>
@@ -195,15 +227,21 @@ export default function LandingPage() {
                   Priority Access
                 </div>
                 <CardHeader className="pb-8 border-b border-white/5 bg-white/5">
-                  <CardTitle className="text-lg font-bold uppercase tracking-widest text-white">Full Commitment</CardTitle>
-                  <CardDescription className="text-primary font-bold text-[10px] uppercase tracking-widest">Protocol Hero Tier</CardDescription>
+                  <CardTitle className="text-lg font-bold uppercase tracking-widest text-white">
+                    Full Commitment
+                  </CardTitle>
+                  <CardDescription className="text-primary font-bold text-[10px] uppercase tracking-widest">
+                    Protocol Hero Tier
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-8 pt-8">
                   <div className="flex items-baseline">
-                    <span className="text-4xl font-bold tracking-tight text-white">$99.99</span>
+                    <span className="text-4xl font-bold tracking-tight text-white">&#8377; 9,999</span>
                     <span className="text-zinc-500 font-bold text-[10px] uppercase ml-1.5">/ Year</span>
                   </div>
-                  <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Save 20% on Annual Stake</p>
+                  <p className="text-[10px] font-bold text-primary uppercase tracking-widest">
+                    Save 20% on Annual Stake
+                  </p>
                   <ul className="space-y-4 text-zinc-300">
                     {[
                       "Priority Results Audit",
@@ -212,13 +250,16 @@ export default function LandingPage() {
                       "Advanced Impact Metrics",
                       "First-Class Network Hub",
                     ].map((item, i) => (
-                      <li key={i} className="flex items-center gap-3 text-xs font-semibold uppercase tracking-tight">
+                      <li key={i} className="flex items-center gap-3 text-xs font-semibold tracking-tight">
                         <Star className="h-4 w-4 text-primary fill-primary" />
                         <span>{item}</span>
                       </li>
                     ))}
                   </ul>
-                  <Button className="w-full h-12 text-xs font-bold rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground uppercase tracking-widest border-none" asChild>
+                  <Button
+                    className="w-full h-12 text-xs font-bold rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground uppercase tracking-widest border-none"
+                    asChild
+                  >
                     <Link href="/sign-up?plan=yearly">Activate annual access</Link>
                   </Button>
                 </CardContent>
@@ -245,24 +286,56 @@ export default function LandingPage() {
               <div className="space-y-4">
                 <h4 className="text-white font-bold uppercase text-[10px] tracking-widest">Protocol</h4>
                 <ul className="space-y-2 text-[11px] font-semibold uppercase tracking-tight">
-                  <li><Link href="#how-it-works" className="hover:text-primary transition-colors">How it works</Link></li>
-                  <li><Link href="#pricing" className="hover:text-primary transition-colors">Pricing</Link></li>
-                  <li><Link href="/draws" className="hover:text-primary transition-colors">Audit Results</Link></li>
+                  <li>
+                    <Link href="#how-it-works" className="hover:text-primary transition-colors">
+                      How it works
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#pricing" className="hover:text-primary transition-colors">
+                      Pricing
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/draws" className="hover:text-primary transition-colors">
+                      Audit Results
+                    </Link>
+                  </li>
                 </ul>
               </div>
               <div className="space-y-4">
                 <h4 className="text-white font-bold uppercase text-[10px] tracking-widest">Charity</h4>
                 <ul className="space-y-2 text-[11px] font-semibold uppercase tracking-tight">
-                  <li><Link href="#charities" className="hover:text-primary transition-colors">Registry</Link></li>
-                  <li><Link href="/impact" className="hover:text-primary transition-colors">Our Impact</Link></li>
-                  <li><Link href="/apply" className="hover:text-primary transition-colors">Apply</Link></li>
+                  <li>
+                    <Link href="#charities" className="hover:text-primary transition-colors">
+                      Registry
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/impact" className="hover:text-primary transition-colors">
+                      Our Impact
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/apply" className="hover:text-primary transition-colors">
+                      Apply
+                    </Link>
+                  </li>
                 </ul>
               </div>
               <div className="space-y-4">
                 <h4 className="text-white font-bold uppercase text-[10px] tracking-widest">Security</h4>
                 <ul className="space-y-2 text-[11px] font-semibold uppercase tracking-tight">
-                  <li><Link href="/privacy" className="hover:text-primary transition-colors">Privacy</Link></li>
-                  <li><Link href="/terms" className="hover:text-primary transition-colors">Terms</Link></li>
+                  <li>
+                    <Link href="/privacy" className="hover:text-primary transition-colors">
+                      Privacy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/terms" className="hover:text-primary transition-colors">
+                      Terms
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </div>

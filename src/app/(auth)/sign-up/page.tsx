@@ -5,14 +5,16 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { signUp } from "@/lib/auth-client";
+import { EyeClosedIcon, EyeIcon, TrophyIcon } from "lucide-react";
 import { toast } from "sonner";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
+import { signUp } from "@/lib/auth-client";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+// import { Separator } from "@/components/ui/separator";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -23,6 +25,7 @@ const registerSchema = z.object({
 export default function SignUpPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -60,9 +63,20 @@ export default function SignUpPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 py-12 dark:bg-zinc-950">
       <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
-          <CardDescription>Enter your information to get started with ClubCommit</CardDescription>
+        <CardHeader className="space-y-8">
+          <Link href="/" className="w-full flex items-center justify-center gap-3 transition-opacity hover:opacity-80">
+            <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center shadow-md shadow-primary/10">
+              <TrophyIcon className="h-5 w-5 text-primary-foreground" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold tracking-tight leading-none">ClubCommit</span>
+            </div>
+          </Link>
+          {/*<Separator />*/}
+          <div className="space-y-1">
+            <CardTitle className="text-xl font-bold">Create an account</CardTitle>
+            <CardDescription>Enter your information to get started with ClubCommit</CardDescription>
+          </div>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -74,7 +88,7 @@ export default function SignUpPage() {
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Aarav Sharma" {...field} />
+                      <Input placeholder="John Doe" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -100,14 +114,29 @@ export default function SignUpPage() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="password" {...field} />
+                      <div className="relative group">
+                        <Input
+                          placeholder="password"
+                          type={showPassword ? "text" : "password"}
+                          autoComplete="password"
+                          className="transition-all"
+                          {...field}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword((state) => !state)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          {showPassword ? <EyeIcon className="w-4 h-4" /> : <EyeClosedIcon className="w-4 h-4" />}
+                        </button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button className="w-full" type="submit" disabled={isLoading}>
-                {isLoading ? "Creating account..." : "Sign up"}
+              <Button className="w-full mt-4" type="submit" disabled={isLoading}>
+                {isLoading ? "Creating account..." : "Register"}
               </Button>
             </form>
           </Form>

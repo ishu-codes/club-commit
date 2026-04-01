@@ -58,6 +58,23 @@ export default function CharityPage() {
         </div>
       </div>
 
+      {!dashboard?.subscription && (
+        <Card className="rounded-xl border shadow-sm p-6 flex flex-col md:flex-row gap-6 items-center bg-muted/10">
+          <div className="h-12 w-12 rounded-full bg-destructive/10 text-destructive flex items-center justify-center shrink-0">
+            <Info className="h-6 w-6" />
+          </div>
+          <div className="space-y-1 flex-1 text-center md:text-left">
+            <h4 className="text-sm font-bold uppercase tracking-widest leading-none">Membership Inactive</h4>
+            <p className="text-sm text-muted-foreground font-medium leading-relaxed mt-2">
+              Establishing a monthly stake is required to support partners and gain prize pool eligibility.
+            </p>
+          </div>
+          <Button asChild className="font-bold px-8">
+            <Link href="/dashboard/subscription">Get Started</Link>
+          </Button>
+        </Card>
+      )}
+
       {dashboard?.subscription && (
         <Card className="bg-muted/5 border shadow-sm rounded-xl overflow-hidden">
           <CardContent className="pt-6">
@@ -131,7 +148,7 @@ export default function CharityPage() {
                       <p className="text-[10px] font-bold uppercase tracking-wider leading-none text-muted-foreground/60">Impact Tracking</p>
                       <p className="text-xs font-semibold text-foreground/80 mt-1">
                         {charity.totalReceived > 0
-                          ? `$${charity.totalReceived.toLocaleString()} Funding Goal`
+                          ? `&#8377;${charity.totalReceived.toLocaleString()} Funding Goal`
                           : "Ready for first commit"}
                       </p>
                     </div>
@@ -161,23 +178,6 @@ export default function CharityPage() {
           </div>
         )}
       </div>
-
-      {!dashboard?.subscription && (
-        <Card className="rounded-xl border-destructive/20 bg-destructive/5 p-6 flex flex-col md:flex-row gap-6 items-center">
-          <div className="h-12 w-12 rounded-full bg-destructive/10 text-destructive flex items-center justify-center shrink-0">
-            <Info className="h-6 w-6" />
-          </div>
-          <div className="space-y-1 flex-1 text-center md:text-left">
-            <h4 className="text-sm font-bold text-destructive uppercase tracking-widest leading-none">Subscription Required</h4>
-            <p className="text-sm text-muted-foreground font-medium leading-relaxed">
-              Establishing a monthly stake is necessary to start supporting partners and gain eligibility for prize cycles.
-            </p>
-          </div>
-          <Button size="sm" variant="destructive" asChild className="w-full md:w-auto font-bold shadow-md shadow-destructive/10">
-            <Link href="/dashboard/subscription">Get Started</Link>
-          </Button>
-        </Card>
-      )}
     </div>
   );
 }

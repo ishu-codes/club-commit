@@ -93,7 +93,7 @@ export default function DrawsPage() {
                 </div>
                 <div className="text-right">
                   <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none mb-1">Prize Pool</p>
-                  <div className="text-4xl font-bold text-primary tracking-tight">${upcomingDraws[0].prizePool}</div>
+                  <div className="text-4xl font-bold text-primary tracking-tight">&#8377;{upcomingDraws[0].prizePool}</div>
                 </div>
               </div>
             </CardHeader>
@@ -193,7 +193,7 @@ export default function DrawsPage() {
                         {draw.status}
                       </Badge>
                     </div>
-                    <p className="text-xl font-bold text-foreground tracking-tight">${draw.prizePool.toLocaleString()}</p>
+                    <p className="text-xl font-bold text-foreground tracking-tight">&#8377;{draw.prizePool.toLocaleString()}</p>
                   </CardHeader>
                   <CardContent className="py-4">
                     {entry ? (
