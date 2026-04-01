@@ -17,4 +17,9 @@ export interface PlatformStats {
         totalPaid: number;
         pendingPayouts: number;
     };
+    charitiesBreakdown: Array<{
+        id: string;
+        name: string;
+        totalReceived: number;
+    }>;
 }

@@ -17,7 +17,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -39,10 +39,10 @@ import { cn } from "@/lib/utils";
 import { scoreFetchers } from "@/fetchers/score";
 import { dashboardFetchers } from "@/fetchers/dashboard";
 
-const scoreSchema = z.z.object({
-  score: z.z.coerce.number().min(50, "Are you sure? Minimum score is 50.").max(150, "Maximum score is 150."),
-  courseName: z.z.string().min(2, "Course name is required"),
-  playedAt: z.z.string().min(1, "Date is required"),
+const scoreSchema = z.object({
+  score: z.number().min(0, "Minimum score is 0.").max(50, "Maximum score is 50."),
+  courseName: z.string().min(2, "Course name is required"),
+  playedAt: z.string().min(1, "Date is required"),
 });
 
 export default function GolfScoresPage() {
@@ -58,7 +58,7 @@ export default function GolfScoresPage() {
   const form = useForm<z.infer<typeof scoreSchema>>({
     resolver: zodResolver(scoreSchema),
     defaultValues: {
-      score: 72,
+      score: 12,
       courseName: "",
       playedAt: new Date().toISOString().split("T")[0],
     },
@@ -68,18 +68,18 @@ export default function GolfScoresPage() {
     mutationFn: scoreFetchers.create,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dashboard"] });
-      toast.success("Round logged successfully!");
+      toast.success("Round recorded.");
       setIsOpen(false);
       form.reset();
     },
-    onError: (err: any) => toast.error(err.message || "Failed to log round"),
+    onError: (err: any) => toast.error(err.message || "Failed to record round"),
   });
 
   const deleteMutation = useMutation({
     mutationFn: scoreFetchers.delete,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dashboard"] });
-      toast.success("Round removed");
+      toast.success("Entry removed.");
     },
   });
 
@@ -89,10 +89,16 @@ export default function GolfScoresPage() {
 
   if (isLoading) {
     return (
-      <div className="space-y-8">
-        <Skeleton className="h-20 w-48 rounded-full" />
-        <Skeleton className="h-64 w-full rounded-3xl" />
-        <Skeleton className="h-96 w-full rounded-3xl" />
+      <div className="space-y-6 animate-in fade-in duration-500">
+        <div className="flex justify-between items-center">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-10 w-32" />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Skeleton className="h-40 rounded-xl" />
+          <Skeleton className="lg:col-span-2 h-40 rounded-xl" />
+        </div>
+        <Skeleton className="h-96 w-full rounded-xl" />
       </div>
     );
   }
@@ -101,97 +107,73 @@ export default function GolfScoresPage() {
   const recentScores = dashboard?.scores.recent || [];
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-700">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div className="space-y-8 animate-in fade-in duration-500">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight underline decoration-primary/20 decoration-4 underline-offset-8">
-            Your Performance
-          </h1>
-          <p className="text-muted-foreground mt-4 italic font-medium">
-            Refine your game, maximize your charitable impact.
+          <h1 className="text-3xl font-bold tracking-tight">Performance Ledger</h1>
+          <p className="text-muted-foreground mt-1 text-sm font-medium">
+            Log rounds and track your rolling average for draw eligibility.
           </p>
         </div>
 
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <Button
-              size="lg"
-              className="rounded-full px-10 shadow-xl shadow-primary/20 hover:shadow-primary/40 gap-2 text-lg font-bold h-14"
-            >
-              <Plus className="h-5 w-5" /> LOG NEW ROUND
+            <Button size="sm" className="gap-2">
+              <Plus className="h-4 w-4" /> Log Round
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[450px] rounded-3xl">
+          <DialogContent className="sm:max-w-106.25 absolute top-1/2 left-1/2 rounded-xl">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-black italic uppercase tracking-tighter">
-                NEW ROUND ENTRY
-              </DialogTitle>
-              <DialogDescription className="italic font-medium">
-                Submit your gross score to update your rolling average. 5 scores are required for full drawdown
-                eligibility.
+              <DialogTitle>Record Performance</DialogTitle>
+              <DialogDescription>
+                Input your gross score and course details to update your rolling 5 index.
               </DialogDescription>
             </DialogHeader>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 py-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
               <div className="space-y-2">
                 <Label
                   htmlFor="score"
-                  className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground"
+                  className="text-xs font-semibold uppercase tracking-widest text-muted-foreground"
                 >
                   Gross Score
                 </Label>
-                <Input
-                  id="score"
-                  type="number"
-                  {...form.register("score")}
-                  className="h-14 text-2xl font-black rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
-                />
+                <Input id="score" type="number" {...form.register("score")} className="rounded-lg" />
                 {form.formState.errors.score && (
-                  <p className="text-xs text-destructive font-bold italic">{form.formState.errors.score.message}</p>
+                  <p className="text-[10px] text-destructive font-bold">{form.formState.errors.score.message}</p>
                 )}
               </div>
               <div className="space-y-2">
                 <Label
                   htmlFor="courseName"
-                  className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground"
+                  className="text-xs font-semibold uppercase tracking-widest text-muted-foreground"
                 >
                   Course Name
                 </Label>
                 <Input
                   id="courseName"
                   {...form.register("courseName")}
-                  placeholder="e.g. St Andrews Links"
-                  className="h-12 rounded-xl focus-visible:ring-primary/20"
+                  placeholder="e.g. Pinehurst No. 2"
+                  className="rounded-lg"
                 />
                 {form.formState.errors.courseName && (
-                  <p className="text-xs text-destructive font-bold italic">
-                    {form.formState.errors.courseName.message}
-                  </p>
+                  <p className="text-[10px] text-destructive font-bold">{form.formState.errors.courseName.message}</p>
                 )}
               </div>
               <div className="space-y-2">
                 <Label
                   htmlFor="playedAt"
-                  className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground"
+                  className="text-xs font-semibold uppercase tracking-widest text-muted-foreground"
                 >
-                  Played On
+                  Date Played
                 </Label>
-                <Input
-                  id="playedAt"
-                  type="date"
-                  {...form.register("playedAt")}
-                  className="h-12 rounded-xl focus-visible:ring-primary/20"
-                />
+                <Input id="playedAt" type="date" {...form.register("playedAt")} className="rounded-lg" />
                 {form.formState.errors.playedAt && (
-                  <p className="text-xs text-destructive font-bold italic">{form.formState.errors.playedAt.message}</p>
+                  <p className="text-[10px] text-destructive font-bold">{form.formState.errors.playedAt.message}</p>
                 )}
               </div>
-              <DialogFooter className="pt-4">
-                <Button
-                  type="submit"
-                  className="w-full h-14 text-lg font-black italic rounded-2xl shadow-xl shadow-primary/10"
-                  disabled={createMutation.isPending}
-                >
-                  {createMutation.isPending ? "PROCESSING..." : "COMMIT SCORE"}
+              <DialogFooter className="pt-2">
+                <Button type="submit" className="w-full rounded-lg" disabled={createMutation.isPending}>
+                  {createMutation.isPending ? "Recording..." : "Sync Score"}
                 </Button>
               </DialogFooter>
             </form>
@@ -199,71 +181,57 @@ export default function GolfScoresPage() {
         </Dialog>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Rolling Average Card */}
-        <Card className="border-none bg-foreground text-background shadow-2xl relative overflow-hidden group rounded-3xl">
-          <CardHeader className="relative z-10">
-            <CardTitle className="text-background/40 uppercase tracking-[0.2em] text-[10px] font-black flex items-center gap-2">
-              <BarChart4 className="h-3 w-3 text-primary" /> Rolling Average (Last 5)
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="rounded-xl border shadow-sm group">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs font-bold flex items-center gap-2 uppercase tracking-widest text-muted-foreground">
+              <BarChart4 className="h-4 w-4 text-primary" /> Rolling Index
             </CardTitle>
           </CardHeader>
-          <CardContent className="relative z-10 pt-0">
+          <CardContent className="space-y-6">
             <div className="flex items-baseline gap-2">
-              <span className="text-8xl font-black italic tracking-tighter group-hover:scale-105 transition-transform duration-700">
-                {dashboard?.scores.average || 0}
-              </span>
-              <span className="text-background/20 font-black uppercase tracking-widest text-xs">Strokes</span>
+              <span className="text-5xl font-extrabold tracking-tight">{dashboard?.scores.average || 0}</span>
+              <span className="text-muted-foreground font-bold uppercase tracking-widest text-[10px]">Strokes</span>
             </div>
-            <div className="mt-10 space-y-4">
-              <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
-                <span className="text-background/40 italic">Eligibility Protocol</span>
-                <Badge
-                  variant={activeScores.length >= 5 ? "secondary" : "outline"}
-                  className="px-3 h-5 border-background/10 bg-background/5 text-background font-black text-[9px] uppercase tracking-tighter"
-                >
-                  {activeScores.length >= 5 ? "FULLY QUALIFIED" : `${activeScores.length} / 5 DATA POINTS`}
-                </Badge>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
+                <span className="text-muted-foreground">Protocol Load</span>
+                <span className={cn("font-bold", activeScores.length >= 5 ? "text-emerald-600" : "text-primary")}>
+                  {activeScores.length >= 5 ? "Qualified" : `${activeScores.length} / 5 Logged`}
+                </span>
               </div>
-              <div className="w-full bg-background/10 h-2 rounded-full overflow-hidden">
+              <div className="w-full bg-muted h-1.5 rounded-full overflow-hidden">
                 <div
-                  className="bg-primary h-full transition-all duration-1000 ease-in-out"
+                  className="bg-primary h-full transition-all duration-700"
                   style={{ width: `${Math.min((activeScores.length / 5) * 100, 100)}%` }}
                 />
               </div>
             </div>
           </CardContent>
-          <div className="absolute top-0 right-0 w-48 h-48 bg-primary/20 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 transition-opacity group-hover:opacity-40" />
         </Card>
 
-        {/* Explainer / Logic */}
-        <Card className="lg:col-span-2 border-none shadow-sm bg-background border-l-8 border-primary rounded-3xl">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 italic font-black uppercase tracking-tight text-xl">
-              Governance & Logic
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex gap-4 p-6 rounded-2xl bg-muted/20 hover:bg-muted/30 transition-colors border group">
-              <div className="h-10 w-10 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-black group-hover:rotate-12 transition-transform">
+        <Card className="lg:col-span-2 rounded-xl border shadow-sm bg-muted/5">
+          <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            <div className="flex gap-4">
+              <div className="h-9 w-9 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold text-xs ring-1 ring-primary/20">
                 1
               </div>
-              <div>
-                <p className="font-black italic text-sm uppercase tracking-tight">Rolling 5 Logic</p>
-                <p className="text-xs text-muted-foreground mt-2 leading-relaxed font-medium">
-                  Your draw weight is computed from your 5 most recent rounds. This protocol ensures competitive balance
-                  across the network.
+              <div className="space-y-1">
+                <p className="text-xs font-bold uppercase tracking-widest">Rolling Logic</p>
+                <p className="text-xs text-muted-foreground leading-relaxed font-medium">
+                  Your draw weight is derived from your 5 most recently logged performances.
                 </p>
               </div>
             </div>
-            <div className="flex gap-4 p-6 rounded-2xl bg-muted/20 hover:bg-muted/30 transition-colors border group">
-              <div className="h-10 w-10 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-black group-hover:rotate-12 transition-transform">
+            <div className="flex gap-4">
+              <div className="h-9 w-9 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold text-xs ring-1 ring-primary/20">
                 2
               </div>
-              <div>
-                <p className="font-black italic text-sm uppercase tracking-tight">Identity Audit</p>
-                <p className="text-xs text-muted-foreground mt-2 leading-relaxed font-medium">
-                  Platform winners must submit verified scorecard data from club systems or recognized handicap
-                  applications to trigger prize funding.
+              <div className="space-y-1">
+                <p className="text-xs font-bold uppercase tracking-widest">Registry Sync</p>
+                <p className="text-xs text-muted-foreground leading-relaxed font-medium">
+                  Winners must provide verifiable scorecards from registered club systems or handicap mobile
+                  applications.
                 </p>
               </div>
             </div>
@@ -271,75 +239,66 @@ export default function GolfScoresPage() {
         </Card>
       </div>
 
-      {/* history */}
-      <div className="space-y-6">
-        <h2 className="text-sm font-black uppercase tracking-[0.3em] text-muted-foreground flex items-center gap-2">
-          <History className="h-4 w-4" /> Temporal Round Registry
+      <div className="space-y-4">
+        <h2 className="text-sm font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+          <History className="h-4 w-4" /> Round Logs
         </h2>
-        <Card className="border-none shadow-sm overflow-hidden rounded-3xl">
+        <Card className="rounded-xl border shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="bg-muted/50 text-muted-foreground uppercase text-[10px] font-black tracking-widest border-b">
+              <thead className="bg-muted/30 text-muted-foreground uppercase text-[10px] font-semibold tracking-widest border-b">
                 <tr>
-                  <th className="px-8 py-5">State</th>
-                  <th className="px-8 py-5">Strokes</th>
-                  <th className="px-8 py-5">Registry Course</th>
-                  <th className="px-8 py-5">Entry Date</th>
-                  <th className="px-8 py-5 text-right">Audit</th>
+                  <th className="px-6 py-3">Status</th>
+                  <th className="px-6 py-3">Score</th>
+                  <th className="px-6 py-3">Course Registry</th>
+                  <th className="px-6 py-3 text-right">Settled</th>
+                  <th className="px-6 py-3 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y">
+              <tbody className="divide-y relative">
                 {recentScores.map((score, index) => {
                   const isActive = index < 5;
                   return (
                     <tr
                       key={score.id}
                       className={cn(
-                        "transition-colors group",
-                        isActive ? "hover:bg-muted/20" : "opacity-40 hover:opacity-100 bg-muted/5",
+                        "transition-colors",
+                        isActive ? "hover:bg-muted/5 font-medium" : "opacity-40 grayscale",
                       )}
                     >
-                      <td className="px-8 py-6">
-                        {isActive ? (
-                          <Badge className="bg-primary/20 text-primary border-none text-[10px] font-black italic h-5 px-3 uppercase tracking-tighter">
-                            ACTIVE DATA
-                          </Badge>
-                        ) : (
-                          <Badge
-                            variant="outline"
-                            className="text-[10px] font-bold h-5 px-3 uppercase tracking-tighter text-muted-foreground border-muted-foreground/10"
-                          >
-                            ARCHIVED
-                          </Badge>
-                        )}
+                      <td className="px-6 py-4">
+                        <Badge
+                          variant={isActive ? "default" : "outline"}
+                          className="text-[9px] font-bold h-4 px-1.5 uppercase leading-none border-none"
+                        >
+                          {isActive ? "Active" : "Archived"}
+                        </Badge>
                       </td>
-                      <td className="px-8 py-6">
-                        <span className="text-2xl font-black italic tracking-tighter group-hover:text-primary transition-colors">
-                          {score.score}
-                        </span>
+                      <td className="px-6 py-4">
+                        <span className="text-xl font-bold tabular-nums">{score.score}</span>
                       </td>
-                      <td className="px-8 py-6 font-bold uppercase italic text-xs tracking-tight">
+                      <td className="px-6 py-4 font-semibold text-xs truncate max-w-[200px] uppercase tracking-tight">
                         {score.courseName}
                       </td>
-                      <td className="px-8 py-6 text-muted-foreground font-medium tabular-nums text-xs">
-                        {new Date(score.playedAt).toLocaleDateString()}
+                      <td className="px-6 py-4 text-muted-foreground text-xs text-right font-medium">
+                        {new Date(score.playedAt).toLocaleDateString(undefined, {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
                       </td>
-                      <td className="px-8 py-6 text-right">
+                      <td className="px-6 py-4 text-right">
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-10 w-10 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/10 border border-transparent hover:border-destructive/20 transition-all"
+                          className="h-8 w-8 rounded-md hover:bg-destructive/10 hover:text-destructive"
                           onClick={() => {
-                            if (
-                              confirm(
-                                "DELETE REGISTRY ENTRY: This will permanently remove the data point and recompute your rolling average. Continue?",
-                              )
-                            ) {
+                            if (confirm("Delete round record? This will recompute your rolling average index.")) {
                               deleteMutation.mutate(score.id);
                             }
                           }}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </td>
                     </tr>
@@ -348,18 +307,17 @@ export default function GolfScoresPage() {
               </tbody>
             </table>
             {!recentScores.length && (
-              <div className="py-32 text-center flex flex-col items-center justify-center space-y-6 bg-muted/5">
-                <div className="h-20 w-20 rounded-full bg-muted flex items-center justify-center text-muted-foreground/30">
-                  <Target className="h-10 w-10" />
+              <div className="py-24 text-center">
+                <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-muted mb-4">
+                  <Target className="h-6 w-6 text-muted-foreground/40" />
                 </div>
-                <div>
-                  <p className="text-muted-foreground font-black italic text-xl uppercase tracking-tighter">
-                    Empty Performance History
-                  </p>
-                  <p className="text-xs text-muted-foreground/60 font-medium tracking-wide">
-                    Commit your first round score to establish your entry protocols.
-                  </p>
-                </div>
+                <h3 className="text-lg font-semibold">No rounds recorded</h3>
+                <p className="text-sm text-muted-foreground max-w-xs mx-auto mb-4">
+                  You need to log your golf scores here to begin tracking your rolling 5 index.
+                </p>
+                <Button size="sm" variant="outline" onClick={() => setIsOpen(true)}>
+                  Log your first score
+                </Button>
               </div>
             )}
           </div>

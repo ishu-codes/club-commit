@@ -54,14 +54,24 @@ router.get(
         });
 
         return success(res, 200, {
-            totalUsers,
-            activeSubscriptions,
-            totalCharities,
-            totalDraws,
-            completedDraws,
-            monthlyRevenue: Math.round(totalRevenue * 100) / 100,
-            totalCharityContributions: Math.round(totalCharityContributions * 100) / 100,
-            totalPrizesPaid: totalPrizesPaid._sum.prizeAmount || 0,
+            users: {
+                total: totalUsers,
+                activeSubscriptions: activeSubscriptions,
+            },
+            subscriptions: {
+                totalRevenue: Math.round(totalRevenue * 100) / 100,
+            },
+            charity: {
+                totalDonated: Math.round(totalCharityContributions * 100) / 100,
+            },
+            draws: {
+                upcoming: totalDraws - completedDraws,
+                totalEntries: 0, // Placeholder or compute if needed
+            },
+            winners: {
+                totalPaid: totalPrizesPaid._sum.prizeAmount || 0,
+                pendingPayouts: 0, // Placeholder
+            },
             charitiesBreakdown,
         });
     })
