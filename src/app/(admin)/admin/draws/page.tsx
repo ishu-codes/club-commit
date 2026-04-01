@@ -19,7 +19,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import z from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -42,10 +42,10 @@ import { cn } from "@/lib/utils";
 
 import { drawFetchers } from "@/fetchers/draw";
 
-const drawSchema = z.z.object({
-  month: z.z.coerce.number().min(1).max(12),
-  year: z.z.coerce.number().min(2024).max(2030),
-  drawType: z.z.enum(["ALGORITHM", "RANDOM"]),
+const drawSchema = z.object({
+  month: z.coerce.number().min(1).max(12),
+  year: z.coerce.number().min(2024).max(2030),
+  drawType: z.enum(["ALGORITHM", "RANDOM"]),
 });
 
 export default function AdminDrawsPage() {
@@ -112,23 +112,21 @@ export default function AdminDrawsPage() {
           <h1 className="text-3xl font-extrabold tracking-tight underline decoration-primary/20 decoration-4 underline-offset-8">
             Cycle Control Center
           </h1>
-          <p className="text-muted-foreground mt-4 font-medium italic">
+          <p className="text-muted-foreground mt-4 font-medium">
             Orchestration terminal for monthly prize pool distribution protocols.
           </p>
         </div>
 
         <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
           <DialogTrigger asChild>
-            <Button className="rounded-2xl px-10 shadow-xl shadow-primary/20 hover:shadow-primary/40 gap-3 font-black h-14 italic text-sm tracking-tight">
+            <Button className="rounded-2xl px-10 shadow-xl shadow-primary/20 hover:shadow-primary/40 gap-3 font-black h-14 text-sm tracking-tight">
               <Plus className="h-5 w-5" /> INITIALIZE NEW CYCLE
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px] rounded-[2rem] p-0 overflow-hidden border-none shadow-2xl">
             <DialogHeader className="bg-foreground text-background p-10">
-              <DialogTitle className="text-3xl font-black italic uppercase tracking-tight">
-                PARAMETRIC SETUP
-              </DialogTitle>
-              <DialogDescription className="text-background/60 font-medium italic text-lg mt-2">
+              <DialogTitle className="text-3xl font-black uppercase tracking-tight">PARAMETRIC SETUP</DialogTitle>
+              <DialogDescription className="text-background/60 font-medium text-lg mt-2">
                 Configure a future prize cycle with performance-weighted logic.
               </DialogDescription>
             </DialogHeader>
@@ -167,7 +165,7 @@ export default function AdminDrawsPage() {
                   onValueChange={(v) => form.setValue("drawType", v as any)}
                   defaultValue={form.getValues("drawType")}
                 >
-                  <SelectTrigger className="h-14 text-sm font-black italic rounded-2xl bg-muted/20 border-none uppercase tracking-widest px-6">
+                  <SelectTrigger className="h-14 text-sm font-black rounded-2xl bg-muted/20 border-none uppercase tracking-widest px-6">
                     <SelectValue placeholder="Protocol Variant" />
                   </SelectTrigger>
                   <SelectContent className="rounded-2xl border-muted/50 p-2">
@@ -187,7 +185,7 @@ export default function AdminDrawsPage() {
                 </Select>
               </div>
 
-              <div className="bg-primary/5 p-6 rounded-2xl flex gap-4 text-primary text-[10px] font-black uppercase tracking-widest leading-relaxed border border-primary/10 italic">
+              <div className="bg-primary/5 p-6 rounded-2xl flex gap-4 text-primary text-[10px] font-black uppercase tracking-widest leading-relaxed border border-primary/10">
                 <AlertCircle className="h-5 w-5 shrink-0" />
                 <span>Cycle initialization immediately opens node registration for all qualified global members.</span>
               </div>
@@ -195,7 +193,7 @@ export default function AdminDrawsPage() {
               <DialogFooter className="pt-4">
                 <Button
                   type="submit"
-                  className="w-full h-20 text-2xl font-black italic rounded-2xl shadow-2xl shadow-primary/20 transition-all hover:scale-[1.01]"
+                  className="w-full h-20 text-2xl font-black rounded-2xl shadow-2xl shadow-primary/20 transition-all hover:scale-[1.01]"
                   disabled={createMutation.isPending}
                 >
                   {createMutation.isPending ? "COMPILING SYSTEM..." : "DEPLOY CYCLE"}
@@ -208,7 +206,7 @@ export default function AdminDrawsPage() {
 
       {/* Active Draws Grid */}
       <div className="space-y-8">
-        <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 flex items-center gap-3 italic">
+        <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 flex items-center gap-3">
           <Clock className="h-4 w-4 text-primary opacity-50" /> ACTIVE RECOVERY PROTOCOLS
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -223,21 +221,21 @@ export default function AdminDrawsPage() {
                     <Badge className="bg-primary text-primary-foreground border-none font-black text-[10px] px-4 py-1.5 uppercase tracking-widest rounded-full">
                       REGISTRATION LIVE
                     </Badge>
-                    <p className="text-background/40 text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2 italic">
+                    <p className="text-background/40 text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
                       <Calendar className="h-4 w-4" />{" "}
                       {new Date(0, draw.month - 1).toLocaleString("default", { month: "long" })} {draw.year}
                     </p>
                   </div>
-                  <CardTitle className="text-5xl font-black italic tracking-tighter uppercase leading-none drop-shadow-xl opacity-90">
+                  <CardTitle className="text-5xl font-black tracking-tighter uppercase leading-none drop-shadow-xl opacity-90">
                     OP-CYCLE #{draw.id.slice(-4).toUpperCase()}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-10 pt-4 space-y-10 relative z-10">
                   <div className="flex items-baseline gap-3">
-                    <span className="text-7xl font-black text-primary italic tracking-tighter">
+                    <span className="text-7xl font-black text-primary tracking-tighter">
                       ${draw.prizePool?.toLocaleString() || "---"}
                     </span>
-                    <span className="text-background/30 font-black text-[10px] uppercase tracking-[0.2em] italic">
+                    <span className="text-background/30 font-black text-[10px] uppercase tracking-[0.2em]">
                       Current Reservoir
                     </span>
                   </div>
@@ -246,7 +244,7 @@ export default function AdminDrawsPage() {
                       <p className="text-[10px] font-black text-background/30 uppercase tracking-[0.3em]">
                         FIELD OCCUPANCY
                       </p>
-                      <p className="text-2xl font-black italic text-background/80 tracking-tight">
+                      <p className="text-2xl font-black text-background/80 tracking-tight">
                         {draw._count?.entries || 0} Members Registered
                       </p>
                     </div>
@@ -254,13 +252,13 @@ export default function AdminDrawsPage() {
                       <p className="text-[10px] font-black text-background/30 uppercase tracking-[0.3em]">
                         ENGINE TYPE
                       </p>
-                      <p className="text-2xl font-black italic text-background/80 tracking-tight">{draw.drawType}</p>
+                      <p className="text-2xl font-black text-background/80 tracking-tight">{draw.drawType}</p>
                     </div>
                   </div>
                 </CardContent>
                 <CardFooter className="p-0 border-t border-background/10 bg-background/5 overflow-hidden">
                   <Button
-                    className="w-full h-24 rounded-none text-2xl font-black italic gap-4 bg-transparent text-background/80 hover:bg-primary hover:text-primary-foreground transition-all border-none"
+                    className="w-full h-24 rounded-none text-2xl font-black gap-4 bg-transparent text-background/80 hover:bg-primary hover:text-primary-foreground transition-all border-none"
                     disabled={runMutation.isPending || (draw._count?.entries || 0) === 0}
                     onClick={() => {
                       if (
@@ -282,7 +280,7 @@ export default function AdminDrawsPage() {
           ) : (
             <div className="col-span-full py-40 text-center border-4 border-dashed rounded-[3rem] bg-muted/5 border-muted/10 group">
               <Trophy className="h-16 w-16 text-muted-foreground/10 mx-auto mb-8 animate-pulse group-hover:text-primary/20 transition-colors" />
-              <p className="text-muted-foreground font-black italic uppercase tracking-[0.3em] text-sm">
+              <p className="text-muted-foreground font-black uppercase tracking-[0.3em] text-sm">
                 No active registration protocols detected.
               </p>
             </div>
@@ -292,7 +290,7 @@ export default function AdminDrawsPage() {
 
       {/* History */}
       <div className="space-y-8">
-        <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 flex items-center gap-3 italic">
+        <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 flex items-center gap-3">
           <History className="h-4 w-4 text-primary opacity-50" /> ARCHIVAL LEDGER
         </h2>
         <Card className="border-none shadow-sm overflow-hidden rounded-[2rem] bg-background border-2 border-muted/10">
@@ -311,11 +309,11 @@ export default function AdminDrawsPage() {
                 <tbody className="divide-y divide-muted/10">
                   {completedDraws.map((draw) => (
                     <tr key={draw.id} className="hover:bg-muted/5 transition-all group">
-                      <td className="px-10 py-8 font-black uppercase italic text-lg tracking-tighter group-hover:text-primary transition-colors">
+                      <td className="px-10 py-8 font-black uppercase text-lg tracking-tighter group-hover:text-primary transition-colors">
                         {new Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date(0, draw.month - 1))}{" "}
                         {draw.year}
                       </td>
-                      <td className="px-10 py-8 font-black text-primary text-xl italic tracking-tighter">
+                      <td className="px-10 py-8 font-black text-primary text-xl tracking-tighter">
                         ${draw.prizePool.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                       </td>
                       <td className="px-10 py-8">
@@ -323,7 +321,7 @@ export default function AdminDrawsPage() {
                           <Badge className="bg-muted/50 text-muted-foreground border border-muted-foreground/20 font-black text-[9px] uppercase tracking-widest px-3 py-1 rounded-full">
                             {draw.drawType}
                           </Badge>
-                          <span className="text-xs text-muted-foreground/60 font-bold italic underline underline-offset-4 decoration-primary/10">
+                          <span className="text-xs text-muted-foreground/60 font-bold underline underline-offset-4 decoration-primary/10">
                             Winner Resolved
                           </span>
                         </div>
@@ -335,7 +333,7 @@ export default function AdminDrawsPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="font-black italic text-[10px] uppercase tracking-widest gap-2 h-10 px-6 rounded-xl bg-muted/20 border border-transparent hover:border-primary/20 hover:bg-primary/5 hover:text-primary transition-all"
+                          className="font-black text-[10px] uppercase tracking-widest gap-2 h-10 px-6 rounded-xl bg-muted/20 border border-transparent hover:border-primary/20 hover:bg-primary/5 hover:text-primary transition-all"
                         >
                           LOGS <ChevronRight className="h-4 w-4" />
                         </Button>
@@ -345,7 +343,7 @@ export default function AdminDrawsPage() {
                 </tbody>
               </table>
               {!completedDraws.length && (
-                <div className="py-24 text-center font-black italic text-muted-foreground/20 uppercase tracking-[0.4em] text-xs bg-muted/5">
+                <div className="py-24 text-center font-black text-muted-foreground/20 uppercase tracking-[0.4em] text-xs bg-muted/5">
                   SYSTEM LEDGER CONTAINS ZERO ARCHIVAL RECORDS.
                 </div>
               )}

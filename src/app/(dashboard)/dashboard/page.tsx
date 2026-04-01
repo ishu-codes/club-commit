@@ -1,28 +1,17 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import {
-  Trophy,
-  TrendingUp,
-  Award,
-  Heart,
-  Calendar,
-  ChevronRight,
-  ArrowUpRight,
-  Clock,
-  Ticket,
-  Plus,
-} from "lucide-react";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { Trophy, TrendingUp, Award, Heart, ChevronRight, ArrowUpRight, Ticket } from "lucide-react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-
+import { Skeleton } from "@/components/ui/skeleton";
 import { dashboardFetchers } from "@/fetchers/dashboard";
+import { useSession } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {
   const { data: dashboard, isLoading } = useQuery({
@@ -30,6 +19,7 @@ export default function DashboardPage() {
     queryFn: dashboardFetchers.get,
     staleTime: 1000 * 60 * 5, // 5 min
   });
+  const { data: session } = useSession();
 
   if (isLoading) {
     return (
@@ -40,8 +30,8 @@ export default function DashboardPage() {
           ))}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <Skeleton className="lg:col-span-2 h-[400px] rounded-2xl" />
-          <Skeleton className="h-[400px] rounded-2xl" />
+          <Skeleton className="lg:col-span-2 h-100 rounded-2xl" />
+          <Skeleton className="h-100 rounded-2xl" />
         </div>
       </div>
     );
@@ -61,16 +51,11 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight">Welcome back, Player</h1>
-          <p className="text-muted-foreground mt-1">Here's your personal impact and performance summary.</p>
-        </div>
-        <Link href="/dashboard/scores">
-          <Button className="rounded-full px-6 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all gap-2">
-            <Plus className="h-4 w-4" /> Log New Round
-          </Button>
-        </Link>
+      <div className="flex flex-col">
+        <h1 className="text-3xl font-extrabold tracking-tight">
+          Welcome back, {session?.user.name.split(" ")[0] ?? "Player"}
+        </h1>
+        <p className="text-muted-foreground mt-1">Here&apos;s your personal impact and performance summary.</p>
       </div>
 
       {/* Stats Grid */}
@@ -82,7 +67,7 @@ export default function DashboardPage() {
               <stat.icon className={cn("h-4 w-4 transition-transform group-hover:scale-110", stat.color)} />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-black tabular-nums">{stat.value}</div>
+              <div className="text-3xl font-semibold tabular-nums">{stat.value}</div>
             </CardContent>
           </Card>
         ))}
@@ -124,7 +109,7 @@ export default function DashboardPage() {
                 ))
               ) : (
                 <div className="text-center py-12 border-2 border-dashed rounded-2xl bg-muted/20">
-                  <p className="text-muted-foreground italic">No rounds logged yet. Hit the links!</p>
+                  <p className="text-muted-foreground">No rounds logged yet. Hit the links!</p>
                 </div>
               )}
             </div>
@@ -134,9 +119,9 @@ export default function DashboardPage() {
         {/* Side Widgets */}
         <div className="space-y-8">
           {/* Draw Widget */}
-          <Card className="bg-foreground text-background border-none shadow-xl overflow-hidden relative group">
+          <Card className="bg-accent-foreground text-background border-none shadow-xl overflow-hidden relative group">
             <CardHeader className="pb-2 relative z-10">
-              <CardTitle className="text-xl font-bold flex items-center gap-2 italic">
+              <CardTitle className="text-xl font-bold flex items-center gap-2">
                 <Ticket className="h-5 w-5 text-primary" /> Monthly Draw
               </CardTitle>
               <CardDescription className="text-background/60">
@@ -171,7 +156,7 @@ export default function DashboardPage() {
             </CardContent>
             <CardFooter className="relative z-10 pt-0">
               <Link href="/dashboard/draws" className="w-full">
-                <Button className="w-full bg-background text-foreground hover:bg-background/90 font-bold h-11 border-none">
+                <Button className="w-full bg-background text-foreground hover:bg-background/90 font-bold border-none">
                   Enter Monthly Draw
                 </Button>
               </Link>
@@ -180,7 +165,7 @@ export default function DashboardPage() {
           </Card>
 
           {/* Impact Summary */}
-          <Card className="border-none shadow-sm bg-gradient-to-br from-destructive/5 to-transparent border-l-4 border-destructive">
+          <Card className="border-none shadow-sm bg-linear-to-br from-destructive/5 to-transparent border-l-4 border-destructive">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg font-bold flex items-center gap-2">
                 <Heart className="h-5 w-5 text-destructive" /> Your Impact

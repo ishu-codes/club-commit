@@ -72,7 +72,7 @@ export default function AdminUsersPage() {
           <h1 className="text-3xl font-extrabold tracking-tight underline decoration-primary/20 decoration-4 underline-offset-8">
             Identity & Clearance
           </h1>
-          <p className="text-muted-foreground mt-4 font-medium italic">
+          <p className="text-muted-foreground mt-4 font-medium">
             Audit authorized system nodes and manage administrative hierarchies.
           </p>
         </div>
@@ -82,7 +82,7 @@ export default function AdminUsersPage() {
             <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em] leading-none">
               GLOBAL NODES
             </p>
-            <p className="text-3xl font-black italic text-foreground leading-none tracking-tighter tabular-nums">
+            <p className="text-3xl font-black text-foreground leading-none tracking-tighter tabular-nums">
               {users?.length || 0}
             </p>
           </div>
@@ -91,7 +91,7 @@ export default function AdminUsersPage() {
             <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em] leading-none">
               SYSTEM AUTHORITIES
             </p>
-            <p className="text-3xl font-black italic text-primary leading-none tracking-tighter tabular-nums">
+            <p className="text-3xl font-black text-primary leading-none tracking-tighter tabular-nums">
               {users?.filter((u) => u.role === "ADMIN").length || 0}
             </p>
           </div>
@@ -102,8 +102,8 @@ export default function AdminUsersPage() {
         <CardHeader className="border-b border-muted/10 bg-muted/5 p-10">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
             <div className="space-y-2">
-              <CardTitle className="text-2xl font-black italic uppercase tracking-tighter">Registry Database</CardTitle>
-              <CardDescription className="font-medium italic">
+              <CardTitle className="text-2xl font-black uppercase tracking-tighter">Registry Database</CardTitle>
+              <CardDescription className="font-medium">
                 Active telemetry filtering for all identified members.
               </CardDescription>
             </div>
@@ -143,12 +143,12 @@ export default function AdminUsersPage() {
                           )}
                         </div>
                         <div>
-                          <p className="font-black italic text-xl leading-none tracking-tight group-hover:text-primary transition-colors">
+                          <p className="font-black text-xl leading-none tracking-tight group-hover:text-primary transition-colors">
                             {user.name || "Anonymous Node"}
                           </p>
                           <div className="flex items-center gap-2 mt-2.5">
                             <Mail className="h-3 w-3 text-muted-foreground/40" />
-                            <p className="text-xs font-black text-muted-foreground/60 tracking-wider lowercase italic">
+                            <p className="text-xs font-black text-muted-foreground/60 tracking-wider lowercase">
                               {user.email}
                             </p>
                           </div>
@@ -159,7 +159,7 @@ export default function AdminUsersPage() {
                       <Badge
                         variant={user.role === "ADMIN" ? "default" : "outline"}
                         className={cn(
-                          "text-[10px] px-4 py-1.5 font-black tracking-widest italic uppercase border-none rounded-full transition-all",
+                          "text-[10px] px-4 py-1.5 font-black tracking-widest uppercase border-none rounded-full transition-all",
                           user.role === "ADMIN"
                             ? "bg-primary text-primary-foreground shadow-lg shadow-primary/10"
                             : "bg-muted/50 text-muted-foreground border border-muted-foreground/20",
@@ -173,24 +173,24 @@ export default function AdminUsersPage() {
                       {user.subscriptions && user.subscriptions.length > 0 ? (
                         <div className="flex items-center gap-3">
                           <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                          <span className="font-black italic text-primary uppercase text-[10px] tracking-widest">
+                          <span className="font-black text-primary uppercase text-[10px] tracking-widest">
                             ACTIVE COMMITMENT
                           </span>
                         </div>
                       ) : (
-                        <span className="text-[10px] font-black text-muted-foreground/20 uppercase tracking-[0.2em] italic">
+                        <span className="text-[10px] font-black text-muted-foreground/20 uppercase tracking-[0.2em]">
                           ZERO ALLOCATION
                         </span>
                       )}
                     </td>
-                    <td className="px-10 py-8 text-muted-foreground/60 font-black tabular-nums italic text-xs uppercase tracking-widest">
+                    <td className="px-10 py-8 text-muted-foreground/60 font-black tabular-nums text-xs uppercase tracking-widest">
                       SYNC: {new Date(user.createdAt).toLocaleDateString()}
                     </td>
                     <td className="px-10 py-8 text-right">
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-12 px-6 gap-3 font-black italic text-[11px] uppercase tracking-widest rounded-xl bg-muted/20 border border-transparent hover:border-primary/20 hover:bg-primary/5 hover:text-primary transition-all"
+                        className="h-12 px-6 gap-3 font-black text-[11px] uppercase tracking-widest rounded-xl bg-muted/20 border border-transparent hover:border-primary/20 hover:bg-primary/5 hover:text-primary transition-all"
                         onClick={() => {
                           const newRole = user.role === "ADMIN" ? "USER" : "ADMIN";
                           if (confirm(`ADMINISTRATIVE OVERRIDE: Elevate/Restrict node clearance for ${user.name}?`)) {
@@ -215,9 +215,7 @@ export default function AdminUsersPage() {
                   <ShieldX className="h-12 w-12" />
                 </div>
                 <div className="space-y-2">
-                  <p className="text-muted-foreground font-black italic text-2xl uppercase tracking-tighter">
-                    Node Not Found
-                  </p>
+                  <p className="text-muted-foreground font-black text-2xl uppercase tracking-tighter">Node Not Found</p>
                   <p className="text-xs text-muted-foreground/40 font-medium tracking-[0.2em] uppercase">
                     Recalibrate search parameters for identity discovery.
                   </p>
@@ -235,10 +233,10 @@ export default function AdminUsersPage() {
             <ShieldIcon className="h-10 w-10" />
           </div>
           <div className="space-y-3 text-center lg:text-left max-w-3xl">
-            <h4 className="font-black italic text-2xl uppercase tracking-tight text-destructive">
+            <h4 className="font-black text-2xl uppercase tracking-tight text-destructive">
               Administrative Security Directive
             </h4>
-            <p className="text-base font-medium leading-relaxed text-destructive/80 italic">
+            <p className="text-base font-medium leading-relaxed text-destructive/80">
               Elevating a node to{" "}
               <span className="font-black underline decoration-2 underline-offset-4 tracking-[0.1em]">ADMIN</span>{" "}
               clearance grants absolute terminal authority. Authorized nodes bypass standard constraints, enabling full
@@ -249,7 +247,7 @@ export default function AdminUsersPage() {
         </div>
         <Button
           variant="outline"
-          className="rounded-2xl border-destructive/30 text-destructive bg-background/50 hover:bg-destructive hover:text-destructive-foreground font-black italic text-xs uppercase h-14 px-8 tracking-widest shadow-xl transition-all active:scale-95 group-hover:border-destructive relative z-10 shrink-0"
+          className="rounded-2xl border-destructive/30 text-destructive bg-background/50 hover:bg-destructive hover:text-destructive-foreground font-black text-xs uppercase h-14 px-8 tracking-widest shadow-xl transition-all active:scale-95 group-hover:border-destructive relative z-10 shrink-0"
         >
           ACCESS SECURITY AUDIT LOGS
         </Button>

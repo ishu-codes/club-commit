@@ -17,7 +17,7 @@ import {
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import z from "zod";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -39,11 +39,11 @@ import { cn } from "@/lib/utils";
 
 import { charityFetchers } from "@/fetchers/charity";
 
-const charitySchema = z.z.object({
-  name: z.z.string().min(2, "Name is required"),
-  description: z.z.string().min(10, "Description is too short. Be more descriptive about the impact."),
-  website: z.z.string().url("Must be a valid URL").optional().or(z.z.literal("")),
-  imageUrl: z.z.string().optional().or(z.z.literal("")),
+const charitySchema = z.object({
+  name: z.string().min(2, "Name is required"),
+  description: z.string().min(10, "Description is too short. Be more descriptive about the impact."),
+  website: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  imageUrl: z.string().optional().or(z.literal("")),
 });
 
 export default function AdminCharitiesPage() {
@@ -127,12 +127,12 @@ export default function AdminCharitiesPage() {
           <h1 className="text-3xl font-extrabold tracking-tight underline decoration-primary/20 decoration-4 underline-offset-8">
             Partner Ecosystem
           </h1>
-          <p className="text-muted-foreground mt-4 font-medium italic">
+          <p className="text-muted-foreground mt-4 font-medium">
             Strategic oversight of global non-profit funding nodes.
           </p>
         </div>
         <Button
-          className="rounded-2xl px-10 shadow-xl shadow-primary/20 hover:shadow-primary/40 gap-3 font-black h-14 italic text-sm tracking-tight"
+          className="rounded-2xl px-10 shadow-xl shadow-primary/20 hover:shadow-primary/40 gap-3 font-black h-14 text-sm tracking-tight"
           onClick={() => {
             setEditingCharity(null);
             form.reset();
@@ -147,10 +147,8 @@ export default function AdminCharitiesPage() {
         <CardHeader className="bg-muted/5 border-b border-muted/10 p-10">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
             <div className="space-y-2">
-              <CardTitle className="text-2xl font-black italic uppercase tracking-tighter">
-                Strategic Directory
-              </CardTitle>
-              <CardDescription className="font-medium italic">
+              <CardTitle className="text-2xl font-black uppercase tracking-tighter">Strategic Directory</CardTitle>
+              <CardDescription className="font-medium">
                 System registry of active and archived impact targets.
               </CardDescription>
             </div>
@@ -196,10 +194,10 @@ export default function AdminCharitiesPage() {
                             )}
                           </div>
                           <div>
-                            <p className="font-black italic text-xl leading-none tracking-tight group-hover:text-primary transition-colors">
+                            <p className="font-black text-xl leading-none tracking-tight group-hover:text-primary transition-colors">
                               {charity.name}
                             </p>
-                            <p className="text-xs text-muted-foreground font-medium mt-2 line-clamp-1 max-w-xs italic">
+                            <p className="text-xs text-muted-foreground font-medium mt-2 line-clamp-1 max-w-xs">
                               {charity.description}
                             </p>
                           </div>
@@ -207,7 +205,7 @@ export default function AdminCharitiesPage() {
                       </td>
                       <td className="px-10 py-8">
                         <div className="space-y-1">
-                          <p className="text-2xl font-black text-primary italic leading-none tracking-tighter">
+                          <p className="text-2xl font-black text-primary leading-none tracking-tighter">
                             ${charity.totalReceived?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || "0.00"}
                           </p>
                           <p className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-widest leading-none">
@@ -219,7 +217,7 @@ export default function AdminCharitiesPage() {
                         <a
                           href={charity.website}
                           target="_blank"
-                          className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary hover:text-foreground bg-primary/10 hover:bg-primary px-4 py-2 rounded-full transition-all border border-primary/10 shadow-sm italic"
+                          className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary hover:text-foreground bg-primary/10 hover:bg-primary px-4 py-2 rounded-full transition-all border border-primary/10 shadow-sm"
                         >
                           EXTERNAL AUDIT <ExternalLink className="h-3 w-3" />
                         </a>
@@ -229,7 +227,7 @@ export default function AdminCharitiesPage() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="h-12 px-6 rounded-xl font-black italic text-xs uppercase tracking-widest gap-2 bg-muted/20 hover:bg-primary hover:text-primary-foreground"
+                            className="h-12 px-6 rounded-xl font-black text-xs uppercase tracking-widest gap-2 bg-muted/20 hover:bg-primary hover:text-primary-foreground"
                             onClick={() => openEdit(charity)}
                           >
                             <Edit2 className="h-4 w-4" /> Modify
@@ -258,7 +256,7 @@ export default function AdminCharitiesPage() {
                     <LayoutGrid className="h-12 w-12" />
                   </div>
                   <div>
-                    <p className="text-muted-foreground font-black italic text-2xl uppercase tracking-tighter">
+                    <p className="text-muted-foreground font-black text-2xl uppercase tracking-tighter">
                       Temporal Registry Empty
                     </p>
                     <p className="text-xs text-muted-foreground/60 font-medium tracking-[0.2em] uppercase">
@@ -275,10 +273,10 @@ export default function AdminCharitiesPage() {
       <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
         <DialogContent className="sm:max-w-[600px] rounded-[2rem] p-0 overflow-hidden border-none shadow-2xl">
           <DialogHeader className="bg-foreground text-background p-10">
-            <DialogTitle className="text-3xl font-black italic uppercase tracking-tight">
+            <DialogTitle className="text-3xl font-black uppercase tracking-tight">
               {editingCharity ? "RECALIBRATE PARTNER" : "ESTABLISH PARTNER"}
             </DialogTitle>
-            <DialogDescription className="text-background/60 font-medium italic text-lg mt-2">
+            <DialogDescription className="text-background/60 font-medium text-lg mt-2">
               Define strategic parameters for impact node integration.
             </DialogDescription>
           </DialogHeader>
@@ -293,7 +291,7 @@ export default function AdminCharitiesPage() {
                 className="h-14 text-xl font-black rounded-2xl bg-muted/20 border-none focus-visible:ring-primary/20"
               />
               {form.formState.errors.name && (
-                <p className="text-xs text-destructive font-black italic tracking-tight">
+                <p className="text-xs text-destructive font-black tracking-tight">
                   {form.formState.errors.name.message}
                 </p>
               )}
@@ -308,7 +306,7 @@ export default function AdminCharitiesPage() {
                 className="min-h-[150px] rounded-2xl bg-muted/20 border-none focus-visible:ring-primary/20 text-sm leading-relaxed p-6"
               />
               {form.formState.errors.description && (
-                <p className="text-xs text-destructive font-black italic tracking-tight">
+                <p className="text-xs text-destructive font-black tracking-tight">
                   {form.formState.errors.description.message}
                 </p>
               )}
@@ -324,7 +322,7 @@ export default function AdminCharitiesPage() {
                   className="h-12 rounded-xl border-muted-foreground/10 focus-visible:ring-primary/20"
                 />
                 {form.formState.errors.website && (
-                  <p className="text-xs text-destructive font-black italic tracking-tight">
+                  <p className="text-xs text-destructive font-black tracking-tight">
                     {form.formState.errors.website.message}
                   </p>
                 )}
@@ -343,7 +341,7 @@ export default function AdminCharitiesPage() {
             <DialogFooter className="pt-6">
               <Button
                 type="submit"
-                className="w-full h-20 text-2xl font-black italic rounded-2xl shadow-2xl shadow-primary/20 transition-all hover:scale-[1.01]"
+                className="w-full h-20 text-2xl font-black rounded-2xl shadow-2xl shadow-primary/20 transition-all hover:scale-[1.01]"
                 disabled={createMutation.isPending || updateMutation.isPending}
               >
                 {createMutation.isPending || updateMutation.isPending

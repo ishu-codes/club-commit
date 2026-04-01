@@ -45,7 +45,7 @@ export default function WinningsPage() {
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [base64Image, setBase64Image] = useState<string | null>(null);
 
-  const { data: winnings, isLoading: loadingWinnings } = useQuery({
+  const { data: myWinnings, isLoading: loadingWinnings } = useQuery({
     queryKey: ["winners", "mine"],
     queryFn: winnerFetchers.mine,
     staleTime: 1000 * 60 * 5, // 5 min
@@ -103,7 +103,7 @@ export default function WinningsPage() {
         return (
           <Badge
             variant="secondary"
-            className="bg-primary/10 text-primary border-none font-black text-[10px] uppercase tracking-widest px-3 italic"
+            className="bg-primary/10 text-primary border-none font-black text-[10px] uppercase tracking-widest px-3"
           >
             VERIFYING...
           </Badge>
@@ -138,7 +138,7 @@ export default function WinningsPage() {
         <h1 className="text-3xl font-extrabold tracking-tight underline decoration-primary/20 decoration-4 underline-offset-8">
           Prize Management
         </h1>
-        <p className="text-muted-foreground mt-4 font-medium italic">
+        <p className="text-muted-foreground mt-4 font-medium">
           Securely claim and track your rewards from the global commitment pool.
         </p>
       </div>
@@ -153,11 +153,11 @@ export default function WinningsPage() {
           </CardHeader>
           <CardContent className="relative z-10 pt-0 px-10 pb-12">
             <div className="flex items-baseline gap-3">
-              <span className="text-8xl font-black italic tracking-tighter drop-shadow-2xl opacity-90">
-                ${dashboard?.winnings.totalWon || 0}
+              <span className="text-8xl font-black tracking-tighter drop-shadow-2xl opacity-90">
+                &#8377; {dashboard?.winnings.totalWon || 0}
               </span>
               <Badge className="bg-primary text-primary-foreground border-none font-black text-[10px] uppercase tracking-widest px-3 h-6">
-                USD
+                INR
               </Badge>
             </div>
             <div className="mt-10 flex items-center gap-10">
@@ -165,7 +165,7 @@ export default function WinningsPage() {
                 <p className="text-[10px] font-black text-background/40 uppercase tracking-widest leading-none">
                   PENDING DATA
                 </p>
-                <p className="text-3xl font-black italic text-background/80 leading-none tracking-tighter">
+                <p className="text-3xl font-black text-background/80 leading-none tracking-tighter">
                   {dashboard?.winnings.pendingPayments || 0}
                 </p>
               </div>
@@ -174,8 +174,8 @@ export default function WinningsPage() {
                 <p className="text-[10px] font-black text-background/40 uppercase tracking-widest leading-none">
                   AUDITED
                 </p>
-                <p className="text-3xl font-black italic text-background/80 leading-none tracking-tighter">
-                  {winnings?.filter((w) => w.status === "VERIFIED" || w.status === "PAID").length || 0}
+                <p className="text-3xl font-black text-background/80 leading-none tracking-tighter">
+                  {myWinnings?.list.filter((w) => w.status === "VERIFIED" || w.status === "PAID").length || 0}
                 </p>
               </div>
             </div>
@@ -186,10 +186,10 @@ export default function WinningsPage() {
         {/* Hall of Fame / Global Motivation */}
         <Card className="lg:col-span-2 border-none shadow-sm bg-muted/5 rounded-[2.5rem] border-2 border-muted/10 group overflow-hidden">
           <CardHeader className="pb-4 p-10">
-            <CardTitle className="text-xl font-black italic flex items-center gap-3 tracking-tight uppercase">
+            <CardTitle className="text-xl font-black flex items-center gap-3 tracking-tight uppercase">
               <Trophy className="h-6 w-6 text-primary" /> Global Winners Circle
             </CardTitle>
-            <CardDescription className="font-medium italic">
+            <CardDescription className="font-medium">
               Verified impact, distributed rewards. Participation leads to outcome.
             </CardDescription>
           </CardHeader>
@@ -206,18 +206,18 @@ export default function WinningsPage() {
                   className="flex items-center justify-between p-5 rounded-2xl bg-background border-2 border-muted/10 group-hover:border-primary/20 transition-all hover:scale-[1.02] hover:shadow-lg"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center font-black text-primary text-xs italic">
+                    <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center font-black text-primary text-xs">
                       #{i + 1}
                     </div>
                     <div>
-                      <p className="font-black italic text-sm tracking-tight">{w.name}</p>
+                      <p className="font-black text-sm tracking-tight">{w.name}</p>
                       <p className="text-[10px] text-muted-foreground font-black uppercase tracking-widest leading-none mt-1.5">
                         {w.draw} • {w.impact}
                       </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-xl font-black italic text-primary leading-none tracking-tighter">${w.amount}</p>
+                    <p className="text-xl font-black text-primary leading-none tracking-tighter">&#8377; {w.amount}</p>
                   </div>
                 </div>
               ))}
@@ -227,12 +227,12 @@ export default function WinningsPage() {
       </div>
 
       <div className="space-y-8">
-        <h2 className="text-sm font-black italic tracking-[0.3em] uppercase text-muted-foreground flex items-center gap-3">
+        <h2 className="text-sm font-black tracking-[0.3em] uppercase text-muted-foreground flex items-center gap-3">
           <Clock className="h-5 w-5 text-primary opacity-50" /> INDIVIDUAL PRIZE REGISTRY
         </h2>
         <div className="grid grid-cols-1 gap-6">
-          {winnings?.length ? (
-            winnings.map((winner) => (
+          {myWinnings?.list.length ? (
+            myWinnings?.list.map((winner) => (
               <Card
                 key={winner.id}
                 className="border-none shadow-sm bg-background border-2 border-muted/10 group hover:border-primary/20 transition-all rounded-[1.5rem] overflow-hidden"
@@ -250,7 +250,7 @@ export default function WinningsPage() {
                       </div>
                       <div>
                         <div className="flex flex-wrap items-center gap-4 mb-3">
-                          <p className="text-2xl font-black italic leading-none tracking-tight uppercase">
+                          <p className="text-2xl font-black leading-none tracking-tight uppercase">
                             {new Intl.DateTimeFormat("en-US", { month: "long" }).format(
                               new Date(0, winner.draw.month - 1),
                             )}{" "}
@@ -258,10 +258,10 @@ export default function WinningsPage() {
                           </p>
                           {getStatusBadge(winner.status)}
                         </div>
-                        <p className="text-xs font-black text-muted-foreground uppercase tracking-[0.2em] leading-none italic">
+                        <p className="text-xs font-black text-muted-foreground uppercase tracking-[0.2em] leading-none">
                           ALLOCATION:{" "}
                           <span className="text-foreground tracking-normal not-italic ml-2">
-                            ${winner.amount.toLocaleString()} USD
+                            &#8377; {winner.amount.toLocaleString()} INR
                           </span>
                         </p>
                       </div>
@@ -277,16 +277,16 @@ export default function WinningsPage() {
                           }}
                         >
                           <DialogTrigger asChild>
-                            <Button className="rounded-xl px-8 h-12 shadow-xl shadow-destructive/10 hover:shadow-destructive/20 gap-3 border-none font-black italic text-sm tracking-tight bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                            <Button className="rounded-xl px-8 h-12 shadow-xl shadow-destructive/10 hover:shadow-destructive/20 gap-3 border-none font-black text-sm tracking-tight bg-destructive text-destructive-foreground hover:bg-destructive/90">
                               <Upload className="h-4 w-4" /> INITIALIZE AUDIT
                             </Button>
                           </DialogTrigger>
                           <DialogContent className="rounded-3xl p-0 overflow-hidden border-none shadow-2xl">
                             <DialogHeader className="bg-destructive text-destructive-foreground p-8">
-                              <DialogTitle className="text-2xl font-black italic uppercase tracking-tight">
+                              <DialogTitle className="text-2xl font-black uppercase tracking-tight">
                                 DATA VERIFICATION REQUIRED
                               </DialogTitle>
-                              <DialogDescription className="text-destructive-foreground/80 font-medium italic">
+                              <DialogDescription className="text-destructive-foreground/80 font-medium">
                                 Upload your temporal scorecard data from a club system or recognized handicap protocol
                                 for terminal clearance.
                               </DialogDescription>
@@ -313,7 +313,7 @@ export default function WinningsPage() {
                                   </div>
                                 )}
                               </div>
-                              <div className="bg-muted/30 p-6 rounded-2xl flex gap-4 text-muted-foreground text-xs font-bold leading-relaxed italic border border-muted/20 leading-snug">
+                              <div className="bg-muted/30 p-6 rounded-2xl flex gap-4 text-muted-foreground text-xs font-bold leading-relaxed border border-muted/20 leading-snug">
                                 <ShieldCheck className="h-6 w-6 shrink-0 text-primary" />
                                 <span>
                                   Registry proofs are only visible to system auditors and permanently purged
@@ -323,7 +323,7 @@ export default function WinningsPage() {
                             </div>
                             <DialogFooter className="p-8 pt-0 bg-background">
                               <Button
-                                className="w-full h-16 text-lg font-black italic rounded-2xl shadow-xl shadow-primary/20 transition-all hover:scale-[1.01]"
+                                className="w-full h-16 text-lg font-black rounded-2xl shadow-xl shadow-primary/20 transition-all hover:scale-[1.01]"
                                 disabled={!base64Image || uploadProofMutation.isPending}
                                 onClick={() => uploadProofMutation.mutate({ id: winner.id, proofUrl: base64Image! })}
                               >
@@ -336,10 +336,10 @@ export default function WinningsPage() {
 
                       {winner.status === "PROOFS_UPLOADED" && (
                         <div className="flex flex-col items-end gap-1">
-                          <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] animate-pulse italic">
+                          <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] animate-pulse">
                             AUDIT IN PROGRESS
                           </p>
-                          <p className="text-xs font-medium text-muted-foreground/60 italic">
+                          <p className="text-xs font-medium text-muted-foreground/60">
                             Temporal data pending clearance
                           </p>
                         </div>
@@ -369,7 +369,7 @@ export default function WinningsPage() {
                 <Trophy className="h-12 w-12" />
               </div>
               <div className="space-y-3">
-                <p className="text-muted-foreground font-black italic text-2xl uppercase tracking-tighter">
+                <p className="text-muted-foreground font-black text-2xl uppercase tracking-tighter">
                   Temporal Cabinet Empty
                 </p>
                 <p className="text-sm font-medium text-muted-foreground/40 max-w-sm mx-auto leading-relaxed">

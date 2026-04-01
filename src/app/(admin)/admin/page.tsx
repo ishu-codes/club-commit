@@ -87,10 +87,10 @@ export default function AdminDashboardPage() {
     <div className="space-y-12 animate-in fade-in duration-1000 slide-in-from-bottom-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
         <div>
-          <h1 className="text-4xl font-black italic tracking-tighter uppercase leading-none underline decoration-primary/20 decoration-8 underline-offset-[12px]">
+          <h1 className="text-4xl font-black tracking-tighter uppercase leading-none underline decoration-primary/20 decoration-8 underline-offset-[12px]">
             OPERATIONAL Hub
           </h1>
-          <p className="text-muted-foreground mt-8 font-medium italic text-lg opacity-80">
+          <p className="text-muted-foreground mt-8 font-medium text-lg opacity-80">
             Real-time terminal for platform performance and member commitment forensics.
           </p>
         </div>
@@ -101,10 +101,10 @@ export default function AdminDashboardPage() {
             </span>
             <div className="flex items-center gap-2">
               <span className="h-3 w-3 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(var(--primary),0.5)]" />
-              <span className="text-xs font-black italic text-foreground tracking-widest uppercase">OPTIMIZED</span>
+              <span className="text-xs font-black text-foreground tracking-widest uppercase">OPTIMIZED</span>
             </div>
           </div>
-          <Button className="bg-foreground text-background hover:bg-foreground/90 font-black italic text-xs h-12 px-8 rounded-2xl shadow-lg transition-all active:scale-95 uppercase tracking-widest">
+          <Button className="bg-foreground text-background hover:bg-foreground/90 font-black text-xs h-12 px-8 rounded-2xl shadow-lg transition-all active:scale-95 uppercase tracking-widest">
             <Zap className="h-4 w-4 mr-2 fill-current" /> Initialize Data Refresh
           </Button>
         </div>
@@ -131,7 +131,7 @@ export default function AdminDashboardPage() {
             </CardHeader>
             <CardContent className="p-8 pt-0">
               <div className="flex items-baseline justify-between gap-4">
-                <p className="text-4xl font-black italic tracking-tighter uppercase">{card.value}</p>
+                <p className="text-4xl font-black tracking-tighter uppercase">{card.value}</p>
                 <Badge
                   variant="secondary"
                   className="bg-primary/10 text-primary border-none font-black text-[10px] px-3 py-1 rounded-full"
@@ -149,17 +149,17 @@ export default function AdminDashboardPage() {
         <Card className="lg:col-span-2 border-none shadow-lg rounded-[2.5rem] bg-background border-2 border-muted/10 flex flex-col overflow-hidden relative">
           <CardHeader className="p-12 pb-6 relative z-10">
             <div className="flex items-center justify-between mb-8">
-              <Badge className="bg-foreground text-background font-black italic text-[10px] uppercase tracking-[0.2em] border-none px-5 py-2 rounded-full">
+              <Badge className="bg-foreground text-background font-black text-[10px] uppercase tracking-[0.2em] border-none px-5 py-2 rounded-full">
                 MISSION IMPACT PROTOCOL
               </Badge>
               <div className="h-10 w-10 bg-primary/10 rounded-xl flex items-center justify-center">
                 <TrendingUp className="h-6 w-6 text-primary" />
               </div>
             </div>
-            <CardTitle className="text-5xl font-black italic tracking-tighter uppercase leading-none">
+            <CardTitle className="text-5xl font-black tracking-tighter uppercase leading-none">
               Scalability Baseline
             </CardTitle>
-            <CardDescription className="text-lg font-medium italic mt-4">
+            <CardDescription className="text-lg font-medium mt-4">
               Targeting $250,000 in total strategic capital distribution by YE2026.
             </CardDescription>
           </CardHeader>
@@ -170,7 +170,7 @@ export default function AdminDashboardPage() {
                   <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em]">
                     RECOVERED CAPITAL
                   </p>
-                  <p className="text-7xl font-black italic text-primary leading-none tracking-tighter">
+                  <p className="text-7xl font-black text-primary leading-none tracking-tighter">
                     ${(stats?.winners?.totalPaid || 0).toLocaleString()}
                   </p>
                 </div>
@@ -178,7 +178,7 @@ export default function AdminDashboardPage() {
                   <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em]">
                     MISSION DELTA
                   </p>
-                  <p className="text-3xl font-black italic text-muted-foreground leading-none tracking-tighter opacity-40">
+                  <p className="text-3xl font-black text-muted-foreground leading-none tracking-tighter opacity-40">
                     ${(250000 - (stats?.winners?.totalPaid || 0)).toLocaleString()}
                   </p>
                 </div>
@@ -190,7 +190,7 @@ export default function AdminDashboardPage() {
                 />
                 <div className="absolute inset-0 bg-primary/5 rounded-full animate-pulse pointer-events-none" />
               </div>
-              <div className="flex justify-between text-[10px] font-black text-muted-foreground/40 tracking-[0.4em] uppercase italic">
+              <div className="flex justify-between text-[10px] font-black text-muted-foreground/40 tracking-[0.4em] uppercase">
                 <span>INITIAL OPS (0%)</span>
                 <span>TERMINAL OBJECTIVE (100%)</span>
               </div>
@@ -199,7 +199,7 @@ export default function AdminDashboardPage() {
           <CardFooter className="p-12 pt-0 relative z-10">
             <Button
               variant="outline"
-              className="w-full h-16 rounded-2xl font-black italic border-2 border-muted/10 hover:bg-foreground hover:text-background hover:border-foreground tracking-widest gap-3 transition-all uppercase text-xs"
+              className="w-full h-16 rounded-2xl font-black border-2 border-muted/10 hover:bg-foreground hover:text-background hover:border-foreground tracking-widest gap-3 transition-all uppercase text-xs"
             >
               GENERATE FULL PERFORMANCE AUDIT <BarChart3 className="h-5 w-5" />
             </Button>
@@ -213,7 +213,7 @@ export default function AdminDashboardPage() {
             <CardTitle className="text-background/40 font-black uppercase text-[10px] tracking-[0.3em] mb-4">
               Capital Allocation Logic
             </CardTitle>
-            <h3 className="text-3xl font-black italic tracking-tighter uppercase leading-[1.1]">
+            <h3 className="text-3xl font-black tracking-tighter uppercase leading-[1.1]">
               STRATEGIC EQUITY DISTRIBUTION
             </h3>
           </CardHeader>
@@ -227,10 +227,10 @@ export default function AdminDashboardPage() {
               ].map((item, i) => (
                 <div key={i} className="space-y-3 group/item">
                   <div className="flex justify-between items-end">
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-background/60 group-hover/item:text-background transition-colors italic">
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-background/60 group-hover/item:text-background transition-colors">
                       {item.label}
                     </p>
-                    <p className="text-2xl font-black italic leading-none tracking-tighter">{item.percent}%</p>
+                    <p className="text-2xl font-black leading-none tracking-tighter">{item.percent}%</p>
                   </div>
                   <div className="h-2 w-full bg-background/10 rounded-full overflow-hidden">
                     <div
@@ -252,23 +252,23 @@ export default function AdminDashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         <Card className="border-none shadow-sm rounded-[2rem] bg-background border-2 border-muted/10 overflow-hidden relative group">
           <CardHeader className="p-10 relative z-10">
-            <CardTitle className="text-2xl font-black italic flex items-center gap-4 uppercase tracking-tighter">
+            <CardTitle className="text-2xl font-black flex items-center gap-4 uppercase tracking-tighter">
               <div className="h-12 w-12 bg-primary/10 rounded-[1rem] flex items-center justify-center transition-transform group-hover:rotate-12">
                 <Users className="h-7 w-7 text-primary" />
               </div>
               Identity Registry
             </CardTitle>
-            <CardDescription className="text-base font-medium italic mt-2">
+            <CardDescription className="text-base font-medium mt-2">
               Manage member profiles and clearance levels.
             </CardDescription>
           </CardHeader>
           <CardContent className="p-10 pt-0 relative z-10">
-            <p className="text-sm font-medium text-muted-foreground mb-10 leading-relaxed italic border-l-4 border-primary/20 pl-6">
+            <p className="text-sm font-medium text-muted-foreground mb-10 leading-relaxed border-l-4 border-primary/20 pl-6">
               Terminal oversight of {stats?.users?.total || 0} active nodes and {stats?.users?.totalAdmins || 0} system
               administrators with full write-access.
             </p>
             <Button
-              className="w-full bg-foreground text-background hover:bg-primary hover:text-primary-foreground rounded-2xl h-16 font-black italic text-sm uppercase tracking-widest gap-3 shadow-xl transition-all"
+              className="w-full bg-foreground text-background hover:bg-primary hover:text-primary-foreground rounded-2xl h-16 font-black text-sm uppercase tracking-widest gap-3 shadow-xl transition-all"
               onClick={() => (window.location.href = "/admin/users")}
             >
               ACCESS DATA REPOSITORY <ArrowUpRight className="h-5 w-5" />
@@ -279,24 +279,24 @@ export default function AdminDashboardPage() {
 
         <Card className="border-none shadow-sm rounded-[2rem] bg-background border-2 border-muted/10 overflow-hidden relative group">
           <CardHeader className="p-10 relative z-10">
-            <CardTitle className="text-2xl font-black italic flex items-center gap-4 uppercase tracking-tighter">
+            <CardTitle className="text-2xl font-black flex items-center gap-4 uppercase tracking-tighter">
               <div className="h-12 w-12 bg-primary/10 rounded-[1rem] flex items-center justify-center transition-transform group-hover:rotate-12">
                 <LayoutGrid className="h-7 w-7 text-primary" />
               </div>
               Strategic Partners
             </CardTitle>
-            <CardDescription className="text-base font-medium italic mt-2">
+            <CardDescription className="text-base font-medium mt-2">
               Audit performance of charitable delivery targets.
             </CardDescription>
           </CardHeader>
           <CardContent className="p-10 pt-0 relative z-10">
-            <p className="text-sm font-medium text-muted-foreground mb-10 leading-relaxed italic border-l-4 border-primary/20 pl-6">
+            <p className="text-sm font-medium text-muted-foreground mb-10 leading-relaxed border-l-4 border-primary/20 pl-6">
               Monitoring {stats?.charities?.total || 0} high-impact endpoints with established distribution protocols
               and verified impact telemetry.
             </p>
             <Button
               variant="outline"
-              className="w-full rounded-2xl h-16 font-black italic text-sm uppercase tracking-widest gap-3 border-2 border-muted/10 hover:border-primary hover:bg-primary/5 hover:text-primary transition-all shadow-sm"
+              className="w-full rounded-2xl h-16 font-black text-sm uppercase tracking-widest gap-3 border-2 border-muted/10 hover:border-primary hover:bg-primary/5 hover:text-primary transition-all shadow-sm"
               onClick={() => (window.location.href = "/admin/charities")}
             >
               PARTNER ANALYTICS <ArrowUpRight className="h-5 w-5" />

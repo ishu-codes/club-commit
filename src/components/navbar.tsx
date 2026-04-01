@@ -56,12 +56,12 @@ export function Navbar() {
                       <AvatarFallback className="text-lg font-bold">{session?.user.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div>
-                      <h3 className="font-bold leading-none mb-1">{session?.user.name}</h3>
+                      <h3 className="text-md font-bold leading-none mb-1">{session?.user.name}</h3>
                       <p className="text-sm text-muted-foreground leading-none">{session?.user.email}</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
-                    <Button variant={"outline"} asChild className="">
+                    <Button asChild className="">
                       <Link href={"/dashboard"}>Dashboard</Link>
                     </Button>
                     <Button

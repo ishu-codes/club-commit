@@ -19,7 +19,7 @@ export default function LandingPage() {
                 <span>Golf with a Purpose</span>
               </div>
               <h1 className="text-4xl md:text-7xl font-extrabold tracking-tight">
-                Your Game, Their <span className="text-primary italic">Future.</span>
+                Your Game, Their <span className="text-primary">Future.</span>
               </h1>
               <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl">
                 The golf platform where every hole played helps a child thrive. Subcribe, enter your scores, and win big
@@ -211,7 +211,7 @@ export default function LandingPage() {
                     <span className="text-5xl font-extrabold tracking-tight">$99.99</span>
                     <span className="text-zinc-400 ml-1">/year</span>
                   </div>
-                  <p className="text-sm text-primary font-medium italic">Save 20% compared to monthly</p>
+                  <p className="text-sm text-primary font-medium">Save 20% compared to monthly</p>
                   <ul className="space-y-3 text-zinc-300">
                     {[
                       "Everything in Monthly",

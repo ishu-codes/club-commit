@@ -1,36 +1,36 @@
 "use client";
 
+import { useState } from "react";
+import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreditCard, CheckCircle2, Crown, Heart, ShieldCheck, Calendar, ArrowRight } from "lucide-react";
-import { useState } from "react";
 import { toast } from "sonner";
-import Link from "next/link";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { dashboardFetchers } from "@/fetchers/dashboard";
 import { charityFetchers } from "@/fetchers/charity";
 import { subscriptionFetchers } from "@/fetchers/subscription";
+import { cn } from "@/lib/utils";
 import { SubscriptionPlan } from "@/types/subscription";
 
 const plans = [
   {
     id: "MONTHLY" as SubscriptionPlan,
     name: "Monthly Impact",
-    price: 9.99,
+    price: "999",
     interval: "month",
     desc: "For seasonal players looking to make a difference.",
   },
   {
     id: "YEARLY" as SubscriptionPlan,
     name: "Annual Hero",
-    price: 99.99,
+    price: "9,999",
     interval: "year",
     desc: "The committed golfer's choice. 2 months free.",
   },
@@ -87,7 +87,7 @@ export default function SubscriptionPage() {
         <h1 className="text-3xl font-extrabold tracking-tight underline decoration-primary/20 decoration-4 underline-offset-8">
           Subscription Governance
         </h1>
-        <p className="text-muted-foreground mt-4 font-medium italic">
+        <p className="text-muted-foreground mt-4 font-medium">
           Manage your commitment levels and strategic funding targets.
         </p>
       </div>
@@ -97,7 +97,7 @@ export default function SubscriptionPage() {
           <Card className="lg:col-span-2 border-primary/20 bg-primary/5 shadow-xl rounded-3xl overflow-hidden relative border-2">
             <CardHeader className="pb-8 relative z-10">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3 font-black text-2xl italic tracking-tight">
+                <div className="flex items-center gap-3 font-black text-2xl tracking-tight">
                   <Crown className="h-8 w-8 text-primary fill-primary animate-pulse" />
                   Active {activeSub.plan} Protocol
                 </div>
@@ -118,8 +118,8 @@ export default function SubscriptionPage() {
                   <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-2">
                     Billing Rate
                   </p>
-                  <p className="text-4xl font-black italic tracking-tighter">
-                    ${activeSub.plan === "YEARLY" ? "8.33" : "9.99"}
+                  <p className="text-4xl font-black tracking-tighter">
+                    &#8377; {activeSub.plan === "YEARLY" ? "8.33" : "9.99"}
                     <span className="text-sm font-medium text-muted-foreground">/mo</span>
                   </p>
                 </div>
@@ -127,7 +127,7 @@ export default function SubscriptionPage() {
                   <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-2">
                     Impact Coefficient
                   </p>
-                  <p className="text-4xl font-black text-destructive italic tracking-tighter">
+                  <p className="text-4xl font-black text-destructive tracking-tighter">
                     {activeSub.contributionPercent}%
                   </p>
                 </div>
@@ -139,9 +139,7 @@ export default function SubscriptionPage() {
                 </div>
                 <div>
                   <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-1">Impact Target</p>
-                  <p className="text-2xl font-black italic tracking-tight">
-                    {activeSub.charity?.name || "No primary target"}
-                  </p>
+                  <p className="text-2xl font-black tracking-tight">{activeSub.charity?.name || "No primary target"}</p>
                   <Link
                     href="/dashboard/charity"
                     className="text-xs font-black text-primary hover:underline mt-2 flex items-center gap-1.5 uppercase tracking-widest"
@@ -157,7 +155,7 @@ export default function SubscriptionPage() {
               </div>
               <Button
                 variant="ghost"
-                className="text-muted-foreground/60 hover:text-destructive hover:bg-destructive/5 font-black italic text-xs uppercase tracking-widest h-10 px-6 rounded-xl"
+                className="text-muted-foreground/60 hover:text-destructive hover:bg-destructive/5 font-black text-xs uppercase tracking-widest h-10 px-6 rounded-xl"
                 onClick={() => {
                   if (
                     confirm(
@@ -176,7 +174,7 @@ export default function SubscriptionPage() {
 
           <Card className="border-none shadow-sm h-fit rounded-3xl bg-muted/5">
             <CardHeader className="pb-4">
-              <CardTitle className="text-lg italic font-black uppercase tracking-tight">OPERATIONAL BENEFITS</CardTitle>
+              <CardTitle className="text-lg font-black uppercase tracking-tight">OPERATIONAL BENEFITS</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6 pt-0">
               {[
@@ -198,7 +196,7 @@ export default function SubscriptionPage() {
               ))}
             </CardContent>
             <Separator className="bg-muted/10" />
-            <CardFooter className="pt-6 text-[10px] uppercase font-black tracking-widest text-muted-foreground/50 leading-relaxed italic">
+            <CardFooter className="pt-6 text-[10px] uppercase font-black tracking-widest text-muted-foreground/50 leading-relaxed">
               "Every stroke in the system translates to real-world capital recovery for our strategic partners."
             </CardFooter>
           </Card>
@@ -208,9 +206,7 @@ export default function SubscriptionPage() {
           <Card className="border-none shadow-2xl overflow-hidden rounded-[2.5rem]">
             <CardHeader className="bg-primary text-primary-foreground text-center py-16 px-10 relative overflow-hidden">
               <div className="relative z-10">
-                <h2 className="text-5xl font-black italic tracking-tighter uppercase leading-none">
-                  COMMIT TO THE MISSION
-                </h2>
+                <h2 className="text-5xl font-black tracking-tighter uppercase leading-none">COMMIT TO THE MISSION</h2>
                 <p className="text-primary-foreground/70 mt-6 text-xl font-medium max-w-xl mx-auto leading-relaxed">
                   Establish your monthly stake to unlock performance tracking and global draw eligibility.
                 </p>
@@ -218,7 +214,7 @@ export default function SubscriptionPage() {
               <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-white/10 rounded-full blur-3xl" />
             </CardHeader>
             <CardContent className="p-12 md:p-16 space-y-12 bg-background">
-              <div className="space-y-8">
+              <div className="flex flex-col gap-6">
                 <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
                   01. TEMPORAL DURATION PROTOCOL
                 </Label>
@@ -239,18 +235,16 @@ export default function SubscriptionPage() {
                           SELECTED
                         </div>
                       )}
-                      <p className="font-black text-2xl italic uppercase tracking-tighter transition-colors group-hover:text-primary">
+                      <p className="font-black text-2xl uppercase tracking-tighter transition-colors group-hover:text-primary">
                         {plan.name}
                       </p>
-                      <div className="flex items-baseline gap-1 mt-6">
-                        <span className="text-5xl font-black italic tracking-tighter">${plan.price}</span>
-                        <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                      <div className="flex items-baseline gap-1 mt-6 flex-wrap">
+                        <span className="text-5xl font-black tracking-tighter">&#8377; {plan.price}</span>
+                        <span className="text-xs self-end font-bold text-muted-foreground uppercase tracking-widest">
                           / {plan.interval}
                         </span>
                       </div>
-                      <p className="text-sm text-muted-foreground font-medium mt-6 leading-relaxed italic">
-                        {plan.desc}
-                      </p>
+                      <p className="text-sm text-muted-foreground font-medium mt-6 leading-relaxed">{plan.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -284,7 +278,7 @@ export default function SubscriptionPage() {
                       </div>
                       <span
                         className={cn(
-                          "font-black italic text-sm uppercase tracking-tight transition-colors",
+                          "font-black text-sm uppercase tracking-tight transition-colors",
                           selectedCharityId === charity.id ? "text-primary" : "text-muted-foreground",
                         )}
                       >
@@ -297,7 +291,7 @@ export default function SubscriptionPage() {
             </CardContent>
             <CardFooter className="bg-muted/10 flex flex-col p-12 md:p-16 gap-10 border-t">
               <Button
-                className="w-full h-20 text-2xl font-black italic rounded-3xl shadow-2xl shadow-primary/20 transition-all hover:scale-[1.01] active:scale-[0.98]"
+                className="w-full h-20 text-2xl font-black rounded-3xl shadow-2xl shadow-primary/20 transition-all hover:scale-[1.01] active:scale-[0.98]"
                 disabled={!selectedCharityId || subscribeMutation.isPending}
                 onClick={() => subscribeMutation.mutate({ plan: selectedPlan, charityId: selectedCharityId })}
               >
@@ -351,8 +345,8 @@ export default function SubscriptionPage() {
                 >
                   <feat.icon className="h-8 w-8" />
                 </div>
-                <h4 className="font-black italic text-xl uppercase tracking-tighter mt-4">{feat.title}</h4>
-                <p className="text-xs text-muted-foreground leading-relaxed font-medium italic">{feat.desc}</p>
+                <h4 className="font-black text-xl uppercase tracking-tighter mt-4">{feat.title}</h4>
+                <p className="text-xs text-muted-foreground leading-relaxed font-medium">{feat.desc}</p>
               </div>
             ))}
           </div>

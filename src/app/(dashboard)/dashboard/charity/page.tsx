@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Heart, Search, CheckCircle2, Info } from "lucide-react";
+import { Heart, Search, CheckCircle2, Info, SearchIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { charityFetchers } from "@/fetchers/charity";
 import { dashboardFetchers } from "@/fetchers/dashboard";
 import { subscriptionFetchers } from "@/fetchers/subscription";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 
 export default function CharityPage() {
   const queryClient = useQueryClient();
@@ -75,7 +76,7 @@ export default function CharityPage() {
                 <h2 className="text-xl font-bold tracking-tight">
                   {dashboard.subscription.charity?.name || "No charity selected"}
                 </h2>
-                <p className="text-sm text-balance text-muted-foreground mt-1 line-clamp-2 italic">
+                <p className="text-sm text-balance text-muted-foreground mt-1 line-clamp-2">
                   {dashboard.subscription.charity?.description}
                 </p>
               </div>
@@ -87,15 +88,18 @@ export default function CharityPage() {
 
       {/* Search and Grid */}
       <div className="space-y-6">
-        <div className="relative group">
-          <Search className="absolute left-4 top-3.5 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
-          <Input
+        <InputGroup className="gap-2 pl-4 h-14 text-lg rounded-2xl shadow-sm border-muted-foreground/10 focus-visible:ring-primary/2">
+          <InputGroupInput
+            id="inline-start-input"
             placeholder="Search charities by name or cause..."
-            className="pl-12 h-14 text-lg rounded-2xl shadow-sm border-muted-foreground/10 focus-visible:ring-primary/20"
+            className=""
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-        </div>
+          <InputGroupAddon align="inline-start">
+            <Search className="h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+          </InputGroupAddon>
+        </InputGroup>
 
         {loadingCharities ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -134,7 +138,7 @@ export default function CharityPage() {
                 </div>
                 <CardHeader className="pb-2 space-y-1">
                   <CardTitle className="text-xl font-bold tracking-tight">{charity.name}</CardTitle>
-                  <CardDescription className="line-clamp-2 min-h-[40px] italic leading-relaxed">
+                  <CardDescription className="line-clamp-2 min-h-[40px] leading-relaxed">
                     {charity.description}
                   </CardDescription>
                 </CardHeader>
@@ -156,7 +160,7 @@ export default function CharityPage() {
                 <CardFooter className="pt-0 pb-6 px-6">
                   {currentCharityId === charity.id ? (
                     <Button
-                      className="w-full gap-2 rounded-xl h-11 border-primary/20 text-primary font-bold italic"
+                      className="w-full gap-2 rounded-xl h-11 border-primary/20 text-primary font-bold"
                       variant="outline"
                       disabled
                     >
@@ -164,7 +168,7 @@ export default function CharityPage() {
                     </Button>
                   ) : (
                     <Button
-                      className="w-full rounded-xl h-11 font-black italic tracking-tight shadow-lg shadow-primary/10"
+                      className="w-full rounded-xl h-11 font-black tracking-tight shadow-lg shadow-primary/10"
                       onClick={() => updateCharityMutation.mutate(charity.id)}
                       disabled={updateCharityMutation.isPending || !dashboard?.subscription}
                     >
@@ -193,7 +197,7 @@ export default function CharityPage() {
           <Link href="/dashboard/subscription" className="w-full md:w-auto">
             <Button
               size="lg"
-              className="w-full font-black italic rounded-2xl h-14 px-8 border-none shadow-xl shadow-primary/20"
+              className="w-full font-black rounded-2xl h-14 px-8 border-none shadow-xl shadow-primary/20"
             >
               UNLIMIT YOUR IMPACT
             </Button>

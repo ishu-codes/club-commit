@@ -17,7 +17,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import z from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -39,10 +39,10 @@ import { cn } from "@/lib/utils";
 import { scoreFetchers } from "@/fetchers/score";
 import { dashboardFetchers } from "@/fetchers/dashboard";
 
-const scoreSchema = z.z.object({
-  score: z.z.coerce.number().min(50, "Are you sure? Minimum score is 50.").max(150, "Maximum score is 150."),
-  courseName: z.z.string().min(2, "Course name is required"),
-  playedAt: z.z.string().min(1, "Date is required"),
+const scoreSchema = z.object({
+  score: z.coerce.number().min(0, "Minimum score is 0.").max(50, "Maximum score is 50."),
+  courseName: z.string().min(2, "Course name is required"),
+  playedAt: z.string().min(1, "Date is required"),
 });
 
 export default function GolfScoresPage() {
@@ -58,7 +58,7 @@ export default function GolfScoresPage() {
   const form = useForm<z.infer<typeof scoreSchema>>({
     resolver: zodResolver(scoreSchema),
     defaultValues: {
-      score: 72,
+      score: 12,
       courseName: "",
       playedAt: new Date().toISOString().split("T")[0],
     },
@@ -107,88 +107,49 @@ export default function GolfScoresPage() {
           <h1 className="text-3xl font-extrabold tracking-tight underline decoration-primary/20 decoration-4 underline-offset-8">
             Your Performance
           </h1>
-          <p className="text-muted-foreground mt-4 italic font-medium">
-            Refine your game, maximize your charitable impact.
-          </p>
+          <p className="text-muted-foreground mt-4 font-medium">Refine your game, maximize your charitable impact.</p>
         </div>
 
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <Button
-              size="lg"
-              className="rounded-full px-10 shadow-xl shadow-primary/20 hover:shadow-primary/40 gap-2 text-lg font-bold h-14"
-            >
-              <Plus className="h-5 w-5" /> LOG NEW ROUND
+            <Button size="lg" className="">
+              <Plus className="h-5 w-5" /> Log New Round
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[450px] rounded-3xl">
+          <DialogContent className="sm:max-w-112.5 rounded-3xl">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-black italic uppercase tracking-tighter">
-                NEW ROUND ENTRY
-              </DialogTitle>
-              <DialogDescription className="italic font-medium">
+              <DialogTitle className="tracking-tighter">New Round</DialogTitle>
+              <DialogDescription className="">
                 Submit your gross score to update your rolling average. 5 scores are required for full drawdown
                 eligibility.
               </DialogDescription>
             </DialogHeader>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 py-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-2">
-                <Label
-                  htmlFor="score"
-                  className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground"
-                >
-                  Gross Score
-                </Label>
-                <Input
-                  id="score"
-                  type="number"
-                  {...form.register("score")}
-                  className="h-14 text-2xl font-black rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
-                />
+                <Label htmlFor="score">Gross Score</Label>
+                <Input id="score" type="number" {...form.register("score")} className="bg-muted/30" />
                 {form.formState.errors.score && (
-                  <p className="text-xs text-destructive font-bold italic">{form.formState.errors.score.message}</p>
+                  <p className="text-xs text-destructive font-bold">{form.formState.errors.score.message}</p>
                 )}
               </div>
               <div className="space-y-2">
-                <Label
-                  htmlFor="courseName"
-                  className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground"
-                >
-                  Course Name
-                </Label>
-                <Input
-                  id="courseName"
-                  {...form.register("courseName")}
-                  placeholder="e.g. St Andrews Links"
-                  className="h-12 rounded-xl focus-visible:ring-primary/20"
-                />
+                <Label htmlFor="courseName">Course Name</Label>
+                <Input id="courseName" {...form.register("courseName")} placeholder="e.g. St Andrews Links" />
                 {form.formState.errors.courseName && (
-                  <p className="text-xs text-destructive font-bold italic">
-                    {form.formState.errors.courseName.message}
-                  </p>
+                  <p className="text-xs text-destructive font-bold">{form.formState.errors.courseName.message}</p>
                 )}
               </div>
               <div className="space-y-2">
-                <Label
-                  htmlFor="playedAt"
-                  className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground"
-                >
-                  Played On
-                </Label>
-                <Input
-                  id="playedAt"
-                  type="date"
-                  {...form.register("playedAt")}
-                  className="h-12 rounded-xl focus-visible:ring-primary/20"
-                />
+                <Label htmlFor="playedAt">Played On</Label>
+                <Input id="playedAt" type="date" {...form.register("playedAt")} />
                 {form.formState.errors.playedAt && (
-                  <p className="text-xs text-destructive font-bold italic">{form.formState.errors.playedAt.message}</p>
+                  <p className="text-xs text-destructive font-bold">{form.formState.errors.playedAt.message}</p>
                 )}
               </div>
               <DialogFooter className="pt-4">
                 <Button
                   type="submit"
-                  className="w-full h-14 text-lg font-black italic rounded-2xl shadow-xl shadow-primary/10"
+                  className="w-full shadow-xl shadow-primary/10"
                   disabled={createMutation.isPending}
                 >
                   {createMutation.isPending ? "PROCESSING..." : "COMMIT SCORE"}
@@ -209,14 +170,14 @@ export default function GolfScoresPage() {
           </CardHeader>
           <CardContent className="relative z-10 pt-0">
             <div className="flex items-baseline gap-2">
-              <span className="text-8xl font-black italic tracking-tighter group-hover:scale-105 transition-transform duration-700">
+              <span className="text-8xl font-black tracking-tighter group-hover:scale-105 transition-transform duration-700">
                 {dashboard?.scores.average || 0}
               </span>
               <span className="text-background/20 font-black uppercase tracking-widest text-xs">Strokes</span>
             </div>
             <div className="mt-10 space-y-4">
               <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
-                <span className="text-background/40 italic">Eligibility Protocol</span>
+                <span className="text-background/40">Eligibility Protocol</span>
                 <Badge
                   variant={activeScores.length >= 5 ? "secondary" : "outline"}
                   className="px-3 h-5 border-background/10 bg-background/5 text-background font-black text-[9px] uppercase tracking-tighter"
@@ -238,7 +199,7 @@ export default function GolfScoresPage() {
         {/* Explainer / Logic */}
         <Card className="lg:col-span-2 border-none shadow-sm bg-background border-l-8 border-primary rounded-3xl">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 italic font-black uppercase tracking-tight text-xl">
+            <CardTitle className="flex items-center gap-2 font-black uppercase tracking-tight text-xl">
               Governance & Logic
             </CardTitle>
           </CardHeader>
@@ -248,7 +209,7 @@ export default function GolfScoresPage() {
                 1
               </div>
               <div>
-                <p className="font-black italic text-sm uppercase tracking-tight">Rolling 5 Logic</p>
+                <p className="font-black text-sm uppercase tracking-tight">Rolling 5 Logic</p>
                 <p className="text-xs text-muted-foreground mt-2 leading-relaxed font-medium">
                   Your draw weight is computed from your 5 most recent rounds. This protocol ensures competitive balance
                   across the network.
@@ -260,7 +221,7 @@ export default function GolfScoresPage() {
                 2
               </div>
               <div>
-                <p className="font-black italic text-sm uppercase tracking-tight">Identity Audit</p>
+                <p className="font-black text-sm uppercase tracking-tight">Identity Audit</p>
                 <p className="text-xs text-muted-foreground mt-2 leading-relaxed font-medium">
                   Platform winners must submit verified scorecard data from club systems or recognized handicap
                   applications to trigger prize funding.
@@ -301,7 +262,7 @@ export default function GolfScoresPage() {
                     >
                       <td className="px-8 py-6">
                         {isActive ? (
-                          <Badge className="bg-primary/20 text-primary border-none text-[10px] font-black italic h-5 px-3 uppercase tracking-tighter">
+                          <Badge className="bg-primary/20 text-primary border-none text-[10px] font-black h-5 px-3 uppercase tracking-tighter">
                             ACTIVE DATA
                           </Badge>
                         ) : (
@@ -314,13 +275,11 @@ export default function GolfScoresPage() {
                         )}
                       </td>
                       <td className="px-8 py-6">
-                        <span className="text-2xl font-black italic tracking-tighter group-hover:text-primary transition-colors">
+                        <span className="text-2xl font-black tracking-tighter group-hover:text-primary transition-colors">
                           {score.score}
                         </span>
                       </td>
-                      <td className="px-8 py-6 font-bold uppercase italic text-xs tracking-tight">
-                        {score.courseName}
-                      </td>
+                      <td className="px-8 py-6 font-bold uppercase text-xs tracking-tight">{score.courseName}</td>
                       <td className="px-8 py-6 text-muted-foreground font-medium tabular-nums text-xs">
                         {new Date(score.playedAt).toLocaleDateString()}
                       </td>
@@ -353,7 +312,7 @@ export default function GolfScoresPage() {
                   <Target className="h-10 w-10" />
                 </div>
                 <div>
-                  <p className="text-muted-foreground font-black italic text-xl uppercase tracking-tighter">
+                  <p className="text-muted-foreground font-black text-xl uppercase tracking-tighter">
                     Empty Performance History
                   </p>
                   <p className="text-xs text-muted-foreground/60 font-medium tracking-wide">

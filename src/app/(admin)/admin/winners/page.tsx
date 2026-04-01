@@ -91,7 +91,7 @@ export default function AdminWinnersPage() {
           <h1 className="text-3xl font-extrabold tracking-tight underline decoration-primary/20 decoration-4 underline-offset-8">
             Audit & Settlement
           </h1>
-          <p className="text-muted-foreground mt-4 font-medium italic">
+          <p className="text-muted-foreground mt-4 font-medium">
             Terminal oversight for member verification and prize disbursement protocols.
           </p>
         </div>
@@ -107,8 +107,8 @@ export default function AdminWinnersPage() {
             ))}
           </div>
           <div className="space-y-0.5">
-            <p className="text-xl font-black italic tracking-tighter leading-none">{winners?.length || 0}</p>
-            <p className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] leading-none italic">
+            <p className="text-xl font-black tracking-tighter leading-none">{winners?.length || 0}</p>
+            <p className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] leading-none">
               Total Registry Entries
             </p>
           </div>
@@ -119,7 +119,7 @@ export default function AdminWinnersPage() {
         <TabsList className="bg-muted/30 p-2 rounded-[2rem] h-20 w-full lg:w-max flex gap-3 border border-muted-foreground/10">
           <TabsTrigger
             value="pending"
-            className="rounded-[1.5rem] px-10 h-full font-black italic text-sm tracking-tight data-[state=active]:bg-foreground data-[state=active]:text-background shadow-xl transition-all uppercase gap-4"
+            className="rounded-[1.5rem] px-10 h-full font-black text-sm tracking-tight data-[state=active]:bg-foreground data-[state=active]:text-background shadow-xl transition-all uppercase gap-4"
           >
             Forensic Reviews
             <Badge
@@ -136,7 +136,7 @@ export default function AdminWinnersPage() {
           </TabsTrigger>
           <TabsTrigger
             value="payouts"
-            className="rounded-[1.5rem] px-10 h-full font-black italic text-sm tracking-tight data-[state=active]:bg-foreground data-[state=active]:text-background shadow-xl transition-all uppercase gap-4"
+            className="rounded-[1.5rem] px-10 h-full font-black text-sm tracking-tight data-[state=active]:bg-foreground data-[state=active]:text-background shadow-xl transition-all uppercase gap-4"
           >
             Pending Payouts
             <Badge
@@ -153,7 +153,7 @@ export default function AdminWinnersPage() {
           </TabsTrigger>
           <TabsTrigger
             value="history"
-            className="rounded-[1.5rem] px-10 h-full font-black italic text-sm tracking-tight data-[state=active]:bg-foreground data-[state=active]:text-background shadow-xl transition-all uppercase"
+            className="rounded-[1.5rem] px-10 h-full font-black text-sm tracking-tight data-[state=active]:bg-foreground data-[state=active]:text-background shadow-xl transition-all uppercase"
           >
             Settled History
           </TabsTrigger>
@@ -169,25 +169,23 @@ export default function AdminWinnersPage() {
                 >
                   <CardHeader className="p-10 pb-6 relative overflow-hidden">
                     <div className="flex items-center justify-between mb-8 relative z-10">
-                      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary italic">
-                        AWAITING AUDIT
-                      </p>
+                      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">AWAITING AUDIT</p>
                       <Trophy className="h-6 w-6 text-primary opacity-20 group-hover:rotate-12 transition-transform" />
                     </div>
-                    <CardTitle className="text-3xl font-black italic tracking-tighter uppercase leading-none relative z-10 group-hover:text-primary transition-colors">
+                    <CardTitle className="text-3xl font-black tracking-tighter uppercase leading-none relative z-10 group-hover:text-primary transition-colors">
                       {winner.user?.name || "Unknown Node"}
                     </CardTitle>
-                    <CardDescription className="font-black text-muted-foreground/60 uppercase text-[9px] tracking-[0.3em] mt-3 relative z-10 italic">
+                    <CardDescription className="font-black text-muted-foreground/60 uppercase text-[9px] tracking-[0.3em] mt-3 relative z-10">
                       ENDPOINT: {winner.user?.email}
                     </CardDescription>
                     <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16" />
                   </CardHeader>
                   <CardContent className="px-10 py-0 space-y-8">
                     <div className="flex items-baseline gap-3">
-                      <span className="text-5xl font-black text-foreground italic tracking-tighter drop-shadow-sm">
+                      <span className="text-5xl font-black text-foreground tracking-tighter drop-shadow-sm">
                         ${winner.prizeAmount?.toLocaleString()}
                       </span>
-                      <span className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.2em] italic">
+                      <span className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.2em]">
                         ALLOCATION
                       </span>
                     </div>
@@ -206,7 +204,7 @@ export default function AdminWinnersPage() {
                           <div className="absolute inset-0 bg-primary/5 group-hover:bg-transparent transition-colors" />
                         </>
                       ) : (
-                        <div className="h-full flex flex-col items-center justify-center text-muted-foreground/30 italic font-black gap-2 uppercase text-[10px] tracking-widest text-center px-6">
+                        <div className="h-full flex flex-col items-center justify-center text-muted-foreground/30 font-black gap-2 uppercase text-[10px] tracking-widest text-center px-6">
                           <Layout className="h-10 w-10 opacity-20 mb-2" />
                           Evidence source empty or corrupted
                         </div>
@@ -215,7 +213,7 @@ export default function AdminWinnersPage() {
                   </CardContent>
                   <CardFooter className="p-10">
                     <Button
-                      className="w-full h-16 bg-foreground text-background hover:bg-primary hover:text-primary-foreground font-black italic gap-4 rounded-2xl shadow-xl transition-all uppercase tracking-widest text-xs"
+                      className="w-full h-16 bg-foreground text-background hover:bg-primary hover:text-primary-foreground font-black gap-4 rounded-2xl shadow-xl transition-all uppercase tracking-widest text-xs"
                       onClick={() => {
                         setSelectedWinner(winner);
                         setIsPreviewOpen(true);
@@ -230,7 +228,7 @@ export default function AdminWinnersPage() {
           ) : (
             <div className="py-48 text-center rounded-[3rem] border-4 border-dashed border-muted/10 bg-muted/5 group">
               <UserCheck className="h-20 w-20 text-muted-foreground/10 mx-auto mb-8 animate-pulse group-hover:text-primary/20 transition-colors" />
-              <p className="text-muted-foreground font-black italic uppercase tracking-[0.4em] text-sm">
+              <p className="text-muted-foreground font-black uppercase tracking-[0.4em] text-sm">
                 Forensic queue is currently cleared.
               </p>
             </div>
@@ -254,32 +252,32 @@ export default function AdminWinnersPage() {
                     {awaitingPayout.map((winner) => (
                       <tr key={winner.id} className="hover:bg-muted/5 transition-all group">
                         <td className="px-12 py-10">
-                          <div className="font-black italic text-xl leading-none tracking-tight group-hover:text-primary transition-colors uppercase">
+                          <div className="font-black text-xl leading-none tracking-tight group-hover:text-primary transition-colors uppercase">
                             {winner.user?.name}
                           </div>
-                          <div className="text-[10px] font-black text-muted-foreground/60 mt-3 uppercase tracking-[0.2em] italic">
+                          <div className="text-[10px] font-black text-muted-foreground/60 mt-3 uppercase tracking-[0.2em]">
                             {winner.user?.email}
                           </div>
                         </td>
                         <td className="px-12 py-10">
                           <div className="flex items-baseline gap-2">
-                            <span className="text-3xl font-black text-primary italic tracking-tighter">
+                            <span className="text-3xl font-black text-primary tracking-tighter">
                               ${winner.prizeAmount?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                             </span>
-                            <span className="text-[9px] font-black text-primary/40 uppercase italic">USD</span>
+                            <span className="text-[9px] font-black text-primary/40 uppercase">USD</span>
                           </div>
                         </td>
                         <td className="px-12 py-10">
                           <div className="inline-flex items-center gap-3 bg-primary/10 px-5 py-2.5 rounded-full border border-primary/20">
                             <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                            <span className="text-[10px] font-black uppercase text-primary tracking-widest italic leading-none">
+                            <span className="text-[10px] font-black uppercase text-primary tracking-widest leading-none">
                               Security Cleared
                             </span>
                           </div>
                         </td>
                         <td className="px-12 py-10 text-right">
                           <Button
-                            className="h-14 px-10 rounded-2xl bg-foreground text-background hover:bg-primary hover:text-primary-foreground font-black italic text-[11px] gap-4 shadow-xl transition-all uppercase tracking-[0.1em]"
+                            className="h-14 px-10 rounded-2xl bg-foreground text-background hover:bg-primary hover:text-primary-foreground font-black text-[11px] gap-4 shadow-xl transition-all uppercase tracking-[0.1em]"
                             onClick={() => {
                               if (confirm("INITIALIZE CAPITAL TRANSFER: Confirm terminal settlement of these funds?")) {
                                 payMutation.mutate(winner.id);
@@ -294,7 +292,7 @@ export default function AdminWinnersPage() {
                   </tbody>
                 </table>
                 {!awaitingPayout.length && (
-                  <div className="py-32 text-center font-black italic text-muted-foreground/20 uppercase tracking-[0.4em] text-xs bg-muted/5">
+                  <div className="py-32 text-center font-black text-muted-foreground/20 uppercase tracking-[0.4em] text-xs bg-muted/5">
                     LEADERSHIP DIRECTIVE: ZERO VERIFIED PAYOUTS PENDING.
                   </div>
                 )}
@@ -320,21 +318,21 @@ export default function AdminWinnersPage() {
                     {completed.map((winner) => (
                       <tr key={winner.id} className="hover:bg-muted/5 transition-all group">
                         <td className="px-12 py-10">
-                          <div className="font-black italic text-lg leading-none tracking-tight opacity-70 group-hover:opacity-100 transition-opacity uppercase">
+                          <div className="font-black text-lg leading-none tracking-tight opacity-70 group-hover:opacity-100 transition-opacity uppercase">
                             {winner.user?.name}
                           </div>
-                          <div className="text-[9px] font-bold text-muted-foreground/40 mt-2 uppercase tracking-[0.2em] italic">
+                          <div className="text-[9px] font-bold text-muted-foreground/40 mt-2 uppercase tracking-[0.2em]">
                             {winner.user?.email}
                           </div>
                         </td>
                         <td className="px-12 py-10">
                           <div className="flex items-baseline gap-2">
-                            <span className="text-2xl font-black text-primary italic tracking-tighter opacity-70 group-hover:opacity-100 transition-opacity">
+                            <span className="text-2xl font-black text-primary tracking-tighter opacity-70 group-hover:opacity-100 transition-opacity">
                               ${winner.prizeAmount?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                             </span>
                           </div>
                         </td>
-                        <td className="px-12 py-10 text-muted-foreground/40 font-black text-[10px] tabular-nums uppercase tracking-widest italic">
+                        <td className="px-12 py-10 text-muted-foreground/40 font-black text-[10px] tabular-nums uppercase tracking-widest">
                           COMPLETED {new Date(winner.paidAt!).toLocaleDateString()}
                         </td>
                         <td className="px-12 py-10 text-right">
@@ -352,7 +350,7 @@ export default function AdminWinnersPage() {
                 </table>
               </div>
               {!completed.length && (
-                <div className="py-32 text-center font-black italic text-muted-foreground/20 uppercase tracking-[0.4em] text-xs bg-muted/5">
+                <div className="py-32 text-center font-black text-muted-foreground/20 uppercase tracking-[0.4em] text-xs bg-muted/5">
                   SYSTEM LOGS CONTAIN ZERO ARCHIVAL SETTLEMENT RECORDS.
                 </div>
               )}
@@ -366,10 +364,10 @@ export default function AdminWinnersPage() {
         <DialogContent className="max-w-4xl p-0 rounded-[3rem] overflow-hidden border-none shadow-3xl bg-background">
           <DialogHeader className="bg-foreground text-background p-12 relative overflow-hidden">
             <div className="relative z-10">
-              <DialogTitle className="text-3xl font-black italic tracking-tighter uppercase leading-none">
+              <DialogTitle className="text-3xl font-black tracking-tighter uppercase leading-none">
                 FORENSIC DATA ANALYZER
               </DialogTitle>
-              <DialogDescription className="text-background/60 font-medium italic mt-3 text-lg">
+              <DialogDescription className="text-background/60 font-medium mt-3 text-lg">
                 Cross-referencing telemetry for terminal score clearance.
               </DialogDescription>
             </div>
@@ -379,28 +377,28 @@ export default function AdminWinnersPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               <div className="space-y-10">
                 <div className="space-y-4">
-                  <p className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground italic">
+                  <p className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground">
                     NODE PARAMETERS
                   </p>
                   <div className="rounded-[1.5rem] border-2 border-muted/10 bg-muted/5 p-8 space-y-8 backdrop-blur-sm">
                     <div className="flex justify-between items-center pb-6 border-b border-muted/10">
-                      <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest italic">
+                      <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                         Identity
                       </span>
-                      <span className="text-xl font-black italic text-foreground tracking-tight uppercase">
+                      <span className="text-xl font-black text-foreground tracking-tight uppercase">
                         {selectedWinner?.user?.name}
                       </span>
                     </div>
                     <div className="flex justify-between items-center pb-6 border-b border-muted/10">
-                      <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest italic">
+                      <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                         Allocation
                       </span>
-                      <span className="text-3xl font-black italic text-primary tracking-tighter">
+                      <span className="text-3xl font-black text-primary tracking-tighter">
                         ${selectedWinner?.prizeAmount?.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest italic">
+                      <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                         Registry HEX
                       </span>
                       <span className="font-mono text-xs text-muted-foreground leading-none">
@@ -409,7 +407,7 @@ export default function AdminWinnersPage() {
                     </div>
                   </div>
                 </div>
-                <div className="bg-primary/5 p-8 rounded-[1.5rem] border border-primary/20 flex gap-6 text-primary text-xs font-bold leading-relaxed italic shadow-inner">
+                <div className="bg-primary/5 p-8 rounded-[1.5rem] border border-primary/20 flex gap-6 text-primary text-xs font-bold leading-relaxed shadow-inner">
                   <ShieldCheck className="h-8 w-8 text-primary shrink-0 opacity-50" />
                   <span className="opacity-80 leading-snug">
                     Verification required: cross-reference evidence image with handicap registry or official club
@@ -418,7 +416,7 @@ export default function AdminWinnersPage() {
                 </div>
               </div>
               <div className="space-y-4">
-                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground italic">
+                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground">
                   EVIDENCE STREAM
                 </p>
                 <div className="aspect-[4/5] bg-muted/20 rounded-[2rem] border-4 border-dashed border-muted-foreground/10 overflow-hidden relative shadow-2xl group/evidence">
@@ -433,14 +431,14 @@ export default function AdminWinnersPage() {
                         <a
                           href={selectedWinner?.proofUrl}
                           target="_blank"
-                          className="flex items-center justify-center gap-3 w-full h-14 bg-white text-black rounded-xl text-[11px] font-black italic uppercase tracking-widest shadow-2xl cursor-new-tab"
+                          className="flex items-center justify-center gap-3 w-full h-14 bg-white text-black rounded-xl text-[11px] font-black uppercase tracking-widest shadow-2xl cursor-new-tab"
                         >
                           Open Raw Endpoint <ExternalLink className="h-4 w-4" />
                         </a>
                       </div>
                     </>
                   ) : (
-                    <div className="flex flex-col items-center justify-center h-full text-muted-foreground/20 italic font-black gap-6 uppercase tracking-widest text-center p-12">
+                    <div className="flex flex-col items-center justify-center h-full text-muted-foreground/20 font-black gap-6 uppercase tracking-widest text-center p-12">
                       <HistoryIcon className="h-16 w-16 opacity-10 animate-spin-slow" />
                       Data Pool Exhausted
                     </div>
@@ -453,7 +451,7 @@ export default function AdminWinnersPage() {
               <Button
                 size="lg"
                 variant="ghost"
-                className="h-20 flex-1 font-black italic text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all rounded-2xl uppercase tracking-[0.2em] text-[10px]"
+                className="h-20 flex-1 font-black text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all rounded-2xl uppercase tracking-[0.2em] text-[10px]"
                 onClick={() => toast.info("Rejection protocol not yet active. Contact node via identity registry.")}
                 disabled={verifyMutation.isPending}
               >
@@ -461,7 +459,7 @@ export default function AdminWinnersPage() {
               </Button>
               <Button
                 size="lg"
-                className="h-20 flex-[2] bg-primary text-primary-foreground hover:bg-primary/90 font-black italic text-2xl shadow-[0_20px_50px_rgba(var(--primary),0.3)] rounded-2xl active:scale-[0.98] transition-all uppercase tracking-tighter"
+                className="h-20 flex-[2] bg-primary text-primary-foreground hover:bg-primary/90 font-black text-2xl shadow-[0_20px_50px_rgba(var(--primary),0.3)] rounded-2xl active:scale-[0.98] transition-all uppercase tracking-tighter"
                 disabled={
                   verifyMutation.isPending || selectedWinner?.status === "VERIFIED" || selectedWinner?.status === "PAID"
                 }

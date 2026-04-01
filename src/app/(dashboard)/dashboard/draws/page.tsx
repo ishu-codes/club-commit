@@ -72,7 +72,7 @@ export default function DrawsPage() {
         <h1 className="text-3xl font-extrabold tracking-tight underline decoration-primary/20 decoration-4 underline-offset-8">
           Engagement Registry
         </h1>
-        <p className="text-muted-foreground mt-4 font-medium italic text-balance max-w-2xl">
+        <p className="text-muted-foreground mt-4 font-medium text-balance max-w-2xl">
           Exclusive tactical competitions initialized for the elite commitment network.
         </p>
       </div>
@@ -91,7 +91,7 @@ export default function DrawsPage() {
                   TEMPORAL GATE OPEN
                 </div>
               </div>
-              <CardTitle className="text-7xl font-black italic tracking-tighter uppercase leading-none">
+              <CardTitle className="text-7xl font-black tracking-tighter uppercase leading-none">
                 {new Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date(0, upcomingDraws[0].month - 1))}
                 <span className="block text-primary text-4xl mt-2 not-italic font-black opacity-80">
                   {upcomingDraws[0].year} RECOVERY FUND
@@ -100,14 +100,14 @@ export default function DrawsPage() {
             </CardHeader>
             <CardContent className="relative z-10 space-y-10 pb-12 px-12">
               <div className="flex items-baseline gap-6">
-                <span className="text-9xl font-black text-primary italic leading-none tracking-tighter drop-shadow-2xl">
+                <span className="text-9xl font-black text-primary leading-none tracking-tighter drop-shadow-2xl">
                   ${upcomingDraws[0].prizePool}
                 </span>
                 <div className="space-y-1">
                   <p className="text-background/40 font-black uppercase text-[10px] tracking-[0.3em] leading-none">
                     PROJECTED
                   </p>
-                  <p className="text-background/80 font-black uppercase text-2xl tracking-tighter leading-none italic">
+                  <p className="text-background/80 font-black uppercase text-2xl tracking-tighter leading-none">
                     POOL VALUE
                   </p>
                 </div>
@@ -118,7 +118,7 @@ export default function DrawsPage() {
                   <p className="text-[10px] text-background/40 uppercase font-black tracking-[0.3em] mb-3 leading-none">
                     ALGORITHM LOAD
                   </p>
-                  <p className="font-black italic text-xl uppercase tracking-tight">
+                  <p className="font-black text-xl uppercase tracking-tight">
                     {upcomingDraws[0].drawType === "ALGORITHM" ? "Weighted Performance" : "Full Randomization"}
                   </p>
                 </div>
@@ -126,7 +126,7 @@ export default function DrawsPage() {
                   <p className="text-[10px] text-background/40 uppercase font-black tracking-[0.3em] mb-3 leading-none">
                     ACTIVE NODES
                   </p>
-                  <p className="font-black italic text-xl uppercase tracking-tight">
+                  <p className="font-black text-xl uppercase tracking-tight">
                     {upcomingDraws[0]._count?.entries || 0} ELIGIBLE DATA POINTS
                   </p>
                 </div>
@@ -135,11 +135,11 @@ export default function DrawsPage() {
             <CardFooter className="relative z-10 bg-background/5 p-12 border-t border-background/10 backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-8">
               <div className="text-sm">
                 {entries.some((e: any) => e.drawId === upcomingDraws[0].id) ? (
-                  <span className="flex items-center gap-3 text-primary font-black italic uppercase tracking-widest text-lg">
+                  <span className="flex items-center gap-3 text-primary font-black uppercase tracking-widest text-lg">
                     <CheckCircle2 className="h-6 w-6 stroke-[3px]" /> Participation Locked
                   </span>
                 ) : (
-                  <div className="flex items-center gap-3 text-background/40 italic font-medium">
+                  <div className="flex items-center gap-3 text-background/40 font-medium">
                     <Info className="h-5 w-5 text-primary" />
                     <span className="text-xs uppercase tracking-wider font-bold">
                       Protocol requires:{" "}
@@ -151,7 +151,7 @@ export default function DrawsPage() {
               </div>
               <Button
                 size="lg"
-                className="w-full sm:w-auto h-20 px-16 text-2xl font-black italic shadow-2xl rounded-2xl group/btn overflow-hidden"
+                className="w-full sm:w-auto h-20 px-16 text-2xl font-black shadow-2xl rounded-2xl group/btn overflow-hidden"
                 disabled={entries.some((e: any) => e.drawId === upcomingDraws[0].id) || enterMutation.isPending}
                 onClick={() => enterMutation.mutate(upcomingDraws[0].id)}
               >
@@ -166,7 +166,7 @@ export default function DrawsPage() {
 
           <Card className="border-none bg-muted/5 shadow-sm rounded-[2.5rem] h-full flex flex-col border-2 border-muted/10 group">
             <CardHeader className="p-10 pb-6">
-              <CardTitle className="text-sm font-black italic flex items-center gap-3 uppercase tracking-[0.3em] text-muted-foreground/60">
+              <CardTitle className="text-sm font-black flex items-center gap-3 uppercase tracking-[0.3em] text-muted-foreground/60">
                 <Ticket className="h-5 w-5 text-primary" /> Qualification Status
               </CardTitle>
             </CardHeader>
@@ -177,7 +177,7 @@ export default function DrawsPage() {
                     Network Stake
                   </span>
                   {dashboard?.subscription ? (
-                    <Badge className="bg-primary/20 text-primary border-none px-4 py-1 font-black text-[10px] uppercase italic tracking-widest">
+                    <Badge className="bg-primary/20 text-primary border-none px-4 py-1 font-black text-[10px] uppercase tracking-widest">
                       ESTABLISHED
                     </Badge>
                   ) : (
@@ -191,9 +191,7 @@ export default function DrawsPage() {
                     Temporal Load
                   </span>
                   <div className="flex items-center gap-3">
-                    <span className="font-black italic text-2xl tracking-tighter">
-                      {dashboard?.scores.active.length || 0}
-                    </span>
+                    <span className="font-black text-2xl tracking-tighter">{dashboard?.scores.active.length || 0}</span>
                     <span className="text-[10px] text-muted-foreground/40 font-black uppercase tracking-widest">
                       / 5 DATA
                     </span>
@@ -203,14 +201,14 @@ export default function DrawsPage() {
                   <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                     Current Seed
                   </span>
-                  <span className="font-black italic text-4xl tracking-tighter text-primary">
+                  <span className="font-black text-4xl tracking-tighter text-primary">
                     {dashboard?.scores.average || "0.00"}
                   </span>
                 </div>
               </div>
 
               <div className="bg-background p-6 rounded-3xl border-2 border-dashed border-muted/20 relative overflow-hidden">
-                <p className="text-[10px] font-bold text-muted-foreground/60 leading-relaxed italic uppercase tracking-tighter relative z-10 text-center">
+                <p className="text-[10px] font-bold text-muted-foreground/60 leading-relaxed uppercase tracking-tighter relative z-10 text-center">
                   "Efficiency is the byproduct of discipline. Rebuild your handicaps to optimize your draw weight."
                 </p>
                 <div className="absolute top-0 left-0 w-full h-1 bg-primary transform -translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
@@ -233,7 +231,7 @@ export default function DrawsPage() {
 
       {/* Participation History */}
       <div className="space-y-10 pt-8">
-        <h2 className="text-sm font-black italic tracking-[0.3em] uppercase text-muted-foreground flex items-center gap-3">
+        <h2 className="text-sm font-black tracking-[0.3em] uppercase text-muted-foreground flex items-center gap-3">
           <HistoryIcon className="h-5 w-5 text-primary opacity-50" /> ARCHIVAL PERFORMANCE REGISTRY
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -247,7 +245,7 @@ export default function DrawsPage() {
                 >
                   <CardHeader className="bg-muted/5 pb-8 p-10 transition-colors group-hover:bg-muted/10 border-b border-muted/10">
                     <div className="flex items-center justify-between mb-6">
-                      <CardTitle className="text-3xl font-black italic tracking-tighter uppercase">
+                      <CardTitle className="text-3xl font-black tracking-tighter uppercase">
                         {new Intl.DateTimeFormat("en-US", { month: "short" }).format(new Date(0, draw.month - 1))}
                         <span className="text-primary font-black ml-2">{draw.year}</span>
                       </CardTitle>
@@ -258,7 +256,7 @@ export default function DrawsPage() {
                         {draw.status}
                       </Badge>
                     </div>
-                    <div className="flex items-baseline gap-2 text-4xl font-black text-foreground leading-none tracking-tighter uppercase italic">
+                    <div className="flex items-baseline gap-2 text-4xl font-black text-foreground leading-none tracking-tighter uppercase">
                       <span className="text-primary not-italic text-2xl font-bold">$</span>
                       {draw.prizePool.toLocaleString()}
                     </div>
@@ -270,7 +268,7 @@ export default function DrawsPage() {
                           <span className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.2em]">
                             ENTRY SEED
                           </span>
-                          <span className="font-black italic text-2xl tracking-tighter group-hover:text-primary transition-colors">
+                          <span className="font-black text-2xl tracking-tighter group-hover:text-primary transition-colors">
                             {entry.entryScore}
                           </span>
                         </div>
@@ -278,13 +276,13 @@ export default function DrawsPage() {
                           <span className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.2em]">
                             AUDIT STATE
                           </span>
-                          <span className="text-primary font-black text-[10px] uppercase italic flex items-center gap-2 tracking-widest bg-primary/10 px-3 py-1 rounded-full">
+                          <span className="text-primary font-black text-[10px] uppercase flex items-center gap-2 tracking-widest bg-primary/10 px-3 py-1 rounded-full">
                             <CheckCircle2 className="h-3.5 w-3.5 stroke-[3px]" /> VERIFIED
                           </span>
                         </div>
                       </div>
                     ) : (
-                      <div className="flex flex-col items-center justify-center py-10 bg-muted/5 text-muted-foreground/30 italic text-[10px] font-black uppercase tracking-[0.2em] border-2 border-dashed border-muted/10 rounded-2xl">
+                      <div className="flex flex-col items-center justify-center py-10 bg-muted/5 text-muted-foreground/30 text-[10px] font-black uppercase tracking-[0.2em] border-2 border-dashed border-muted/10 rounded-2xl">
                         NODE INACTIVE DURING CALL
                       </div>
                     )}
@@ -307,7 +305,7 @@ export default function DrawsPage() {
               <div className="h-16 w-16 bg-muted/20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <HistoryIcon className="h-8 w-8 text-muted-foreground/40 animate-pulse" />
               </div>
-              <p className="text-muted-foreground/40 font-black uppercase tracking-[0.4em] italic text-xs">
+              <p className="text-muted-foreground/40 font-black uppercase tracking-[0.4em] text-xs">
                 Archival history loading...
               </p>
             </div>
