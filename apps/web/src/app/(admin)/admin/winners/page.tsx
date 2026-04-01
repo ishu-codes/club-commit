@@ -81,9 +81,10 @@ export default function AdminWinnersPage() {
     );
   }
 
-  const pendingReview = winners?.filter((w) => w.status === "PROOFS_UPLOADED") || [];
-  const awaitingPayout = winners?.filter((w) => w.status === "VERIFIED") || [];
-  const completed = winners?.filter((w) => w.status === "PAID") || [];
+  // console.log({ winners });
+  const pendingReview = winners?.winners.filter((w) => w.status === "PROOFS_UPLOADED") || [];
+  const awaitingPayout = winners?.winners.filter((w) => w.status === "VERIFIED") || [];
+  const completed = winners?.winners.filter((w) => w.status === "PAID") || [];
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
@@ -107,10 +108,16 @@ export default function AdminWinnersPage() {
       <Tabs defaultValue="pending" className="w-full">
         <TabsList className="bg-muted/50 p-1 rounded-lg w-full md:w-auto h-auto grid grid-cols-3 md:flex md:gap-1">
           <TabsTrigger value="pending" className="rounded-md px-6 py-2 transition-all">
-            Review <Badge variant="secondary" className="ml-2 px-1.5 h-4 text-[10px]">{pendingReview.length}</Badge>
+            Review{" "}
+            <Badge variant="secondary" className="ml-2 px-1.5 h-4 text-[10px]">
+              {pendingReview.length}
+            </Badge>
           </TabsTrigger>
           <TabsTrigger value="payouts" className="rounded-md px-6 py-2 transition-all">
-            Payouts <Badge variant="secondary" className="ml-2 px-1.5 h-4 text-[10px]">{awaitingPayout.length}</Badge>
+            Payouts{" "}
+            <Badge variant="secondary" className="ml-2 px-1.5 h-4 text-[10px]">
+              {awaitingPayout.length}
+            </Badge>
           </TabsTrigger>
           <TabsTrigger value="history" className="rounded-md px-6 py-2 transition-all">
             History
@@ -124,16 +131,27 @@ export default function AdminWinnersPage() {
                 <Card key={winner.id} className="rounded-xl border shadow-sm flex flex-col group">
                   <CardHeader>
                     <div className="flex items-center justify-between mb-2">
-                      <Badge variant="outline" className="text-[10px] uppercase font-bold text-primary border-primary/20">Awaiting Audit</Badge>
+                      <Badge
+                        variant="outline"
+                        className="text-[10px] uppercase font-bold text-primary border-primary/20"
+                      >
+                        Awaiting Audit
+                      </Badge>
                       <Trophy className="h-4 w-4 text-primary opacity-20" />
                     </div>
                     <CardTitle className="text-lg">{winner.user?.name || "Unknown node"}</CardTitle>
-                    <CardDescription className="text-xs font-medium uppercase tracking-tight">{winner.user?.email}</CardDescription>
+                    <CardDescription className="text-xs font-medium uppercase tracking-tight">
+                      {winner.user?.email}
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="flex-1 space-y-6">
                     <div className="space-y-1">
-                      <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">Prize Allocation</p>
-                      <p className="text-3xl font-bold text-foreground tracking-tight">&#8377;{winner.amount?.toLocaleString()}</p>
+                      <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">
+                        Prize Allocation
+                      </p>
+                      <p className="text-3xl font-bold text-foreground tracking-tight">
+                        &#8377;{winner.amount?.toLocaleString()}
+                      </p>
                     </div>
                     <div className="aspect-video bg-muted/30 rounded-lg border border-dashed flex flex-col items-center justify-center overflow-hidden relative group-hover:border-primary/40 transition-colors">
                       {winner.proofUrl ? (
@@ -141,12 +159,17 @@ export default function AdminWinnersPage() {
                           src={winner.proofUrl}
                           className="object-cover w-full h-full cursor-pointer hover:scale-105 transition-transform"
                           alt="Proof"
-                          onClick={() => { setSelectedWinner(winner); setIsPreviewOpen(true); }}
+                          onClick={() => {
+                            setSelectedWinner(winner);
+                            setIsPreviewOpen(true);
+                          }}
                         />
                       ) : (
                         <div className="text-center p-4">
                           <ImageIcon className="h-6 w-6 text-muted-foreground/30 mx-auto mb-2" />
-                          <p className="text-[10px] font-medium text-muted-foreground/50 uppercase tracking-widest">No proof attached</p>
+                          <p className="text-[10px] font-medium text-muted-foreground/50 uppercase tracking-widest">
+                            No proof attached
+                          </p>
                         </div>
                       )}
                     </div>
@@ -154,7 +177,10 @@ export default function AdminWinnersPage() {
                   <CardFooter className="pt-0 pb-6 px-6">
                     <Button
                       className="w-full rounded-lg h-10 text-xs font-bold gap-2"
-                      onClick={() => { setSelectedWinner(winner); setIsPreviewOpen(true); }}
+                      onClick={() => {
+                        setSelectedWinner(winner);
+                        setIsPreviewOpen(true);
+                      }}
                     >
                       Audit Entry <ArrowRight className="h-3.5 w-3.5" />
                     </Button>
@@ -206,7 +232,9 @@ export default function AdminWinnersPage() {
                             size="sm"
                             className="rounded-lg font-bold gap-2"
                             onClick={() => {
-                              if (confirm("Confirm terminal settlement?")) { payMutation.mutate(winner.id); }
+                              if (confirm("Confirm terminal settlement?")) {
+                                payMutation.mutate(winner.id);
+                              }
                             }}
                           >
                             Execute Payout <CheckCircle2 className="h-3.5 w-3.5" />
@@ -244,7 +272,9 @@ export default function AdminWinnersPage() {
                       <tr key={winner.id} className="hover:bg-muted/5 transition-colors opacity-80 hover:opacity-100">
                         <td className="px-6 py-4">
                           <p className="font-semibold">{winner.user?.name}</p>
-                          <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tight">{winner.user?.email}</p>
+                          <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tight">
+                            {winner.user?.email}
+                          </p>
                         </td>
                         <td className="px-6 py-4 font-bold text-primary">
                           &#8377;{winner.amount?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
@@ -253,7 +283,11 @@ export default function AdminWinnersPage() {
                           {new Date(winner.paidAt!).toLocaleDateString()}
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <Button variant="ghost" size="sm" className="h-8 rounded-md text-[10px] font-bold uppercase tracking-widest gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 rounded-md text-[10px] font-bold uppercase tracking-widest gap-1"
+                          >
                             Audit <ExternalLink className="h-3 w-3" />
                           </Button>
                         </td>
@@ -276,13 +310,17 @@ export default function AdminWinnersPage() {
         <DialogContent className="max-w-3xl p-0 rounded-xl overflow-hidden border-none shadow-2xl">
           <DialogHeader className="bg-foreground text-background p-8">
             <DialogTitle className="text-2xl font-bold tracking-tight">Forensic Verification</DialogTitle>
-            <DialogDescription className="text-muted-foreground">Cross-reference member evidence with registry score data.</DialogDescription>
+            <DialogDescription className="text-muted-foreground">
+              Cross-reference member evidence with registry score data.
+            </DialogDescription>
           </DialogHeader>
           <div className="p-8 space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
               <div className="md:col-span-2 space-y-6">
                 <div className="space-y-2">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Entity Parameters</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                    Entity Parameters
+                  </p>
                   <div className="rounded-lg border bg-muted/30 p-5 space-y-4">
                     <div className="flex justify-between items-center text-sm">
                       <span className="text-muted-foreground font-medium">Node Identity</span>
@@ -290,11 +328,15 @@ export default function AdminWinnersPage() {
                     </div>
                     <div className="flex justify-between items-center text-sm">
                       <span className="text-muted-foreground font-medium">Allocated Pool</span>
-                      <span className="font-bold text-primary">&#8377;{selectedWinner?.amount?.toLocaleString() || '0'}</span>
+                      <span className="font-bold text-primary">
+                        &#8377;{selectedWinner?.amount?.toLocaleString() || "0"}
+                      </span>
                     </div>
                     <div className="flex justify-between items-center text-[10px]">
                       <span className="text-muted-foreground font-medium">Hex Identifier</span>
-                      <span className="font-mono text-muted-foreground/60">#{selectedWinner?.id?.slice(-12).toUpperCase()}</span>
+                      <span className="font-mono text-muted-foreground/60">
+                        #{selectedWinner?.id?.slice(-12).toUpperCase()}
+                      </span>
                     </div>
                   </div>
                 </div>

@@ -19,7 +19,7 @@ model User {
   updatedAt      DateTime @updatedAt
 
   bio            String?
-  role           String   @default("user") // "user" | "admin"
+  role           String   @default("USER") // "user" | "admin"
   sessions Session[]
   accounts Account[]
 

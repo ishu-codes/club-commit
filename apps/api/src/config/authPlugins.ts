@@ -1,5 +1,6 @@
 import { type BetterAuthPlugin } from "better-auth";
 import { createAuthMiddleware } from "better-auth/api";
+import { customSession } from "better-auth/plugins";
 
 import { db } from "../database/index.js";
 import type { SignUpResponse } from "../types/auth.js";
