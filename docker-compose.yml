@@ -1,0 +1,53 @@
+services:
+  # api:
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/api/Dockerfile
+  #   container_name: clubcommit_api
+  #   ports:
+  #     - "8080:${PORT}"
+  #   environment:
+  #     NODE_ENV: production
+  #     PORT: 8080
+  #     DATABASE_URL: postgresql://clubcommit_user:clubcommit_password@localhost:5432/clubcommit
+
+  #   depends_on:
+  #     - database
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+  #     interval: 30s
+  #     timeout: 5s
+  #     retries: 3
+
+  # web:
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/web/Dockerfile
+  #   container_name: clubcommit_web
+  #   ports:
+  #     - "3000:80"
+  #   environment:
+  #     - VITE_API_URL=http://localhost:8080
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD", "wget", "-qO-", "http://localhost"]
+  #     interval: 30s
+  #     timeout: 5s
+  #     retries: 3
+
+  database:
+    image: postgres:16.10-alpine
+    container_name: clubcommit-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: clubcommit_password
+      POSTGRES_USER: clubcommit_user
+      POSTGRES_DB: clubcommit
+    restart: unless-stopped
+
+volumes:
+  data:

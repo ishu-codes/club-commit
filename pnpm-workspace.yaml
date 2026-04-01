@@ -1,0 +1,11 @@
+packages:
+  - api/**
+  - web/**
+onlyBuiltDependencies:
+  - "@biomejs/biome"
+  - bcrypt
+  - better-sqlite3
+  - esbuild
+ignoredBuiltDependencies:
+  - sharp
+  - unrs-resolver
