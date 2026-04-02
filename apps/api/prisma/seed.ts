@@ -80,19 +80,18 @@ async function main() {
   console.log(`  ✓ Admin user: admin@clubcommit.com / admin123`);
 
   // ── Test User ──────────────────────────────────────────────────────────
-  const userPassword = await hash("user123", 10);
-  const testUser = await db.user.upsert({
-    where: { email: "user@clubcommit.com" },
-    update: {},
-    create: {
-      email: "user@clubcommit.com",
-      name: "Test User",
-      hashedPassword: userPassword,
-      role: "user",
-      emailVerified: true,
-    },
-  });
-  console.log(`  ✓ Test user: user@clubcommit.com / user123`);
+  // const userPassword = await hash("user123", 10);
+  // const testUser = await db.user.upsert({
+  //   where: { email: "user@clubcommit.com" },
+  //   update: {},
+  //   create: {
+  //     email: "user@clubcommit.com",
+  //     name: "Test User",
+  //     role: "user",
+  //     emailVerified: true,
+  //   },
+  // });
+  // console.log(`Test user: user@clubcommit.com / user123`);
 
   // ── Sample subscription for test user ──────────────────────────────────
   const now = new Date();

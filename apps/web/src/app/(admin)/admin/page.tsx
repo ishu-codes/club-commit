@@ -10,6 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { adminFetchers } from "@/fetchers/admin";
 import { cn } from "@/lib/utils";
+import { AllocationChart } from "@/components/admin/AllocationChart";
 
 export default function AdminDashboardPage() {
   const {
@@ -65,19 +66,19 @@ export default function AdminDashboardPage() {
     },
     {
       label: "Revenue",
-      value: `&#8377;${(stats?.subscriptions.totalRevenue || 0).toLocaleString()}`,
+      value: `₹ ${(stats?.subscriptions.totalRevenue || 0).toLocaleString()}`,
       icon: DollarSign,
       trend: "+8%",
     },
     {
       label: "Charities",
-      value: stats?.users.total || 0, // Fallback or use correct field if available
+      value: `₹ ${(stats?.charity.totalDonated || 0).toLocaleString()}`,
       icon: Heart,
       trend: "Stable",
     },
     {
       label: "Distributed",
-      value: `&#8377;${(stats?.winners.totalPaid || 0).toLocaleString()}`,
+      value: `₹ ${(stats?.winners.totalPaid || 0).toLocaleString()}`,
       icon: Trophy,
       trend: "+24%",
     },
@@ -112,10 +113,10 @@ export default function AdminDashboardPage() {
               <card.icon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold" dangerouslySetInnerHTML={{ __html: String(card.value) }} />
-              <p className="text-xs text-muted-foreground mt-1">
+              <CardTitle className="text-2xl font-bold">{card.value}</CardTitle>
+              {/*<p className="text-xs text-muted-foreground mt-1">
                 <span className="text-emerald-500 font-medium">{card.trend}</span> from last month
-              </p>
+              </p>*/}
             </CardContent>
           </Card>
         ))}
@@ -172,18 +173,7 @@ export default function AdminDashboardPage() {
             <CardDescription>Top supported charities</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {(stats?.charitiesBreakdown || []).slice(0, 4).map((item, i) => (
-              <div key={i} className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium truncate max-w-[150px]">{item.name}</span>
-                  <span className="text-sm font-semibold">&#8377;{item.totalReceived.toLocaleString()}</span>
-                </div>
-                <Progress
-                  value={Math.min((item.totalReceived / (stats?.winners.totalPaid || 1)) * 100, 100)}
-                  className="h-1.5"
-                />
-              </div>
-            ))}
+            <AllocationChart data={stats?.charitiesBreakdown ?? []} />
           </CardContent>
         </Card>
       </div>

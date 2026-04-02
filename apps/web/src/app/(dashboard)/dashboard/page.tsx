@@ -176,7 +176,7 @@ export default function DashboardPage() {
             <CardContent className="space-y-3">
               <p className="text-sm font-semibold leading-relaxed">
                 {dashboard?.subscription
-                  ? `Supporting: &#8377; {dashboard.subscription.charity?.name}`
+                  ? `Supporting: ${dashboard.subscription.charity?.name}`
                   : "Start making an impact today."}
               </p>
               <p className="text-xs text-muted-foreground leading-relaxed font-medium">

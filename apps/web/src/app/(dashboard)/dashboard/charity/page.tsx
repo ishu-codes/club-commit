@@ -111,7 +111,7 @@ export default function CharityPage() {
               <Skeleton key={i} className="h-64 rounded-xl" />
             ))}
           </div>
-        ) : (
+        ) : filteredCharities && filteredCharities.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCharities?.map((charity) => (
               <Card
@@ -175,6 +175,16 @@ export default function CharityPage() {
                 </CardFooter>
               </Card>
             ))}
+          </div>
+        ) : (
+          <div className="py-24 text-center border-2 border-dashed rounded-3xl bg-muted/5">
+            <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-muted mb-4">
+              <Heart className="h-8 w-8 text-muted-foreground/40" />
+            </div>
+            <h3 className="text-xl font-bold">No causes found</h3>
+            <p className="text-muted-foreground max-w-sm mx-auto mt-2 font-medium">
+              We couldn't find any organizations matching your criteria. Try adjusting your search or check back later.
+            </p>
           </div>
         )}
       </div>
