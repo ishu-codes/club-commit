@@ -3,8 +3,8 @@ WORKDIR /app
 
 FROM base AS deps
 RUN apk add --no-cache libc6-compat openssl
-COPY package.json pnpm-lock.yaml .npmrc ./
-COPY prisma ./prisma
+COPY apps/api/package.json apps/api/pnpm-lock.yaml apps/api/.npmrc ./
+COPY apps/api/prisma ./prisma
 RUN corepack enable && pnpm install --no-frozen-lockfile
 
 FROM base AS builder
@@ -12,8 +12,8 @@ RUN apk add --no-cache libc6-compat openssl
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/prisma ./prisma
 COPY --from=deps /app/.npmrc ./.npmrc
-COPY package.json ./
-COPY src ./src
+COPY apps/api/package.json ./
+COPY apps/api/src ./src
 RUN corepack enable && pnpm build
 
 FROM node:22-alpine AS runner
