@@ -40,7 +40,7 @@ import { scoreFetchers } from "@/fetchers/score";
 import { dashboardFetchers } from "@/fetchers/dashboard";
 
 const scoreSchema = z.object({
-  score: z.number().min(0, "Minimum score is 0.").max(50, "Maximum score is 50."),
+  score: z.coerce.number().min(0, "Minimum score is 0.").max(50, "Maximum score is 50."),
   courseName: z.string().min(2, "Course name is required"),
   playedAt: z.string().min(1, "Date is required"),
 });

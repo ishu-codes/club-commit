@@ -5,11 +5,11 @@ import type { Request, Response, NextFunction } from "express";
  * Must be used AFTER requireAuth middleware.
  */
 export default function requireAdmin(req: Request, res: Response, next: NextFunction) {
-    const user = (req as any).user;
+  const user = (req as any).user;
 
-    if (!user || user.role !== "admin") {
-        return res.status(403).json({ success: false, error: "Forbidden: admin access required" });
-    }
+  if (!user || user.role !== "ADMIN") {
+    return res.status(403).json({ success: false, error: "Forbidden: admin access required" });
+  }
 
-    next();
+  next();
 }

@@ -15,7 +15,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!loading && !session?.session) {
       router.replace("/sign-in");
-    }
+    } else if (session?.user.role === "ADMIN") router.replace("/admin");
   }, [session, loading, router]);
 
   if (loading) {

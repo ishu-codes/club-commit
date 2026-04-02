@@ -1,38 +1,40 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Users,
-  TrendingUp,
-  Heart,
-  Trophy,
-  Activity,
-  ShieldCheck,
-  Zap,
-  ArrowUpRight,
-  Target,
-  DollarSign,
-  ChevronRight,
-  TrendingDown,
-  LayoutGrid,
-  BarChart3,
-} from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Users, TrendingUp, Heart, Trophy, ArrowUpRight, DollarSign, RefreshCw } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { adminFetchers } from "@/fetchers/admin";
 import { cn } from "@/lib/utils";
 
-import { adminFetchers } from "@/fetchers/admin";
-
 export default function AdminDashboardPage() {
-  const { data: stats, isLoading } = useQuery({
+  const {
+    data: stats,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["admin", "stats"],
     queryFn: adminFetchers.stats,
     staleTime: 1000 * 60 * 5, // 5 min
   });
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    const start = Date.now();
+    await refetch();
+    const elapsed = Date.now() - start;
+    const remaining = Math.max(0, 1000 - elapsed);
+    if (remaining > 0) {
+      await new Promise((resolve) => setTimeout(resolve, remaining));
+    }
+    setIsRefreshing(false);
+  };
 
   if (isLoading) {
     return (
@@ -86,17 +88,16 @@ export default function AdminDashboardPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Overview</h1>
-          <p className="text-muted-foreground">
-            Monitor platform performance and system health.
-          </p>
+          <p className="text-muted-foreground">Monitor platform performance and system health.</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 px-3 py-1.5 bg-muted/50 rounded-full border border-border">
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-xs font-medium uppercase tracking-wider">System Live</span>
           </div>
-          <Button size="sm">
-            <Zap className="h-4 w-4 mr-2" /> Refresh
+          <Button size="sm" onClick={handleRefresh} disabled={isRefreshing} className="min-w-[100px]">
+            <RefreshCw className={cn("h-4 w-4 mr-2", isRefreshing && "animate-spin")} />
+            {isRefreshing ? "Refreshing..." : "Refresh"}
           </Button>
         </div>
       </div>
@@ -144,19 +145,14 @@ export default function AdminDashboardPage() {
                 </p>
               </div>
               <div className="text-right space-y-1">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
-                  Target Delta
-                </p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Target Delta</p>
                 <p className="text-xl font-semibold opacity-50">
                   &#8377;{(2500000 - (stats?.winners.totalPaid || 0)).toLocaleString()}
                 </p>
               </div>
             </div>
             <div className="space-y-2">
-              <Progress
-                value={((stats?.winners.totalPaid || 0) / 2500000) * 100}
-                className="h-2 rounded-full"
-              />
+              <Progress value={((stats?.winners.totalPaid || 0) / 2500000) * 100} className="h-2 rounded-full" />
               <div className="flex justify-between text-[10px] font-medium text-muted-foreground/60 uppercase tracking-widest">
                 <span>Phase Start</span>
                 <span>&#8377;2.5M Target</span>
@@ -182,7 +178,10 @@ export default function AdminDashboardPage() {
                   <span className="text-sm font-medium truncate max-w-[150px]">{item.name}</span>
                   <span className="text-sm font-semibold">&#8377;{item.totalReceived.toLocaleString()}</span>
                 </div>
-                <Progress value={Math.min((item.totalReceived / (stats?.winners.totalPaid || 1)) * 100, 100)} className="h-1.5" />
+                <Progress
+                  value={Math.min((item.totalReceived / (stats?.winners.totalPaid || 1)) * 100, 100)}
+                  className="h-1.5"
+                />
               </div>
             ))}
           </CardContent>
@@ -204,7 +203,8 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Overview of {stats?.users.total || 0} registered members and {stats?.users.activeSubscriptions || 0} active nodes.
+              Overview of {stats?.users.total || 0} registered members and {stats?.users.activeSubscriptions || 0}{" "}
+              active nodes.
             </p>
           </CardContent>
           <CardFooter>

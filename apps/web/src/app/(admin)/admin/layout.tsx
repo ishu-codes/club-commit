@@ -111,13 +111,16 @@ function AppSidebar() {
           </nav>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <Link href="/dashboard">
-          <Button variant="ghost" size="sm" className="w-full justify-start gap-3 hover:text-white hover:bg-white/5">
+      <SidebarFooter className="px-4">
+        {/*<Button variant="ghost" size="sm" className="w-full justify-start py-2!" asChild>
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group relative text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+          >
             <LayoutDashboard className="h-4 w-4" />
             User Dashboard
-          </Button>
-        </Link>
+          </Link>
+        </Button>*/}
         <Logout
           variant="ghost"
           className={cn(

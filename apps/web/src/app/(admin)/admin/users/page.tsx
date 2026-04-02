@@ -1,17 +1,7 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  Users,
-  Search,
-  ShieldAlert,
-  UserCog,
-  Mail,
-  ShieldCheck,
-  User,
-  ShieldX,
-  Lock,
-} from "lucide-react";
+import { Users, Search, ShieldAlert, UserCog, Mail, ShieldCheck, User, ShieldX, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -54,12 +44,12 @@ export default function AdminUsersPage() {
     );
   }
 
-  const filteredUsers = users?.filter(
+  const filteredUsers = users?.users.filter(
     (u) =>
       u.name?.toLowerCase().includes(search.toLowerCase()) || u.email?.toLowerCase().includes(search.toLowerCase()),
   );
 
-  const adminCount = users?.filter((u) => u.role === "ADMIN").length || 0;
+  const adminCount = users?.users.filter((u) => u.role === "ADMIN").length || 0;
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
@@ -137,7 +127,7 @@ export default function AdminUsersPage() {
                         variant={user.role === "ADMIN" ? "default" : "outline"}
                         className={cn(
                           "text-[10px] font-bold px-2 py-0.5 h-5",
-                          user.role === "ADMIN" ? "bg-primary border-none" : "text-muted-foreground"
+                          user.role === "ADMIN" ? "bg-primary border-none" : "text-muted-foreground",
                         )}
                       >
                         {user.role}
@@ -196,11 +186,15 @@ export default function AdminUsersPage() {
         <div className="flex-1 space-y-1 text-center md:text-left">
           <h4 className="text-sm font-bold text-destructive uppercase tracking-widest">Security Directive</h4>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Elevating a node to <span className="font-bold text-destructive">ADMIN</span> clearance grants full architectural control.
-            Ensure you verify identities through established protocols before promotion.
+            Elevating a node to <span className="font-bold text-destructive">ADMIN</span> clearance grants full
+            architectural control. Ensure you verify identities through established protocols before promotion.
           </p>
         </div>
-        <Button variant="outline" size="sm" className="border-destructive/20 text-destructive hover:bg-destructive hover:text-destructive-foreground">
+        <Button
+          variant="outline"
+          size="sm"
+          className="border-destructive/20 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+        >
           Audit Security Logs
         </Button>
       </div>

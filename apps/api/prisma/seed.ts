@@ -56,8 +56,7 @@ async function main() {
     db.charity.create({
       data: {
         name: "Clean Water Fund",
-        description:
-          "Working to ensure clean, safe, and affordable drinking water for communities across the globe.",
+        description: "Working to ensure clean, safe, and affordable drinking water for communities across the globe.",
         imageUrl: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=400",
         website: "https://cleanwaterfund.org",
       },
@@ -74,8 +73,7 @@ async function main() {
     create: {
       email: "admin@clubcommit.com",
       name: "Admin",
-      hashedPassword: adminPassword,
-      role: "admin",
+      role: "ADMIN",
       emailVerified: true,
     },
   });
