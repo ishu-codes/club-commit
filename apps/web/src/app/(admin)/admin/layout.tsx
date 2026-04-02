@@ -18,9 +18,9 @@ import {
   LogOutIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { useSession, signOut } from "@/lib/auth-client";
+import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
 import {
   Sidebar,

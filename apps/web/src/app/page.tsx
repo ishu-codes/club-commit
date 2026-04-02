@@ -343,7 +343,17 @@ export default function LandingPage() {
 
           <div className="pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-bold uppercase tracking-widest">
             <p>© {new Date().getFullYear()} ClubCommit Unit. ALL RIGHTS RESERVED.</p>
-            <p className="opacity-40">System verified by Ishu.</p>
+            <p className="opacity-40">
+              System verified by{" "}
+              <Link
+                href="https://github.com/ishu-codes"
+                target="_blank"
+                className="font-medium text-primary underline-offset-4 hover:underline"
+              >
+                Ishu
+              </Link>
+              .
+            </p>
           </div>
         </div>
       </footer>

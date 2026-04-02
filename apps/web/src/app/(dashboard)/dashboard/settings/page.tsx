@@ -12,7 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 // import { cn } from "@/lib/utils";
 import { authFetchers, User } from "@/fetchers/auth";
-import { useSession } from "@/lib/auth-client";
+// import { useSession } from "@/lib/auth-client";
+import { useAuthSession } from "@/hooks/useAuthSession";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function SettingsPage() {
@@ -20,7 +21,8 @@ export default function SettingsPage() {
     queryKey: ["auth", "me"],
     queryFn: authFetchers.me,
   });
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
+  const { session } = useAuthSession();
 
   return (
     <div className="max-w-4xl mx-auto space-y-10 animate-in fade-in duration-700">

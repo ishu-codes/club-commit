@@ -3,10 +3,12 @@
 import { useEffect, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
-import { useSession } from "@/lib/auth-client";
+// import { useSession } from "@/lib/auth-client";
+import { useAuthSession } from "@/hooks/useAuthSession";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
+  const { session } = useAuthSession();
   const router = useRouter();
 
   useEffect(() => {

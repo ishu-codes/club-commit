@@ -10,7 +10,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { dashboardFetchers } from "@/fetchers/dashboard";
-import { useSession } from "@/lib/auth-client";
+// import { useSession } from "@/lib/auth-client";
+import { useAuthSession } from "@/hooks/useAuthSession";
 import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {
@@ -19,7 +20,8 @@ export default function DashboardPage() {
     queryFn: dashboardFetchers.get,
     staleTime: 1000 * 60 * 5, // 5 min
   });
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
+  const { session } = useAuthSession();
 
   if (isLoading) {
     return (

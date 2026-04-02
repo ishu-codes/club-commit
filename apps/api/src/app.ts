@@ -30,7 +30,7 @@ app.use(
       }
       return callback(new Error("Not allowed by CORS"));
     },
-  })
+  }),
 );
 
 app.use(express.json({ limit: "5mb" }));
@@ -54,7 +54,12 @@ app.use("/api/v1/dashboard", dashboardRouter);
 
 // Root
 app.get("/", (_: Request, res: Response) => {
-  res.json({ name: "ClubCommit API", version: "1.0.0" });
+  res.json({
+    name: "ClubCommit API",
+    version: "1.0.0",
+    github: "https://github.com/ishu-codes/club-commit",
+    author: "Ishu",
+  });
 });
 
 // Global error handler

@@ -5,11 +5,13 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 import { ThemeToggle } from "@/components/navbar/ThemeToggle";
-import { useSession } from "@/lib/auth-client";
+// import { useSession } from "@/lib/auth-client";
+import { useAuthSession } from "@/hooks/useAuthSession";
 import Logout from "./Logout";
 
 export default function Navbar() {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
+  const { session } = useAuthSession();
   return (
     <div className="w-full flex gap-4 items-center justify-between px-4 py-2 sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <SidebarTrigger size={"lg"} />
