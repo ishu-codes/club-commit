@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { UserIcon, Smartphone, Lock } from "lucide-react";
+import { Smartphone, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -51,14 +51,14 @@ export default function SettingsPage() {
             <CardContent className="space-y-6">
               <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
                 {/*<div className="h-24 w-24 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 relative group overflow-hidden">*/}
-                <Avatar className="w-24 h-24 cursor-pointer transition-opacity hover:opacity-80 relative group overflow-hidden">
+                <Avatar className="w-24 h-24 relative group overflow-hidden">
                   <AvatarImage src={session?.user.image ?? ""} alt="profile" />
                   <AvatarFallback className="text-3xl font-semibold bg-primary/10 text-primary">
                     {session?.user.name.charAt(0)}
                   </AvatarFallback>
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                  {/*<div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                     <span className="text-[10px] text-white font-bold uppercase">Change</span>
-                  </div>
+                  </div>*/}
                 </Avatar>
                 <div className="flex-1 space-y-1">
                   <p className="text-sm font-semibold">{session?.user.name || "Member Node"}</p>

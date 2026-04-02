@@ -105,7 +105,7 @@ export default function DashboardPage() {
                       </div>
                       <div>
                         <p className="font-semibold text-sm">{score.courseName}</p>
-                        <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-tighter">
+                        <p className="text-[11px] text-muted-foreground font-medium tracking-tighter">
                           {new Date(score.playedAt).toLocaleDateString(undefined, {
                             month: "short",
                             day: "numeric",
@@ -114,7 +114,7 @@ export default function DashboardPage() {
                         </p>
                       </div>
                     </div>
-                    <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                    {/*<ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />*/}
                   </div>
                 ))
               ) : (

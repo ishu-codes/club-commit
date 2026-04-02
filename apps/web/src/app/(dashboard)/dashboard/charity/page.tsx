@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+// import Image from "next/image";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Heart, Search, CheckCircle2, Info } from "lucide-react";
@@ -54,7 +55,9 @@ export default function CharityPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Support a Cause</h1>
-          <p className="text-muted-foreground mt-1 text-sm font-medium">Choose where your contributions go. Change at any time.</p>
+          <p className="text-muted-foreground mt-1 text-sm font-medium">
+            Choose where your contributions go. Change at any time.
+          </p>
         </div>
       </div>
 
@@ -83,7 +86,9 @@ export default function CharityPage() {
                 <Heart className="h-5 w-5 text-primary fill-primary/20" />
               </div>
               <div className="flex-1">
-                <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-0.5">Currently Supporting</p>
+                <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-0.5">
+                  Currently Supporting
+                </p>
                 <h2 className="text-lg font-bold">{dashboard.subscription.charity?.name || "None selected"}</h2>
                 <p className="text-sm text-muted-foreground mt-1 line-clamp-1 max-w-2xl font-medium">
                   {dashboard.subscription.charity?.description || "Select a cause below to begin your impact journey."}
@@ -118,14 +123,21 @@ export default function CharityPage() {
                 key={charity.id}
                 className={cn(
                   "overflow-hidden flex flex-col transition-all rounded-xl border shadow-sm group",
-                  currentCharityId === charity.id ? "ring-2 ring-primary border-transparent" : "hover:border-primary/40",
+                  currentCharityId === charity.id
+                    ? "ring-2 ring-primary border-transparent"
+                    : "hover:border-primary/40",
                 )}
               >
-                <div className="aspect-[16/9] relative overflow-hidden bg-muted">
+                <div className="aspect-video relative overflow-hidden bg-muted">
                   <img
-                    src={charity.imageUrl || `https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800&auto=format&fit=crop&q=60`}
+                    src={
+                      charity.imageUrl ||
+                      `https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800&auto=format&fit=crop&q=60`
+                    }
                     alt={charity.name}
                     className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                    // width={800}
+                    // height={800}
                   />
                   {currentCharityId === charity.id && (
                     <div className="absolute top-3 right-3">
@@ -141,33 +153,32 @@ export default function CharityPage() {
                     {charity.description}
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="flex-1 pb-4">
+                {/*<CardContent className="flex-1 pb-4">
                   <div className="flex items-center gap-2.5 text-muted-foreground">
                     <Heart className="h-3.5 w-3.5 text-primary" />
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-wider leading-none text-muted-foreground/60">Impact Tracking</p>
+                      <p className="text-[10px] font-bold uppercase tracking-wider leading-none text-muted-foreground/60">
+                        Impact Tracking
+                      </p>
                       <p className="text-xs font-semibold text-foreground/80 mt-1">
                         {charity.totalReceived > 0
-                          ? `&#8377;${charity.totalReceived.toLocaleString()} Funding Goal`
+                          ? `₹ ${charity.totalReceived.toLocaleString()} Funding Goal`
                           : "Ready for first commit"}
                       </p>
                     </div>
                   </div>
-                </CardContent>
+                </CardContent>*/}
                 <CardFooter className="pt-0 pb-6">
                   {currentCharityId === charity.id ? (
-                    <Button
-                      className="w-full gap-2 rounded-lg h-9 text-xs font-bold"
-                      variant="secondary"
-                      disabled
-                    >
+                    <Button className="w-full gap-2 rounded-lg h-9 text-xs font-bold" variant="secondary" disabled>
                       <CheckCircle2 className="h-3.5 w-3.5" /> Active Choice
                     </Button>
                   ) : (
                     <Button
-                      className="w-full rounded-lg h-9 text-xs font-bold shadow-sm"
+                      className="w-full rounded-lg h-9 text-xs font-bold shadow-sm cursor-not-allowed"
                       onClick={() => updateCharityMutation.mutate(charity.id)}
-                      disabled={updateCharityMutation.isPending || !dashboard?.subscription}
+                      // disabled={updateCharityMutation.isPending || !dashboard?.subscription}
+                      disabled={true}
                     >
                       {updateCharityMutation.isPending ? "Updating..." : "Activate Partner"}
                     </Button>
@@ -183,7 +194,8 @@ export default function CharityPage() {
             </div>
             <h3 className="text-xl font-bold">No causes found</h3>
             <p className="text-muted-foreground max-w-sm mx-auto mt-2 font-medium">
-              We couldn't find any organizations matching your criteria. Try adjusting your search or check back later.
+              We couldn&apos;t find any organizations matching your criteria. Try adjusting your search or check back
+              later.
             </p>
           </div>
         )}

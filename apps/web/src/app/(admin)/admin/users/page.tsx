@@ -62,7 +62,7 @@ export default function AdminUsersPage() {
         <div className="flex items-center gap-6 px-6 py-3 bg-muted/50 rounded-xl border border-border">
           <div className="text-center">
             <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Total Nodes</p>
-            <p className="text-xl font-bold">{users?.length || 0}</p>
+            <p className="text-xl font-bold">{users?.users.length || 0}</p>
           </div>
           <Separator orientation="vertical" className="h-8 shadow-none" />
           <div className="text-center">
@@ -134,7 +134,7 @@ export default function AdminUsersPage() {
                       </Badge>
                     </td>
                     <td className="px-6 py-4">
-                      {user.subscriptions && user.subscriptions.length > 0 ? (
+                      {user?.subscriptions && user?.subscriptions.length > 0 ? (
                         <div className="flex items-center gap-2">
                           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                           <span className="text-[10px] font-semibold uppercase text-emerald-600">Active</span>
@@ -144,7 +144,7 @@ export default function AdminUsersPage() {
                       )}
                     </td>
                     <td className="px-6 py-4 text-muted-foreground text-xs font-medium">
-                      {new Date(user.createdAt).toLocaleDateString()}
+                      {new Date(user?.createdAt ?? new Date()).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <Button

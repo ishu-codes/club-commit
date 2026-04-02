@@ -1,44 +1,37 @@
-# Stage 1 — Build
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS base
 WORKDIR /app
 
-# Copy dependency files first for caching
-COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* ./
+FROM base AS deps
+RUN apk add --no-cache libc6-compat openssl
+COPY package.json pnpm-lock.yaml ./
+COPY prisma ./prisma
+RUN corepack enable && pnpm install --no-frozen-lockfile
 
-# Install dependencies using whichever lock file exists
-RUN if [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
-    elif [ -f pnpm-lock.yaml ]; then npm install -g pnpm && pnpm install --frozen-lockfile; \
-    elif [ -f package-lock.json ]; then npm ci; \
-    else npm install; fi
+FROM base AS builder
+RUN apk add --no-cache libc6-compat openssl
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/prisma ./prisma
+COPY package.json ./
+COPY src ./src
+RUN corepack enable && pnpm build
 
-# Copy source files
-COPY . .
-
-# If using TypeScript, build it
-RUN if [ -f tsconfig.json ]; then npm run build; fi
-
-# Stage 2 — Runtime
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=8080
 
-# Copy production dependencies only
-COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* ./
-RUN if [ -f yarn.lock ]; then yarn install --production --frozen-lockfile; \
-    elif [ -f pnpm-lock.yaml ]; then npm install -g pnpm && pnpm install --prod --frozen-lockfile; \
-    elif [ -f package-lock.json ]; then npm ci --only=production; \
-    else npm install --only=production; fi
+RUN apk add --no-cache openssl && addgroup -S nodejs && adduser -S expressjs -G nodejs
 
-# Copy compiled build or source
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/dist ./dist
-# or if not using TypeScript:
-# COPY --from=builder /app/src ./src
 
-# Expose port
+USER expressjs
+
 EXPOSE 8080
 
-# Healthcheck
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget -qO- http://localhost:8080/health || exit 1
+  CMD wget -qO- http://127.0.0.1:8080/health || exit 1
 
-# Default start command (adjust if different)
 CMD ["node", "dist/index.js"]

@@ -37,19 +37,18 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
+// import { Separator } from "@/components/ui/separator";
+// import { cn } from "@/lib/utils";
 
 import { drawFetchers } from "@/fetchers/draw";
 
 const drawSchema = z.object({
-  month: z.number().min(1).max(12),
+  month: z.coerce.number().min(1).max(12),
   year: z.number().min(2024).max(2030),
   drawType: z.enum(["ALGORITHM", "RANDOM"]),
 });
 
 type DrawFormValues = z.infer<typeof drawSchema>;
-
 
 export default function AdminDrawsPage() {
   const queryClient = useQueryClient();
@@ -125,36 +124,30 @@ export default function AdminDrawsPage() {
           <DialogContent className="sm:max-w-[450px] rounded-xl">
             <DialogHeader>
               <DialogTitle>Schedule Draw Cycle</DialogTitle>
-              <DialogDescription>
-                Configure the parameters for a new prize distribution cycle.
-              </DialogDescription>
+              <DialogDescription>Configure the parameters for a new prize distribution cycle.</DialogDescription>
             </DialogHeader>
-            <form
-              onSubmit={form.handleSubmit((v) => createMutation.mutate(v as any))}
-              className="space-y-4 py-4"
-            >
+            <form onSubmit={form.handleSubmit((v) => createMutation.mutate(v as any))} className="space-y-4 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="month" className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  <Label
+                    htmlFor="month"
+                    className="text-xs font-semibold uppercase tracking-widest text-muted-foreground"
+                  >
                     Month (1-12)
                   </Label>
-                  <Input
-                    id="month"
-                    type="number"
-                    {...form.register("month")}
-                    className="rounded-lg"
-                  />
+                  <Input id="month" type="number" {...form.register("month")} className="rounded-lg" />
+                  {form.formState.errors.month && (
+                    <p className="text-[10px] text-destructive font-bold">{form.formState.errors.month.message}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="year" className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  <Label
+                    htmlFor="year"
+                    className="text-xs font-semibold uppercase tracking-widest text-muted-foreground"
+                  >
                     Year
                   </Label>
-                  <Input
-                    id="year"
-                    type="number"
-                    {...form.register("year")}
-                    className="rounded-lg"
-                  />
+                  <Input id="year" type="number" {...form.register("year")} className="rounded-lg" />
                 </div>
               </div>
 
@@ -182,11 +175,7 @@ export default function AdminDrawsPage() {
               </div>
 
               <DialogFooter className="pt-4">
-                <Button
-                  type="submit"
-                  className="w-full rounded-lg"
-                  disabled={createMutation.isPending}
-                >
+                <Button type="submit" className="w-full rounded-lg" disabled={createMutation.isPending}>
                   {createMutation.isPending ? "Scheduling..." : "Schedule Cycle"}
                 </Button>
               </DialogFooter>
@@ -217,7 +206,9 @@ export default function AdminDrawsPage() {
                 </CardHeader>
                 <CardContent className="flex-1 space-y-4">
                   <div className="space-y-1">
-                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">Prize Pool</p>
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">
+                      Prize Pool
+                    </p>
                     <p className="text-2xl font-bold text-primary">${draw.prizePool?.toLocaleString() || "0"}</p>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-xs border rounded-lg p-3 bg-muted/20">

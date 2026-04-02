@@ -101,7 +101,7 @@ export default function AdminWinnersPage() {
               </div>
             ))}
           </div>
-          <p className="text-xs font-bold uppercase tracking-wider">{winners?.length || 0} Total Entries</p>
+          <p className="text-xs font-bold uppercase tracking-wider">{winners?.winners.length || 0} Total Entries</p>
         </div>
       </div>
 

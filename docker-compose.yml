@@ -1,40 +1,55 @@
 services:
-  # api:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/api/Dockerfile
-  #   container_name: clubcommit_api
-  #   ports:
-  #     - "8080:${PORT}"
-  #   environment:
-  #     NODE_ENV: production
-  #     PORT: 8080
-  #     DATABASE_URL: postgresql://clubcommit_user:clubcommit_password@localhost:5432/clubcommit
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: clubcommit-api
+    ports:
+      - "8080:8080"
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      DATABASE_URL: postgresql://clubcommit_user:clubcommit_password@database:5432/clubcommit
+      DIRECT_URL: postgresql://clubcommit_user:clubcommit_password@database:5432/clubcommit
+      CORS_ORIGINS: http://localhost:3000
+      BETTER_AUTH_URL: http://localhost:8080
+      JWT_ACCESS_SECRET: clubcommit-dev-secret-change-in-production
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
-  #   depends_on:
-  #     - database
-  #   restart: unless-stopped
-  #   healthcheck:
-  #     test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
-  #     interval: 30s
-  #     timeout: 5s
-  #     retries: 3
-
-  # web:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/web/Dockerfile
-  #   container_name: clubcommit_web
-  #   ports:
-  #     - "3000:80"
-  #   environment:
-  #     - VITE_API_URL=http://localhost:8080
-  #   restart: unless-stopped
-  #   healthcheck:
-  #     test: ["CMD", "wget", "-qO-", "http://localhost"]
-  #     interval: 30s
-  #     timeout: 5s
-  #     retries: 3
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8080
+        NEXT_PUBLIC_API_VERSION: v1
+    container_name: clubcommit-web
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      NEXT_PUBLIC_API_URL: http://localhost:8080
+      NEXT_PUBLIC_API_VERSION: v1
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   database:
     image: postgres:16.10-alpine
@@ -48,6 +63,12 @@ services:
       POSTGRES_USER: clubcommit_user
       POSTGRES_DB: clubcommit
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U clubcommit_user -d clubcommit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 volumes:
   data:

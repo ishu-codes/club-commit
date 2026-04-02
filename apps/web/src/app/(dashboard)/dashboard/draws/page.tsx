@@ -70,7 +70,9 @@ export default function DrawsPage() {
     <div className="space-y-8 animate-in fade-in duration-500">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Competitions</h1>
-        <p className="text-muted-foreground mt-1 text-sm font-medium">Verify your eligibility and enter active prize cycles.</p>
+        <p className="text-muted-foreground mt-1 text-sm font-medium">
+          Verify your eligibility and enter active prize cycles.
+        </p>
       </div>
 
       {upcomingDraws.length > 0 && (
@@ -80,33 +82,47 @@ export default function DrawsPage() {
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <Badge className="bg-primary text-primary-foreground font-bold text-[10px] uppercase px-2 h-5">Live Now</Badge>
+                    <Badge className="bg-primary text-primary-foreground font-bold text-[10px] uppercase px-2 h-5">
+                      Live Now
+                    </Badge>
                     <span className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-1">
                       <Clock className="h-3 w-3" /> Ends Soon
                     </span>
                   </div>
                   <CardTitle className="text-3xl font-bold">
-                    {new Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date(0, upcomingDraws[0].month - 1))}
+                    {new Intl.DateTimeFormat("en-US", { month: "long" }).format(
+                      new Date(0, upcomingDraws[0].month - 1),
+                    )}
                     <span className="text-primary ml-2 uppercase opacity-80">{upcomingDraws[0].year}</span>
                   </CardTitle>
-                  <CardDescription className="text-sm font-medium">Active recovery fund distribution cycle.</CardDescription>
+                  <CardDescription className="text-sm font-medium">
+                    Active recovery fund distribution cycle.
+                  </CardDescription>
                 </div>
                 <div className="text-right">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none mb-1">Prize Pool</p>
-                  <div className="text-4xl font-bold text-primary tracking-tight">&#8377;{upcomingDraws[0].prizePool}</div>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none mb-1">
+                    Prize Pool
+                  </p>
+                  <div className="text-4xl font-bold text-primary tracking-tight">
+                    &#8377;{upcomingDraws[0].prizePool}
+                  </div>
                 </div>
               </div>
             </CardHeader>
             <CardContent className="py-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 rounded-lg bg-muted/20 border flex flex-col justify-center">
-                  <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">Entry Protocol</p>
+                  <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">
+                    Entry Protocol
+                  </p>
                   <p className="font-semibold text-sm">
                     {upcomingDraws[0].drawType === "ALGORITHM" ? "Performance Weighted" : "Random Selection"}
                   </p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/20 border flex flex-col justify-center">
-                  <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">Total Entries</p>
+                  <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">
+                    Total Entries
+                  </p>
                   <p className="font-semibold text-sm">
                     {upcomingDraws[0]._count?.entries || 0} Registered Competitors
                   </p>
@@ -131,7 +147,9 @@ export default function DrawsPage() {
                 disabled={entries.some((e: any) => e.drawId === upcomingDraws[0].id) || enterMutation.isPending}
                 onClick={() => enterMutation.mutate(upcomingDraws[0].id)}
               >
-                {entries.some((e: any) => e.drawId === upcomingDraws[0].id) ? "Successfully Entered" : "Enter Competition"}
+                {entries.some((e: any) => e.drawId === upcomingDraws[0].id)
+                  ? "Successfully Entered"
+                  : "Enter Competition"}
               </Button>
             </CardFooter>
           </Card>
@@ -147,9 +165,19 @@ export default function DrawsPage() {
                 <div className="flex justify-between items-center text-xs">
                   <span className="text-muted-foreground font-medium">Monthly Stake</span>
                   {dashboard?.subscription ? (
-                    <Badge variant="secondary" className="bg-emerald-50 text-emerald-700 border-emerald-100 text-[9px] font-bold uppercase">Active</Badge>
+                    <Badge
+                      variant="secondary"
+                      className="bg-emerald-50 text-emerald-700 border-emerald-100 text-[9px] font-bold uppercase"
+                    >
+                      Active
+                    </Badge>
                   ) : (
-                    <Badge variant="outline" className="text-[9px] font-bold uppercase text-red-500 border-red-100 bg-red-50/50">Missing</Badge>
+                    <Badge
+                      variant="outline"
+                      className="text-[9px] font-bold uppercase text-red-500 border-red-100 bg-red-50/50"
+                    >
+                      Missing
+                    </Badge>
                   )}
                 </div>
                 <Separator />
@@ -165,7 +193,12 @@ export default function DrawsPage() {
               </div>
             </CardContent>
             <CardFooter className="pt-2 pb-6 px-6">
-              <Button variant="outline" size="sm" className="w-full text-xs font-bold rounded-lg border-primary/20 hover:bg-primary/5 text-primary" asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full text-xs font-bold rounded-lg border-primary/20 hover:bg-primary/5 text-primary"
+                asChild
+              >
                 <Link href="/dashboard/scores">Log Round</Link>
               </Button>
             </CardFooter>
@@ -182,24 +215,34 @@ export default function DrawsPage() {
             pastDraws.map((draw) => {
               const entry = entries.find((e: any) => e.drawId === draw.id);
               return (
-                <Card key={draw.id} className="overflow-hidden border shadow-sm rounded-xl group transition-all hover:border-primary/20">
+                <Card
+                  key={draw.id}
+                  className="overflow-hidden border shadow-sm rounded-xl group transition-all hover:border-primary/20"
+                >
                   <CardHeader className="bg-muted/10 pb-4 border-b">
                     <div className="flex items-center justify-between mb-1">
                       <CardTitle className="text-lg font-bold">
                         {new Intl.DateTimeFormat("en-US", { month: "short" }).format(new Date(0, draw.month - 1))}
                         <span className="text-primary ml-1.5">{draw.year}</span>
                       </CardTitle>
-                      <Badge variant="outline" className="text-[9px] h-4 font-bold border-muted-foreground/20 leading-none">
+                      <Badge
+                        variant="outline"
+                        className="text-[9px] h-4 font-bold border-muted-foreground/20 leading-none"
+                      >
                         {draw.status}
                       </Badge>
                     </div>
-                    <p className="text-xl font-bold text-foreground tracking-tight">&#8377;{draw.prizePool.toLocaleString()}</p>
+                    <p className="text-xl font-bold text-foreground tracking-tight">
+                      &#8377;{draw.prizePool.toLocaleString()}
+                    </p>
                   </CardHeader>
                   <CardContent className="py-4">
                     {entry ? (
                       <div className="flex items-center justify-between text-xs">
                         <span className="text-muted-foreground font-medium">Logged Seed</span>
-                        <span className="font-bold text-primary bg-primary/5 px-2 py-0.5 rounded border border-primary/10">{entry.entryScore}</span>
+                        <span className="font-bold text-primary bg-primary/5 px-2 py-0.5 rounded border border-primary/10">
+                          {entry.entryScore}
+                        </span>
                       </div>
                     ) : (
                       <div className="py-2 text-center text-[10px] text-muted-foreground/40 font-bold uppercase tracking-widest border border-dashed rounded-md bg-muted/5">
@@ -208,7 +251,11 @@ export default function DrawsPage() {
                     )}
                   </CardContent>
                   <CardFooter className="pt-0 pb-6 px-6">
-                    <Button variant="ghost" size="sm" className="w-full h-8 text-[10px] font-bold uppercase tracking-widest gap-2 bg-muted/30 hover:bg-primary/10 hover:text-primary transition-all">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full h-8 text-[10px] font-bold uppercase tracking-widest gap-2 bg-muted/30 hover:bg-primary/10 hover:text-primary transition-all"
+                    >
                       Audit Results <ArrowRight className="h-3 w-3" />
                     </Button>
                   </CardFooter>
@@ -218,7 +265,9 @@ export default function DrawsPage() {
           ) : (
             <div className="col-span-full py-16 text-center border-2 border-dashed rounded-xl bg-muted/5">
               <HistoryIcon className="h-8 w-8 text-muted-foreground/20 mx-auto mb-3" />
-              <p className="text-muted-foreground font-semibold text-xs uppercase tracking-widest opacity-40">History Loading...</p>
+              <p className="text-muted-foreground font-semibold text-xs uppercase tracking-widest opacity-40">
+                No past draws found!
+              </p>
             </div>
           )}
         </div>
