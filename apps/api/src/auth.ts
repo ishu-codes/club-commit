@@ -19,10 +19,6 @@ export const prisma =
 
 const isProd = process.env.NODE_ENV == "production";
 
-if (!isProd) {
-  globalForPrisma.prisma = prisma;
-}
-
 const db = new PrismaClient();
 let authConfig: ReturnType<typeof betterAuth>;
 
@@ -78,11 +74,12 @@ try {
       customSession(async ({ user, session }) => {
         const userFound = await getUserRole(user.id);
         return {
+          session,
           user: {
             ...user,
+            email: user.email!,
             role: userFound?.role ?? "USER",
           },
-          session,
         };
       }),
     ],
