@@ -1,4 +1,4 @@
-import { authClient } from "./auth-client";
+// import { authClient } from "./auth-client";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 const API_VERSION = process.env.NEXT_PUBLIC_API_VERSION || "v1";
@@ -17,7 +17,7 @@ export async function apiFetch<T>(endpoint: string, options: FetchOptions = {}):
   }
 
   // Get session headers from better-auth client
-  const session = await authClient.getSession();
+  // const session = await authClient.getSession();
   const headers = new Headers(init.headers);
 
   if (!headers.has("Content-Type") && !(init.body instanceof FormData)) {
