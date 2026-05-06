@@ -46,22 +46,16 @@ try {
 
     session: {
       name: "session-token",
-      sameSite: isProd ? "none" : "lax",
+      sameSite: isProd ? "lax" : "lax",
       secure: isProd,
       expiresIn: 60 * 60 * 24 * 7, // 7 days
       updateAge: 60 * 60 * 24, // Update every day
-      cookieAttributes: {
-        secure: isProd,
-        sameSite: isProd ? "none" : "lax",
-        httpOnly: true,
-        path: "/",
-        domain: "club-commit-production.up.railway.app",
-      },
       cookieCache: {
         enabled: true,
         maxAge: 10 * 60, // Cache duration in seconds (10 minutes)
       },
     },
+
     advanced: {
       cookies: {
         session_token: {
@@ -69,14 +63,14 @@ try {
           attributes: {
             httpOnly: true,
             secure: isProd,
-            sameSite: isProd ? "none" : "lax",
+            sameSite: isProd ? "lax" : "lax",
           },
         },
       },
       defaultCookieAttributes: {
         httpOnly: true,
         secure: isProd,
-        sameSite: isProd ? "none" : "lax",
+        sameSite: isProd ? "lax" : "lax",
       },
     },
 
