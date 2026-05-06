@@ -20,7 +20,7 @@ export const prisma =
 const isProd = process.env.NODE_ENV == "production";
 
 const db = new PrismaClient();
-let authConfig: ReturnType<typeof betterAuth>;
+let authConfig;
 
 try {
   const betterAuthUrl = (process.env.BETTER_AUTH_URL || "http://localhost:8080").replace(/\/$/, "");
