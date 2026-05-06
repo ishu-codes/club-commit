@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import authConfig from "../auth";
+import authConfig from "../auth.js";
 // import { db } from "../../database";
 
 export default async function requireAuth(
