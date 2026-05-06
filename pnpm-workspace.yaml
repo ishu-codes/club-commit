@@ -1,6 +1,6 @@
 packages:
-  - api/**
-  - web/**
+  - apps/api/**
+  - apps/web/**
 onlyBuiltDependencies:
   - "@biomejs/biome"
   - bcrypt
