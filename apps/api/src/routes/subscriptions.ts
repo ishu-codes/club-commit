@@ -1,10 +1,10 @@
 import { Router } from "express";
 import type { Request, Response } from "express";
+import { asyncHandler } from "../config/handler.js";
+import { PLANS } from "../config/plans.js";
+import { failure, success } from "../config/response.js";
 import { db } from "../database/index.js";
 import requireAuth from "../middlewares/auth.js";
-import { asyncHandler } from "../config/handler.js";
-import { success, failure } from "../config/response.js";
-import { PLANS } from "../config/plans.js";
 
 const router = Router();
 
@@ -15,182 +15,199 @@ router.use(requireAuth);
  * POST /api/v1/subscriptions — Create a new subscription (mock payment)
  */
 router.post(
-  "/",
-  asyncHandler(async (req: Request, res: Response) => {
-    const userId = (req as any).userId;
-    const {
-      plan,
-      charityId,
-      contributionPercent,
-    }: {
-      plan: "MONTHLY" | "YEARLY";
-      charityId: string;
-      contributionPercent: number;
-    } = req.body;
+    "/",
+    asyncHandler(async (req: Request, res: Response) => {
+        const userId = (req as any).userId;
+        const {
+            plan,
+            charityId,
+            contributionPercent,
+        }: {
+            plan: "MONTHLY" | "YEARLY";
+            charityId: string;
+            contributionPercent: number;
+        } = req.body;
 
-    if (!plan || !["MONTHLY", "YEARLY"].includes(plan)) {
-      return failure(res, 400, "Invalid plan. Must be MONTHLY or YEARLY.");
-    }
+        if (!plan || !["MONTHLY", "YEARLY"].includes(plan)) {
+            return failure(
+                res,
+                400,
+                "Invalid plan. Must be MONTHLY or YEARLY.",
+            );
+        }
 
-    // Check for existing active subscription
-    const existing = await db.subscription.findFirst({
-      where: { userId, status: "ACTIVE" },
-    });
-    if (existing) {
-      return failure(res, 409, "You already have an active subscription.");
-    }
-
-    // Validate charity if provided
-    if (charityId) {
-      const charity = await db.charity.findUnique({ where: { id: charityId } });
-      if (!charity || !charity.isActive) {
-        return failure(res, 400, "Invalid or inactive charity.");
-      }
-    }
-
-    const percent = Math.min(Math.max(Number(contributionPercent) || 10, 5), 50);
-    const price = PLANS[plan];
-    const startDate = new Date();
-    const endDate = new Date(startDate);
-    if (plan === "MONTHLY") {
-      endDate.setMonth(endDate.getMonth() + 1);
-    } else {
-      endDate.setFullYear(endDate.getFullYear() + 1);
-    }
-
-    const subscription = await db.$transaction(async (txn) => {
-      const sub = await txn.subscription.create({
-        data: {
-          userId,
-          plan,
-          price,
-          charityId: charityId || null,
-          contributionPercent: percent,
-          startDate,
-          endDate,
-        },
-        include: { charity: true },
-      });
-
-      if (charityId)
-        await txn.charity.update({
-          where: {
-            id: charityId,
-          },
-          data: {
-            totalReceived: {
-              increment: price,
-            },
-          },
+        // Check for existing active subscription
+        const existing = await db.subscription.findFirst({
+            where: { userId, status: "ACTIVE" },
         });
-      return sub;
-    });
+        if (existing) {
+            return failure(
+                res,
+                409,
+                "You already have an active subscription.",
+            );
+        }
 
-    return success(res, 201, subscription);
-  }),
+        // Validate charity if provided
+        if (charityId) {
+            const charity = await db.charity.findUnique({
+                where: { id: charityId },
+            });
+            if (!charity || !charity.isActive) {
+                return failure(res, 400, "Invalid or inactive charity.");
+            }
+        }
+
+        const percent = Math.min(
+            Math.max(Number(contributionPercent) || 10, 5),
+            50,
+        );
+        const price = PLANS[plan];
+        const startDate = new Date();
+        const endDate = new Date(startDate);
+        if (plan === "MONTHLY") {
+            endDate.setMonth(endDate.getMonth() + 1);
+        } else {
+            endDate.setFullYear(endDate.getFullYear() + 1);
+        }
+
+        const subscription = await db.$transaction(async (txn) => {
+            const sub = await txn.subscription.create({
+                data: {
+                    userId,
+                    plan,
+                    price,
+                    charityId: charityId || null,
+                    contributionPercent: percent,
+                    startDate,
+                    endDate,
+                },
+                include: { charity: true },
+            });
+
+            if (charityId)
+                await txn.charity.update({
+                    where: {
+                        id: charityId,
+                    },
+                    data: {
+                        totalReceived: {
+                            increment: price,
+                        },
+                    },
+                });
+            return sub;
+        });
+
+        return success(res, 201, subscription);
+    }),
 );
 
 /**
  * GET /api/v1/subscriptions/me — Get current user's active subscription
  */
 router.get(
-  "/me",
-  asyncHandler(async (req: Request, res: Response) => {
-    const userId = (req as any).userId;
+    "/me",
+    asyncHandler(async (req: Request, res: Response) => {
+        const userId = (req as any).userId;
 
-    const subscription = await db.subscription.findFirst({
-      where: { userId, status: "ACTIVE" },
-      include: { charity: true },
-      orderBy: { createdAt: "desc" },
-    });
+        const subscription = await db.subscription.findFirst({
+            where: { userId, status: "ACTIVE" },
+            include: { charity: true },
+            orderBy: { createdAt: "desc" },
+        });
 
-    return success(res, 200, { subscription });
-  }),
+        return success(res, 200, { subscription });
+    }),
 );
 
 /**
  * GET /api/v1/subscriptions/history — Get all user subscriptions
  */
 router.get(
-  "/history",
-  asyncHandler(async (req: Request, res: Response) => {
-    const userId = (req as any).userId;
+    "/history",
+    asyncHandler(async (req: Request, res: Response) => {
+        const userId = (req as any).userId;
 
-    const subscriptions = await db.subscription.findMany({
-      where: { userId },
-      include: { charity: true },
-      orderBy: { createdAt: "desc" },
-    });
+        const subscriptions = await db.subscription.findMany({
+            where: { userId },
+            include: { charity: true },
+            orderBy: { createdAt: "desc" },
+        });
 
-    return success(res, 200, { subscriptions });
-  }),
+        return success(res, 200, { subscriptions });
+    }),
 );
 
 /**
  * PATCH /api/v1/subscriptions/:id/cancel — Cancel a subscription
  */
 router.patch(
-  "/:id/cancel",
-  asyncHandler(async (req: Request, res: Response) => {
-    const userId = (req as any).userId;
-    const { id } = req.params;
+    "/:id/cancel",
+    asyncHandler(async (req: Request, res: Response) => {
+        const userId = (req as any).userId;
+        const { id } = req.params;
 
-    const subscription = await db.subscription.findFirst({
-      where: { id, userId, status: "ACTIVE" },
-    });
+        const subscription = await db.subscription.findFirst({
+            where: { id: id as string, userId, status: "ACTIVE" },
+        });
 
-    if (!subscription) {
-      return failure(res, 404, "Active subscription not found.");
-    }
+        if (!subscription) {
+            return failure(res, 404, "Active subscription not found.");
+        }
 
-    const updated = await db.subscription.update({
-      where: { id },
-      data: { status: "CANCELLED" },
-      include: { charity: true },
-    });
+        const updated = await db.subscription.update({
+            where: { id: id as string },
+            data: { status: "CANCELLED" },
+            include: { charity: true },
+        });
 
-    return success(res, 200, updated);
-  }),
+        return success(res, 200, updated);
+    }),
 );
 
 /**
  * PATCH /api/v1/subscriptions/:id/charity — Update charity selection
  */
 router.patch(
-  "/:id/charity",
-  asyncHandler(async (req: Request, res: Response) => {
-    const userId = (req as any).userId;
-    const { id } = req.params;
-    const { charityId, contributionPercent } = req.body;
+    "/:id/charity",
+    asyncHandler(async (req: Request, res: Response) => {
+        const userId = (req as any).userId;
+        const { id } = req.params;
+        const { charityId, contributionPercent } = req.body;
 
-    const subscription = await db.subscription.findFirst({
-      where: { id, userId, status: "ACTIVE" },
-    });
+        const subscription = await db.subscription.findFirst({
+            where: { id: id as string, userId, status: "ACTIVE" },
+        });
 
-    if (!subscription) {
-      return failure(res, 404, "Active subscription not found.");
-    }
+        if (!subscription) {
+            return failure(res, 404, "Active subscription not found.");
+        }
 
-    if (charityId) {
-      const charity = await db.charity.findUnique({ where: { id: charityId } });
-      if (!charity || !charity.isActive) {
-        return failure(res, 400, "Invalid or inactive charity.");
-      }
-    }
+        if (charityId) {
+            const charity = await db.charity.findUnique({
+                where: { id: charityId },
+            });
+            if (!charity || !charity.isActive) {
+                return failure(res, 400, "Invalid or inactive charity.");
+            }
+        }
 
-    const percent = contributionPercent ? Math.min(Math.max(Number(contributionPercent), 5), 50) : undefined;
+        const percent = contributionPercent
+            ? Math.min(Math.max(Number(contributionPercent), 5), 50)
+            : undefined;
 
-    const updated = await db.subscription.update({
-      where: { id },
-      data: {
-        ...(charityId && { charityId }),
-        ...(percent && { contributionPercent: percent }),
-      },
-      include: { charity: true },
-    });
+        const updated = await db.subscription.update({
+            where: { id: id as string },
+            data: {
+                ...(charityId && { charityId }),
+                ...(percent && { contributionPercent: percent }),
+            },
+            include: { charity: true },
+        });
 
-    return success(res, 200, updated);
-  }),
+        return success(res, 200, updated);
+    }),
 );
 
 export default router;

@@ -1,9 +1,9 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
+    DrawEntryData,
     calculateAverageScore,
     calculatePrizePool,
     selectWinner,
-    DrawEntryData
 } from "../services/drawEngine";
 
 describe("drawEngine", () => {

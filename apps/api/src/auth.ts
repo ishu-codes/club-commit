@@ -1,21 +1,21 @@
+import { PrismaClient } from "@prisma/client";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { PrismaClient } from "@prisma/client";
 
+import { customSession } from "better-auth/plugins";
 import dotenv from "dotenv";
 import { getUserRole } from "./routes/auth.js";
-import { customSession } from "better-auth/plugins";
 dotenv.config();
 
 const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
+    prisma: PrismaClient | undefined;
 };
 
 export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    log: ["error", "warn"],
-  });
+    globalForPrisma.prisma ??
+    new PrismaClient({
+        log: ["error", "warn"],
+    });
 
 const isProd = process.env.NODE_ENV == "production";
 
@@ -23,70 +23,74 @@ const db = new PrismaClient();
 let authConfig;
 
 try {
-  const betterAuthUrl = (process.env.BETTER_AUTH_URL || "http://localhost:8080").replace(/\/$/, "");
+    const betterAuthUrl = (
+        process.env.BETTER_AUTH_URL || "http://localhost:8080"
+    ).replace(/\/$/, "");
 
-  authConfig = betterAuth({
-    baseURL: betterAuthUrl + "/api/auth",
-    trustedOrigins: (process.env.TRUSTED_ORIGINS || "http://localhost:3000").split(",").map((origin) => origin.trim()),
+    authConfig = betterAuth({
+        baseURL: betterAuthUrl + "/api/auth",
+        trustedOrigins: (process.env.TRUSTED_ORIGINS || "http://localhost:3000")
+            .split(",")
+            .map((origin) => origin.trim()),
 
-    secret: process.env.JWT_ACCESS_SECRET || "",
+        secret: process.env.JWT_ACCESS_SECRET || "",
 
-    database: prismaAdapter(db, {
-      provider: "postgresql",
-    }),
+        database: prismaAdapter(db, {
+            provider: "postgresql",
+        }),
 
-    emailAndPassword: {
-      enabled: true,
-      autoSignIn: true,
-    },
-
-    session: {
-      name: "session-token",
-      sameSite: isProd ? "lax" : "lax",
-      secure: isProd,
-      expiresIn: 60 * 60 * 24 * 7, // 7 days
-      updateAge: 60 * 60 * 24, // Update every day
-      cookieCache: {
-        enabled: true,
-        maxAge: 10 * 60, // Cache duration in seconds (10 minutes)
-      },
-    },
-
-    advanced: {
-      cookies: {
-        session_token: {
-          name: "session-token",
-          attributes: {
-            httpOnly: true,
-            secure: isProd,
-            sameSite: isProd ? "lax" : "lax",
-          },
+        emailAndPassword: {
+            enabled: true,
+            autoSignIn: true,
         },
-      },
-      defaultCookieAttributes: {
-        httpOnly: true,
-        secure: isProd,
-        sameSite: isProd ? "lax" : "lax",
-      },
-    },
 
-    plugins: [
-      customSession(async ({ user, session }) => {
-        const userFound = await getUserRole(user.id);
-        return {
-          session,
-          user: {
-            ...user,
-            email: user.email!,
-            role: userFound?.role ?? "USER",
-          },
-        };
-      }),
-    ],
-  });
+        session: {
+            name: "session-token",
+            sameSite: isProd ? "lax" : "lax",
+            secure: isProd,
+            expiresIn: 60 * 60 * 24 * 7, // 7 days
+            updateAge: 60 * 60 * 24, // Update every day
+            cookieCache: {
+                enabled: true,
+                maxAge: 10 * 60, // Cache duration in seconds (10 minutes)
+            },
+        },
+
+        advanced: {
+            cookies: {
+                session_token: {
+                    name: "session-token",
+                    attributes: {
+                        httpOnly: true,
+                        secure: isProd,
+                        sameSite: isProd ? "lax" : "lax",
+                    },
+                },
+            },
+            defaultCookieAttributes: {
+                httpOnly: true,
+                secure: isProd,
+                sameSite: isProd ? "lax" : "lax",
+            },
+        },
+
+        plugins: [
+            customSession(async ({ user, session }) => {
+                const userFound = await getUserRole(user.id);
+                return {
+                    session,
+                    user: {
+                        ...user,
+                        email: user.email!,
+                        role: userFound?.role ?? "USER",
+                    },
+                };
+            }),
+        ],
+    });
 } catch (err) {
-  console.error("Better Auth initialization error:", err);
-  throw err;
+    console.error("Better Auth initialization error:", err);
+    throw err;
 }
 
 export default authConfig;

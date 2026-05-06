@@ -1,11 +1,11 @@
 import { Router } from "express";
 import type { Request, Response } from "express";
+import { asyncHandler } from "../config/handler.js";
+import { failure, success } from "../config/response.js";
 import { db } from "../database/index.js";
 import requireAuth from "../middlewares/auth.js";
 import requireAdmin from "../middlewares/requireAdmin.js";
-import { asyncHandler } from "../config/handler.js";
-import { success, failure } from "../config/response.js";
-import { selectWinner, calculateAverageScore } from "../services/drawEngine.js";
+import { calculateAverageScore, selectWinner } from "../services/drawEngine.js";
 
 const router = Router();
 
@@ -25,12 +25,16 @@ router.get(
             orderBy: [{ year: "desc" }, { month: "desc" }],
             include: {
                 _count: { select: { entries: true } },
-                winner: { include: { user: { select: { id: true, name: true, email: true } } } },
+                winner: {
+                    include: {
+                        user: { select: { id: true, name: true, email: true } },
+                    },
+                },
             },
         });
 
         return success(res, 200, draws);
-    })
+    }),
 );
 
 /**
@@ -40,19 +44,25 @@ router.get(
     "/:id",
     asyncHandler(async (req: Request, res: Response) => {
         const draw = await db.draw.findUnique({
-            where: { id: req.params.id },
+            where: { id: req.params.id as string },
             include: {
                 entries: {
-                    include: { user: { select: { id: true, name: true, email: true } } },
+                    include: {
+                        user: { select: { id: true, name: true, email: true } },
+                    },
                     orderBy: { averageScore: "desc" },
                 },
-                winner: { include: { user: { select: { id: true, name: true, email: true } } } },
+                winner: {
+                    include: {
+                        user: { select: { id: true, name: true, email: true } },
+                    },
+                },
             },
         });
 
         if (!draw) return failure(res, 404, "Draw not found.");
         return success(res, 200, draw);
-    })
+    }),
 );
 
 /**
@@ -66,21 +76,28 @@ router.post(
         const { id } = req.params;
 
         // Check draw exists and is OPEN
-        const draw = await db.draw.findUnique({ where: { id } });
+        const draw = await db.draw.findUnique({ where: { id: id as string } });
         if (!draw) return failure(res, 404, "Draw not found.");
-        if (draw.status !== "OPEN") return failure(res, 400, "This draw is not accepting entries.");
+        if (draw.status !== "OPEN")
+            return failure(res, 400, "This draw is not accepting entries.");
 
         // Must have active subscription
         const activeSub = await db.subscription.findFirst({
             where: { userId, status: "ACTIVE" },
         });
-        if (!activeSub) return failure(res, 403, "Active subscription required to enter draws.");
+        if (!activeSub)
+            return failure(
+                res,
+                403,
+                "Active subscription required to enter draws.",
+            );
 
         // Check already entered
         const existingEntry = await db.drawEntry.findUnique({
-            where: { drawId_userId: { drawId: id, userId } },
+            where: { drawId_userId: { drawId: id as string, userId } },
         });
-        if (existingEntry) return failure(res, 409, "You have already entered this draw.");
+        if (existingEntry)
+            return failure(res, 409, "You have already entered this draw.");
 
         // Need at least 1 score
         const scores = await db.golfScore.findMany({
@@ -89,17 +106,21 @@ router.post(
             take: 5,
         });
         if (scores.length === 0) {
-            return failure(res, 400, "You need at least one golf score to enter a draw.");
+            return failure(
+                res,
+                400,
+                "You need at least one golf score to enter a draw.",
+            );
         }
 
         const averageScore = calculateAverageScore(scores.map((s) => s.score));
 
         const entry = await db.drawEntry.create({
-            data: { drawId: id, userId, averageScore },
+            data: { drawId: id as string, userId, averageScore },
         });
 
         return success(res, 201, entry);
-    })
+    }),
 );
 
 // ── Admin routes ─────────────────────────────────────────────────────────
@@ -117,14 +138,23 @@ router.post(
         const m = Number(month);
         const y = Number(year);
         if (!m || !y || m < 1 || m > 12) {
-            return failure(res, 400, "Valid month (1–12) and year are required.");
+            return failure(
+                res,
+                400,
+                "Valid month (1–12) and year are required.",
+            );
         }
 
         // Check uniqueness
         const existing = await db.draw.findUnique({
             where: { month_year: { month: m, year: y } },
         });
-        if (existing) return failure(res, 409, "A draw for this month/year already exists.");
+        if (existing)
+            return failure(
+                res,
+                409,
+                "A draw for this month/year already exists.",
+            );
 
         const draw = await db.draw.create({
             data: {
@@ -136,7 +166,7 @@ router.post(
         });
 
         return success(res, 201, draw);
-    })
+    }),
 );
 
 /**
@@ -150,12 +180,14 @@ router.post(
         const { id } = req.params;
 
         const draw = await db.draw.findUnique({
-            where: { id },
+            where: { id: id as string },
             include: { entries: true },
         });
         if (!draw) return failure(res, 404, "Draw not found.");
-        if (draw.status === "COMPLETED") return failure(res, 400, "Draw already completed.");
-        if (draw.entries.length === 0) return failure(res, 400, "No entries in this draw.");
+        if (draw.status === "COMPLETED")
+            return failure(res, 400, "Draw already completed.");
+        if (draw.entries.length === 0)
+            return failure(res, 400, "No entries in this draw.");
 
         // Calculate prize pool from active subscriptions
         const activeSubscriptions = await db.subscription.findMany({
@@ -163,22 +195,22 @@ router.post(
             select: { price: true, contributionPercent: true },
         });
 
-        const totalPool =
-            activeSubscriptions.reduce((sum, s) => {
-                const afterCharity = s.price * (1 - s.contributionPercent / 100);
-                return sum + afterCharity * 0.9; // 10% platform fee
-            }, 0);
+        const totalPool = activeSubscriptions.reduce((sum, s) => {
+            const afterCharity = s.price * (1 - s.contributionPercent / 100);
+            return sum + afterCharity * 0.9; // 10% platform fee
+        }, 0);
 
         const prizePool = Math.round(totalPool * 100) / 100;
 
         // Select winner
         const winnerEntry = selectWinner(draw.entries, draw.drawType);
-        if (!winnerEntry) return failure(res, 500, "Failed to select a winner.");
+        if (!winnerEntry)
+            return failure(res, 500, "Failed to select a winner.");
 
         // Update draw and create winner record in a transaction
         const [updatedDraw, winner] = await db.$transaction([
             db.draw.update({
-                where: { id },
+                where: { id: id as string },
                 data: {
                     status: "COMPLETED",
                     prizePool,
@@ -187,7 +219,7 @@ router.post(
             }),
             db.winner.create({
                 data: {
-                    drawId: id,
+                    drawId: id as string,
                     userId: winnerEntry.userId,
                     prizeAmount: prizePool,
                 },
@@ -202,7 +234,8 @@ router.post(
 
         for (const sub of subsWithCharity) {
             if (sub.charityId) {
-                const contribution = sub.price * (sub.contributionPercent / 100);
+                const contribution =
+                    sub.price * (sub.contributionPercent / 100);
                 await db.charity.update({
                     where: { id: sub.charityId },
                     data: { totalReceived: { increment: contribution } },
@@ -217,7 +250,7 @@ router.post(
                 entry: winnerEntry,
             },
         });
-    })
+    }),
 );
 
 /**
@@ -231,11 +264,11 @@ router.patch(
         const { id } = req.params;
         const { status, drawType } = req.body;
 
-        const draw = await db.draw.findUnique({ where: { id } });
+        const draw = await db.draw.findUnique({ where: { id: id as string } });
         if (!draw) return failure(res, 404, "Draw not found.");
 
         const updated = await db.draw.update({
-            where: { id },
+            where: { id: id as string },
             data: {
                 ...(status && { status }),
                 ...(drawType && { drawType }),
@@ -243,7 +276,7 @@ router.patch(
         });
 
         return success(res, 200, updated);
-    })
+    }),
 );
 
 export default router;

@@ -15,7 +15,10 @@ export interface DrawEntryData {
 /**
  * Select a winner from draw entries.
  */
-export function selectWinner(entries: DrawEntryData[], drawType: "RANDOM" | "ALGORITHM"): DrawEntryData | null {
+export function selectWinner(
+    entries: DrawEntryData[],
+    drawType: "RANDOM" | "ALGORITHM",
+): DrawEntryData | null {
     if (entries.length === 0) return null;
     if (entries.length === 1) return entries[0];
 
@@ -40,7 +43,9 @@ function randomSelect(entries: DrawEntryData[]): DrawEntryData {
  * without making it deterministic).
  */
 function weightedSelect(entries: DrawEntryData[]): DrawEntryData {
-    const weights = entries.map((e) => Math.pow(Math.max(e.averageScore, 1), 2));
+    const weights = entries.map((e) =>
+        Math.pow(Math.max(e.averageScore, 1), 2),
+    );
     const totalWeight = weights.reduce((sum, w) => sum + w, 0);
 
     let random = Math.random() * totalWeight;
@@ -58,7 +63,7 @@ function weightedSelect(entries: DrawEntryData[]): DrawEntryData {
  * Calculate the prize pool from active subscriptions minus charity contributions.
  */
 export function calculatePrizePool(
-    subscriptions: Array<{ price: number; contributionPercent: number }>
+    subscriptions: Array<{ price: number; contributionPercent: number }>,
 ): { totalRevenue: number; charityTotal: number; prizePool: number } {
     let totalRevenue = 0;
     let charityTotal = 0;

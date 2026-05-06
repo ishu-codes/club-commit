@@ -1,9 +1,9 @@
 import { Router } from "express";
 import type { Request, Response } from "express";
+import { asyncHandler } from "../config/handler.js";
+import { failure, success } from "../config/response.js";
 import { db } from "../database/index.js";
 import requireAuth from "../middlewares/auth.js";
-import { asyncHandler } from "../config/handler.js";
-import { success, failure } from "../config/response.js";
 
 const router = Router();
 
@@ -21,7 +21,11 @@ router.post(
         // Validate Stableford score (0–50 reasonable range)
         const numScore = Number(score);
         if (isNaN(numScore) || numScore < 0 || numScore > 50) {
-            return failure(res, 400, "Invalid score. Stableford scores must be between 0 and 50.");
+            return failure(
+                res,
+                400,
+                "Invalid score. Stableford scores must be between 0 and 50.",
+            );
         }
 
         // Must have active subscription
@@ -29,7 +33,11 @@ router.post(
             where: { userId, status: "ACTIVE" },
         });
         if (!activeSub) {
-            return failure(res, 403, "Active subscription required to submit scores.");
+            return failure(
+                res,
+                403,
+                "Active subscription required to submit scores.",
+            );
         }
 
         const newScore = await db.golfScore.create({
@@ -42,7 +50,7 @@ router.post(
         });
 
         return success(res, 201, newScore);
-    })
+    }),
 );
 
 /**
@@ -62,8 +70,10 @@ router.get(
         const average =
             activeScores.length > 0
                 ? Math.round(
-                    (activeScores.reduce((sum, s) => sum + s.score, 0) / activeScores.length) * 100
-                ) / 100
+                      (activeScores.reduce((sum, s) => sum + s.score, 0) /
+                          activeScores.length) *
+                          100,
+                  ) / 100
                 : 0;
 
         return success(res, 200, {
@@ -72,7 +82,7 @@ router.get(
             average,
             totalScores: allScores.length,
         });
-    })
+    }),
 );
 
 /**
@@ -86,19 +96,26 @@ router.patch(
         const { score, courseName, playedAt } = req.body;
 
         const existing = await db.golfScore.findFirst({
-            where: { id, userId },
+            where: { id: id as string, userId },
         });
         if (!existing) {
             return failure(res, 404, "Score not found.");
         }
 
         const numScore = score !== undefined ? Number(score) : undefined;
-        if (numScore !== undefined && (isNaN(numScore) || numScore < 0 || numScore > 50)) {
-            return failure(res, 400, "Invalid score. Must be between 0 and 50.");
+        if (
+            numScore !== undefined &&
+            (isNaN(numScore) || numScore < 0 || numScore > 50)
+        ) {
+            return failure(
+                res,
+                400,
+                "Invalid score. Must be between 0 and 50.",
+            );
         }
 
         const updated = await db.golfScore.update({
-            where: { id },
+            where: { id: id as string },
             data: {
                 ...(numScore !== undefined && { score: numScore }),
                 ...(courseName !== undefined && { courseName }),
@@ -107,7 +124,7 @@ router.patch(
         });
 
         return success(res, 200, updated);
-    })
+    }),
 );
 
 /**
@@ -120,16 +137,16 @@ router.delete(
         const { id } = req.params;
 
         const existing = await db.golfScore.findFirst({
-            where: { id, userId },
+            where: { id: id as string, userId },
         });
         if (!existing) {
             return failure(res, 404, "Score not found.");
         }
 
-        await db.golfScore.delete({ where: { id } });
+        await db.golfScore.delete({ where: { id: id as string } });
 
         return success(res, 200, { message: "Score deleted." });
-    })
+    }),
 );
 
 export default router;
