@@ -12,12 +12,10 @@ export default function requireAdmin(
     const user = (req as any).user;
 
     if (!user || user.role !== "ADMIN") {
-        return res
-            .status(403)
-            .json({
-                success: false,
-                error: "Forbidden: admin access required",
-            });
+        return res.status(403).json({
+            success: false,
+            error: "Forbidden: admin access required",
+        });
     }
 
     next();

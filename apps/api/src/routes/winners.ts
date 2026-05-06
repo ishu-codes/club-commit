@@ -21,7 +21,7 @@ router.get(
                         id: true,
                         name: true,
                         email: true,
-                        profileImage: true,
+                        image: true,
                     },
                 },
                 draw: { select: { id: true, month: true, year: true } },
